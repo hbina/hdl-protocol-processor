@@ -173,6 +173,20 @@ See [docs/design.md](docs/design.md) for the design report and complete ISA.
 
 ## Work journal
 
+### 2026-10-07 — Ignore VS Code workspace settings
+
+- Starting point: the ignore rules deliberately kept `.vscode` settings and
+  extension recommendations visible to Git.
+- Decision: follow the user's preference to treat `.vscode/` as local editor
+  configuration. This supersedes the earlier journal entry's choice to keep
+  those files eligible for version control.
+- Change: added `.vscode/` to `.gitignore` and updated its editor-files comment.
+  No protocol, build, verification-coverage, or physical-result status changed.
+- Verification: `git check-ignore -v .vscode/settings.json
+  .vscode/extensions.json` matched the new rule for both files;
+  `git diff --check` passed. No `.vscode` files were already tracked.
+- Remaining: explicitly share any needed editor setup through documentation.
+
 ### 2026-10-07 — Keep generated files out of version control
 
 - Starting point: the existing `.gitignore` covered the main ASIC outputs but

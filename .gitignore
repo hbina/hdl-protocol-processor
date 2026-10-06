@@ -28,7 +28,8 @@ __pycache__/
 # Assembler output written to the repository root (e.g. spi.hex)
 /*.hex
 
-# Local editor and OS files; keep shared .vscode settings and *.gtkw
+# Local editor and OS files; keep *.gtkw waveform-viewer configuration
+.vscode/
 .idea/
 *.swp
 *.swo

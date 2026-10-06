@@ -50,7 +50,7 @@ role is a separate scope decision.
 | Check | Latest result |
 |---|---:|
 | Assembler unit tests | 7 passed |
-| RTL UART/SPI/I2C cocotb regression | Passed |
+| RTL UART/SPI/I2C cocotb regression | Passed (Icarus and Verilator) |
 | Post-route mapped-netlist UART/SPI/I2C regression | Passed |
 | LibreLane CMOS5L flow | Complete; 72 recorded steps, 8 gated stages skipped |
 | Non-filler standard cells | 7,403 |
@@ -178,6 +178,31 @@ uv run python tools/assembler.py firmware/uart_tx.asm
 See [docs/design.md](docs/design.md) for the design report and complete ISA.
 
 ## Work journal
+
+### 2026-10-07 — Verify the full local regression suite
+
+- Starting point: the core and physical-flow baseline commits needed a fresh
+  check across all existing project tests and supported RTL simulators.
+- Decision: run pytest discovery under `test/`, rebuild each simulation in its
+  own ignored directory, and inspect each XML report before the next run.
+- Verification: all commands used `UV_CACHE_DIR="$PWD/.asic-tools/uv-cache"`
+  and `uv run --locked`. `pytest -q test` passed seven tests. Each of the
+  following passed the combined UART/SPI/I2C cocotb test with zero XML
+  failures/errors/skips:
+  `make -B -C test SIM=icarus SIM_BUILD=sim_build/rtl_icarus`;
+  `make -B -C test SIM=verilator SIM_BUILD=sim_build/rtl_verilator`;
+  `make -B -C test SIM=icarus GATES=yes SIM_BUILD=sim_build/gl_icarus`
+  with `PDK_ROOT="$PWD/.asic-tools/pdk"`.
+  The gate-level netlist matched the saved final-run netlist byte-for-byte.
+  Logs and per-run XML reports are in `/tmp/asic-full-suite-em20dcqr/`.
+  `git diff --check` passed; generated build/result paths remain ignored.
+- Change: refreshed the README RTL snapshot to name both passing simulators.
+  No RTL, firmware, tests, dependencies, or physical results changed.
+- Remaining: coverage is still the seven assembler tests and one directed
+  protocol regression, exercised in three configurations. Existing protocol
+  and signoff limitations remain. The gate test is functional; Icarus still
+  reports unsupported PDK timing constructs. No hardening, remote CI,
+  container build, or hardware interoperability run was performed.
 
 ### 2026-10-07 — Import physical-flow integration and audit saved evidence
 

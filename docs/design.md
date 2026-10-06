@@ -294,6 +294,7 @@ October 2026 local run produced these final metrics:
 | LVS errors | 0 |
 | Antenna-violating nets/pins | 0 / 0 |
 | Disconnected pins | 0 |
+| Maximum-fanout violations | 68 in each timing corner |
 
 The mapped post-route netlist also passes the same cocotb UART, SPI, and I2C
 firmware regression as the RTL. These results establish that the current design
@@ -306,7 +307,9 @@ the run did not use activity vectors, and LibreLane warned that no voltage-sourc
 locations were supplied for IR analysis. Magic DRC and LVS passed, but KLayout
 DRC and layout XOR are disabled in the current challenge configuration. The
 flow also used its generic fallback SDC because explicit PnR and signoff SDC
-files are not configured. These limitations should be resolved or accepted by
+files are not configured. The final metrics additionally report 68
+maximum-fanout violations in each timing corner; the affected nets and
+constraints need review. These limitations should be resolved or accepted by
 the official submission flow before calling the layout tapeout-ready.
 
 ## 9. Current limitations and next engineering steps

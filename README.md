@@ -52,13 +52,14 @@ role is a separate scope decision.
 | Assembler unit tests | 7 passed |
 | RTL UART/SPI/I2C cocotb regression | Passed |
 | Post-route mapped-netlist UART/SPI/I2C regression | Passed |
-| LibreLane CMOS5L flow | 80/80 steps completed |
+| LibreLane CMOS5L flow | Complete; 72 recorded steps, 8 gated stages skipped |
 | Non-filler standard cells | 7,403 |
 | Standard-cell utilization | 14.67% |
 | Worst setup slack at 20 ns | +6.943 ns |
 | Worst hold slack | +0.120 ns |
 | Route DRC / Magic DRC / LVS errors | 0 / 0 / 0 |
 | Antenna / disconnected-pin / power-grid violations | 0 / 0 / 0 |
+| Maximum-fanout violations | 68 (requires review) |
 
 The raw results are in `runs/wokwi/final/metrics.json` after a local hardening
 run. See [the design report](docs/design.md) for interpretation and
@@ -99,12 +100,17 @@ run. See [the design report](docs/design.md) for interpretation and
   Fixed-function protocol engines are explicitly outside the project
   architecture.
 - KLayout DRC, layout XOR, and EQY equivalence are disabled in the current flow.
+- The saved final metrics report 68 maximum-fanout violations in each timing
+  corner; investigate the affected nets and constraints before physical signoff.
 - Timing currently uses LibreLane's generic fallback SDC. It includes the 20 ns
   clock and 4 ns I/O delays, but explicit project signoff constraints remain to
   be defined.
 - Power and IR-drop values are preliminary because realistic activity vectors
   and explicit voltage-source locations were not supplied.
 - No FPGA or fabricated-silicon interoperability testing has been performed.
+- The development-container template still uses `ihp-sg13g2` and LibreLane
+  `3.0.0.dev44`; use the pinned local CMOS5L flow in
+  [docs/physical_flow.md](docs/physical_flow.md) for physical builds.
 
 ## Environment
 
@@ -172,6 +178,36 @@ uv run python tools/assembler.py firmware/uart_tx.asm
 See [docs/design.md](docs/design.md) for the design report and complete ISA.
 
 ## Work journal
+
+### 2026-10-07 — Import physical-flow integration and audit saved evidence
+
+- Starting point: the functional baseline was committed, but the CMOS5L
+  configuration, physical-flow guide, build workflows, and container template
+  were still untracked.
+- Decision: import the existing integration without rerunning hardening or
+  claiming remote CI/container verification. Keep the pinned local CMOS5L
+  setup authoritative while documenting the older container template.
+- Change: added `src/config.json`, the physical-flow guide, GDS/precheck/
+  gate-level/viewer/docs/FPGA workflows, and development-container files.
+  Updated the README and design/flow reports to record 68 maximum-fanout
+  violations in each corner. Clarified the earlier 80/80 progress claim:
+  the completed saved flow has 72 recorded steps and eight gated stages skipped.
+  Added the container's process/LibreLane mismatch to the README limitations.
+- Verification: Python assertions on `runs/wokwi/final/metrics.json` confirmed
+  7,403 cells, 14.67% utilization, +6.943 ns setup/+0.120 ns hold slack,
+  zero recorded route/Magic DRC, LVS, antenna and power-grid violations, and
+  68 fanout violations in all three corners. Checked the final GDS, 72 numbered
+  step directories, eight gated-stage skips, and `Flow complete.` in `flow.log`.
+  Installed LibreLane `3.1.0.dev3`, support-tools commit
+  `d66cf179e7bc4d296362ab7e2e3b344dc3c4f665`, and PDK commit
+  `2bbec755dc67ca3db0261c3d6163e15735d66710` match the guide.
+  `src/config.json` parsed successfully; `sh -n
+  .devcontainer/copy_tt_support_tools.sh` and `git diff --check` passed.
+  The preceding baseline's post-route functional regression also passed.
+- Remaining: investigate fanout constraints/nets, align the container with
+  CMOS5L, and verify remote CI. KLayout DRC/XOR, EQY, explicit timing
+  constraints, realistic power/IR inputs, and hardware interoperability remain
+  open. The saved flow was inspected, not rebuilt or promoted to signoff.
 
 ### 2026-10-07 — Import the programmable core and regression baseline
 

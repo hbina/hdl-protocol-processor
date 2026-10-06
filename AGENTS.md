@@ -30,27 +30,3 @@ When updating the README:
 
 Before finishing a task, check whether the work made any README status stale.
 If it did, the task is not complete until the README has been updated.
-
-## Preserve the journey in Git history
-
-When Git metadata is available, commit completed logical milestones unless the
-user asks not to commit. Do not combine unrelated changes, and do not squash
-away meaningful milestones or failed approaches that informed the final design
-unless the user explicitly requests a rewritten history.
-
-Use an imperative subject that describes the outcome, preferably in the form
-`area: outcome`. Add a commit body for every material project change with these
-sections:
-
-```text
-Context:
-- What problem or milestone prompted the change.
-
-Changes:
-- What changed and the important design decisions.
-
-Verification:
-- Exact commands/checks and their outcomes.
-
-Remaining:
-- Known limitations, risks, or follow-up work.

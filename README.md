@@ -173,6 +173,29 @@ See [docs/design.md](docs/design.md) for the design report and complete ISA.
 
 ## Work journal
 
+### 2026-10-07 — Import the programmable core and regression baseline
+
+- Starting point: Git contained the ignore rules and README, while the working
+  RTL, firmware, host tools, tests, and design documentation were untracked.
+- Decision: preserve the two existing commits and import the functional
+  baseline as one coherent milestone; import physical-flow integration
+  separately rather than inventing historical implementation steps.
+- Change: added the generic programmable core, Tiny Tapeout interface/metadata,
+  UART/SPI/I2C example firmware, assembler, unit/cocotb tests, locked Python
+  environment, RTL CI, license, repository instructions, and design/datasheet
+  documentation. Corrected the stale gate-level netlist path in `test/README.md`.
+- Verification: with `UV_CACHE_DIR=.asic-tools/uv-cache`,
+  `uv run --locked pytest -q test/test_assembler.py` passed all seven tests and
+  `uv run --locked make -B -C test` passed the combined RTL regression.
+  `PDK_ROOT="$PWD/.asic-tools/pdk" UV_CACHE_DIR=.asic-tools/uv-cache
+  uv run --locked make -B -C test GATES=yes` also passed against the existing
+  post-route netlist. XML checks confirmed one case with no failures/errors in
+  each simulation; the copied netlist matched the final-run netlist byte-for-byte.
+- Remaining: these directed examples retain Partial protocol status. Generic
+  runtime data/concurrency, broader ISA verification, bidirectional protocol
+  firmware, and hardware interoperability remain open. CI was not run remotely;
+  the physical build configuration and guide are the next import milestone.
+
 ### 2026-10-07 — Ignore VS Code workspace settings
 
 - Starting point: the ignore rules deliberately kept `.vscode` settings and

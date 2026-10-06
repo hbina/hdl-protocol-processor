@@ -1,0 +1,49 @@
+name: test
+on: [push, workflow_dispatch]
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Install iverilog
+        shell: bash
+        run: sudo apt-get update && sudo apt-get install -y iverilog
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install Python and locked dependencies
+        run: |
+          uv python install
+          uv sync --locked
+
+      - name: Run tests
+        run: |
+          uv run pytest test/test_assembler.py
+          cd test
+          uv run make clean
+          uv run make
+          # make will return success even if the test fails, so check for failure in the results.xml
+          ! grep failure results.xml
+
+      - name: Test Summary
+        uses: test-summary/action@v2.4
+        with:
+          paths: "test/results.xml"
+        if: always()
+
+      - name: upload waveform and test results
+        if: success() || failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: |
+            test/tb.fst
+            test/results.xml
+            test/output/*

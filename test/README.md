@@ -6,11 +6,20 @@ recovery. All tests work against RTL and the mapped netlist without relying on
 internal hierarchical signals. The pin controller uses the same ABI library
 as a board adapter: [tools/runtime.py](../tools/runtime.py).
 
-Assembler, storage/FIFO, and controller recovery unit tests run separately:
+Assembler, instruction-model, storage/FIFO, and controller recovery unit tests
+run separately:
 
 ```sh
-uv run pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py
+uv run pytest -q test/test_assembler.py test/test_isa.py test/test_program.py test/test_isa_golden.py test/test_isa_sync.py test/test_runtime_units.py test/test_runtime_driver.py
+uv run pyright
 ```
+
+Test programs are built from typed instructions (`tools/isa.py`) with
+`tools/program.py` (`Program`, `Label`, `pad_to`, `place`) rather than by
+concatenating assembly text; `load_program` accepts a linked `Image`. The
+golden snapshot (`test/golden/isa_words.json`) pins the encoding of every
+checked-in program under every ISA variant; `test_isa_sync.py` checks the RTL
+opcode constants and the generated design-document table.
 
 Storage tests include simultaneous FIFO operations at depths 1/3/4/64 and
 record/output publication/ownership boundaries. See [runtime.md](../docs/runtime.md)

@@ -3,7 +3,7 @@
 SETO 56
 SETOE 60
 idle:
-LDI r3, 0x22
+LDI r3, 34
 PREAD r0, r3
 JFAIL idle
 LDI r1, 128
@@ -222,15 +222,15 @@ JMP form_error
 length_ok:
 LDI r0, 144
 LOAD r5, r0
-CMPI r5, 0x2d
+CMPI r5, 45
 JFAIL control_maybe_out
 JMP control_token_match
 control_maybe_out:
-CMPI r5, 0xe1
+CMPI r5, 225
 JFAIL control_maybe_ack
 JMP control_token_match
 control_maybe_ack:
-CMPI r5, 0xd2
+CMPI r5, 210
 JFAIL control_in_gate
 CMPI r7, 145
 JFAIL rearm
@@ -258,7 +258,7 @@ LDI r1, 5
 STORE r1, r0
 JMP rearm
 control_in_gate:
-CMPI r5, 0x69
+CMPI r5, 105
 JFAIL out_gate
 LDI r0, 171
 LOAD r0, r0
@@ -309,11 +309,11 @@ LOAD r6, r0
 JZ r6, rearm
 LDI r4, 0
 STORE r4, r0
-CMPI r6, 0x2d
+CMPI r6, 45
 JFAIL out_data
 CMPI r7, 155
 JFAIL form_error
-CMPI r5, 0xc3
+CMPI r5, 195
 JFAIL pid_error
 out_data:
 LDI r0, 136
@@ -322,11 +322,11 @@ MOV r0, r7
 ADDI r0, 109
 SHL r0
 ADDI r0, 1
-CMPI r5, 0xc3
+CMPI r5, 195
 JFAIL maybe_data1
 JMP syndrome
 maybe_data1:
-CMPI r5, 0x4b
+CMPI r5, 75
 JFAIL unsupported
 ADDI r0, 18
 syndrome:
@@ -345,7 +345,7 @@ JMP crc_error
 valid:
 LDI r0, 136
 LOAD r0, r0
-CMPI r0, 0x2d
+CMPI r0, 45
 JFAIL control_out_data
 LDI r0, 181
 LDI r1, 160
@@ -354,11 +354,11 @@ LDI r0, 190
 LDI r1, 0
 STORE r1, r0
 LDI r0, 160
-LDI r1, 0x4b
+LDI r1, 75
 STORE r1, r0
 LDI r0, 145
 LOAD r0, r0
-CMPI r0, 0x80
+CMPI r0, 128
 JFAIL maybe_standard_write
 JMP standard_read
 maybe_standard_write:
@@ -388,7 +388,7 @@ JFAIL form_error
 JZ r4, form_error
 LDI r0, 145
 LOAD r0, r0
-CMPI r0, 0x40
+CMPI r0, 64
 JFAIL setup_read
 LDI r0, 146
 LOAD r0, r0
@@ -401,7 +401,7 @@ LDI r1, 1
 STORE r1, r0
 JMP control_ack
 setup_read:
-CMPI r0, 0xc0
+CMPI r0, 192
 JFAIL unsupported
 LDI r0, 146
 LOAD r0, r0
@@ -426,7 +426,7 @@ JMP control_ack
 control_out_data:
 LDI r0, 144
 LOAD r5, r0
-CMPI r5, 0x4b
+CMPI r5, 75
 JFAIL pid_error
 LDI r0, 171
 LOAD r0, r0
@@ -457,7 +457,7 @@ LDI r0, 171
 LDI r1, 2
 STORE r1, r0
 LDI r0, 160
-LDI r1, 0x4b
+LDI r1, 75
 STORE r1, r0
 JMP control_ack
 control_read_status:
@@ -534,7 +534,7 @@ STORE r2, r0
 LDI r1, 161
 control_result_byte:
 LOAD r0, r1
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -614,7 +614,7 @@ publish:
 # Output metadata defaults0; no per-byte nonzero metadata used here.
 LDI r1, 128
 LDI r2, 16
-LDI r3, 0x40
+LDI r3, 64
 event:
 LOAD r0, r1
 PWRITE r0, r3
@@ -639,7 +639,7 @@ LOAD r7, r7
 LDI r5, 8
 LDI r4, 1
 LDI r0, 36
-CMPI r1, 0xc3
+CMPI r1, 195
 JFAIL stream_seed1
 LDI r2, 151
 LDI r3, 254
@@ -847,7 +847,6 @@ WAIT 2
 balance_17_end:
 balance_18_end:
 RET
-
 control_token_match:
 CMPI r7, 147
 JFAIL ignore_token
@@ -868,7 +867,6 @@ control_token_valid:
 LDI r0, 157
 STORE r5, r0
 JMP rearm
-
 setup_address:
 LDI r0, 147
 LOAD r4, r0
@@ -943,7 +941,7 @@ LDI r0, 182
 LDI r1, 0
 STORE r1, r0
 LDI r0, 160
-LDI r1, 0x4b
+LDI r1, 75
 STORE r1, r0
 LDI r0, 171
 LDI r1, 7
@@ -1016,7 +1014,6 @@ IN r0
 ANDI r0, 3
 JZ r0, reset_release
 JMP rearm
-
 enum_init:
 LDI r0, 181
 LDI r1, 160

@@ -10,7 +10,8 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, Timer, ValueChange
 from cocotb.utils import get_sim_time
-from run_usb_rx import candidate_words, study_assembler
+from run_usb_rx import candidate_words
+from isa_variants import label_addresses
 
 from test import PinController, load_program, reset
 from tools.runtime import Request
@@ -89,7 +90,7 @@ class Transceiver:
     async def trace_capture(self):
         variant = os.environ["WAVE_C_CAPACITY_EXPERIMENT"]
         source = Path(__file__).with_name(f"{variant}_candidate.asm").read_text()
-        _, labels = study_assembler()._parse_lines(source)
+        labels = label_addresses(source)
         addresses = {labels[f"capture_{index}"] for index in range(3)}
         stages = {labels[name]: name for name in ["decode", "crc_begin", "crc_done"]}
         core = self.dut.user_project.core

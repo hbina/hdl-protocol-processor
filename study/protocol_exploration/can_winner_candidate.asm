@@ -7,7 +7,7 @@
 SETO 1
 SETOE 1
 idle:
-LDI r3, 0x22
+LDI r3, 34
 PREAD r0, r3
 JFAIL idle
 LDI r1, 128
@@ -191,8 +191,8 @@ ANDI r1, 1
 OR r3, r1
 ANDI r2, 254
 JZ r0, rx_balance_3_yes
-XORI r2, 0x99
-XORI r3, 0x45
+XORI r2, 153
+XORI r3, 69
 JMP rx_balance_3_end
 rx_balance_3_yes:
 WAIT 2
@@ -330,7 +330,7 @@ SHL r0
 OR r0, r3
 ADDI r1, 1
 DJNZ r2, rx_id_high
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -345,7 +345,7 @@ SHL r0
 OR r0, r3
 ADDI r1, 1
 DJNZ r2, rx_id_low
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -379,7 +379,7 @@ ANDI r3, 7
 JZ r3, rx_output_byte
 JMP rx_data_bit
 rx_output_byte:
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -473,7 +473,7 @@ JFAIL payload_from_fifo
 LOAD r0, r7
 JMP payload_ready
 payload_from_fifo:
-LDI r3, 0x11
+LDI r3, 17
 PREAD r0, r3
 STORE r0, r7
 payload_ready:
@@ -529,8 +529,8 @@ ANDI r1, 1
 OR r3, r1
 ANDI r2, 254
 JZ r0, tx_balance_101_yes
-XORI r2, 0x99
-XORI r3, 0x45
+XORI r2, 153
+XORI r3, 69
 JMP tx_balance_101_end
 tx_balance_101_yes:
 WAIT 2
@@ -722,8 +722,8 @@ ANDI r2, 1
 OR r7, r2
 ANDI r4, 254
 JZ r1, balance_106_yes
-XORI r4, 0x99
-XORI r7, 0x45
+XORI r4, 153
+XORI r7, 69
 JMP balance_106_end
 balance_106_yes:
 WAIT 2
@@ -810,7 +810,7 @@ DJNZ r2, clear_saved_payload
 # Output metadata defaults0; no per-byte nonzero metadata used here.
 LDI r1, 128
 LDI r2, 16
-LDI r3, 0x40
+LDI r3, 64
 event:
 LOAD r0, r1
 PWRITE r0, r3
@@ -902,8 +902,8 @@ LDI r2, 24
 JMP failure
 winner_loss:
 LDI r6, 3
-XORI r4, 0x99
-XORI r7, 0x45
+XORI r4, 153
+XORI r7, 69
 LDI r1, 247
 LOAD r1, r1
 MOV r0, r1

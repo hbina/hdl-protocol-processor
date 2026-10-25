@@ -11,6 +11,31 @@ from cocotb.triggers import Timer
 from generic_frontier import assemble
 
 from test import PinController, load_program, reset
+from tools.isa import (
+    ADDI,
+    CMPI,
+    CMPLT,
+    DJNZ,
+    FRONTIER,
+    HALT,
+    JFAIL,
+    JMP,
+    JZ,
+    LDI,
+    LOAD,
+    MOV,
+    STORE,
+    XOR,
+    r0,
+    r1,
+    r2,
+    r3,
+    r4,
+    r5,
+    r6,
+    r7,
+)
+from tools.program import place
 from tools.runtime import Request
 
 
@@ -19,47 +44,47 @@ async def test_frontier_registers_loader_banks(dut):
     assert os.environ.get("GENERIC_FRONTIER_EXPERIMENT") == "1"
     cocotb.start_soon(Clock(dut.clk, 20, unit="ns").start())
     await reset(dut, pin_input=0xFF)
-    lines = ["HALT"] * 1024
-    instructions = {
-        0: "MOV r0, r7",
-        1: "CMPI r0, 0",
-        2: "JFAIL 900",
-        3: "LDI r4, 128",
-        4: "LDI r5, 0x5a",
-        5: "STORE r5, r4",
-        6: "LOAD r6, r4",
-        7: "CMPI r6, 0x5a",
-        8: "JFAIL 900",
-        9: "MOV r7, r6",
-        10: "XOR r7, r5",
-        11: "JZ r7, 512",
-        12: "JMP 900",
-        512: "LDI r7, 2",
-        513: "DJNZ r7, 513",
-        514: "CMPI r7, 0",
-        515: "JFAIL 900",
-        516: "JMP 256",
-        256: "LDI r4, 0xa5",
-        257: "LDI r5, 0x22",
-        258: "MOV r0, r4",
-        259: "JMP 768",
-        768: "MOV r4, r5",
-        769: "ADDI r4, 1",
-        770: "MOV r1, r4",
-        771: "CMPLT r7, r4",
-        772: "JFAIL 900",
-        773: "CMPI r4, 0",
-        774: "JFAIL 1020",
-        900: "LDI r0, 0xee",
-        901: "HALT",
-        1020: "MOV r2, r6",
-        1021: "LDI r3, 0x77",
-        1022: "JMP 1023",
-        1023: "HALT",
-    }
-    for address, instruction in instructions.items():
-        lines[address] = instruction
-    await load_program(dut, assemble("\n".join(lines)))
+    image = place(
+        {
+            0: MOV(r0, r7),
+            1: CMPI(r0, 0),
+            2: JFAIL(900),
+            3: LDI(r4, 128),
+            4: LDI(r5, 0x5A),
+            5: STORE(r5, r4),
+            6: LOAD(r6, r4),
+            7: CMPI(r6, 0x5A),
+            8: JFAIL(900),
+            9: MOV(r7, r6),
+            10: XOR(r7, r5),
+            11: JZ(r7, 512),
+            12: JMP(900),
+            512: LDI(r7, 2),
+            513: DJNZ(r7, 513),
+            514: CMPI(r7, 0),
+            515: JFAIL(900),
+            516: JMP(256),
+            256: LDI(r4, 0xA5),
+            257: LDI(r5, 0x22),
+            258: MOV(r0, r4),
+            259: JMP(768),
+            768: MOV(r4, r5),
+            769: ADDI(r4, 1),
+            770: MOV(r1, r4),
+            771: CMPLT(r7, r4),
+            772: JFAIL(900),
+            773: CMPI(r4, 0),
+            774: JFAIL(1020),
+            900: LDI(r0, 0xEE),
+            901: HALT(),
+            1020: MOV(r2, r6),
+            1021: LDI(r3, 0x77),
+            1022: JMP(1023),
+            1023: HALT(),
+        },
+        1024,
+    )
+    await load_program(dut, image.link(FRONTIER).words)
     await Timer(3, unit="us")
     dut.ena.value = 0
     controller = PinController(dut)

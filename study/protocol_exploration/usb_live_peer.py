@@ -11,10 +11,12 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, Timer, ValueChange
 from cocotb.utils import get_sim_time
 from generic_call_frontier import assemble
-from generic_frontier import base_assembler
+from isa_variants import label_addresses
 from usb_rx_peer import Transceiver, crc16, encode
 
 from test import PinController, load_program, reset
+from tools.isa import ADDI, CALL, CALL_FRONTIER, HALT, JMP, LDI, MOV, RET, r0, r4
+from tools.program import place
 from tools.runtime import Request
 
 CONSTANTS = json.loads(Path(__file__).with_name("usb_live_constants.json").read_text())[
@@ -33,7 +35,7 @@ def final_stuff_vector():
 
 async def trace_live(dut, phy):
     source = Path(__file__).with_name("usb_live_candidate.asm").read_text()
-    _, labels = base_assembler()._parse_lines(source)
+    labels = label_addresses(source)
     addresses = {
         labels[f"bit_{bit}_{phase}"]: phase for bit in range(8) for phase in range(3)
     }
@@ -209,21 +211,22 @@ async def test_live_usb_timeout_recovery(dut):
 async def test_generic_call_return_banks(dut):
     cocotb.start_soon(Clock(dut.clk, 20, unit="ns").start())
     await reset(dut)
-    lines = ["HALT"] * 1024
-    for address, instruction in {
-        0: "LDI r4, 1",
-        1: "CALL 900",
-        2: "JMP 510",
-        510: "CALL 768",
-        511: "MOV r0, r4",
-        512: "HALT",
-        768: "ADDI r4, 4",
-        769: "RET",
-        900: "ADDI r4, 2",
-        901: "RET",
-    }.items():
-        lines[address] = instruction
-    await load_program(dut, assemble("\n".join(lines)))
+    image = place(
+        {
+            0: LDI(r4, 1),
+            1: CALL(900),
+            2: JMP(510),
+            510: CALL(768),
+            511: MOV(r0, r4),
+            512: HALT(),
+            768: ADDI(r4, 4),
+            769: RET(),
+            900: ADDI(r4, 2),
+            901: RET(),
+        },
+        1024,
+    )
+    await load_program(dut, image.link(CALL_FRONTIER).words)
     await Timer(2, unit="us")
     dut.ena.value = 0
     assert await PinController(dut).read(0x10B) == 7

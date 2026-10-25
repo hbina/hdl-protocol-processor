@@ -28,7 +28,7 @@ def test_address_crc5_basis_against_independent_token_oracle():
 
 def test_generated_reset_address_source_and_capacity():
     source = (ROOT / "study/protocol_exploration/usb_address_candidate.asm").read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     assert len(assemble(source)) == 921
     with pytest.raises(ValueError):
         production_assemble(source)

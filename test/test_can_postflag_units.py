@@ -18,8 +18,8 @@ def test_can_postflag_generation_and_capacity():
     source = (here / "can_postflag_candidate.asm").read_text()
     raw = (here / "can_postflag_unoptimized_candidate.asm").read_text()
     partial = (here / "can_postflag_partial_compaction_candidate.asm").read_text()
-    assert source == generate() and raw == generate(compact=False)
-    assert partial == generate(cleanup=False)
+    assert source == generate().to_asm() and raw == generate(compact=False).to_asm()
+    assert partial == generate(cleanup=False).to_asm()
     assert len(call_assemble(source)) == 1023
     for text, words in [(raw, 1034), (partial, 1028)]:
         with pytest.raises(

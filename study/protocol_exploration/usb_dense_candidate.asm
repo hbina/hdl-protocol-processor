@@ -3,7 +3,7 @@
 SETO 56
 SETOE 60
 idle:
-LDI r3, 0x22
+LDI r3, 34
 PREAD r0, r3
 JFAIL idle
 LDI r1, 128
@@ -197,11 +197,11 @@ MOV r0, r7
 ADDI r0, 109
 SHL r0
 ADDI r0, 1
-CMPI r5, 0xc3
+CMPI r5, 195
 JFAIL maybe_data1
 JMP syndrome
 maybe_data1:
-CMPI r5, 0x4b
+CMPI r5, 75
 JFAIL unsupported
 ADDI r0, 18
 syndrome:
@@ -270,7 +270,7 @@ STORE r0, r1
 LDI r1, 144
 output_byte:
 LOAD r0, r1
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -347,7 +347,7 @@ publish:
 # Output metadata defaults0; no per-byte nonzero metadata used here.
 LDI r1, 128
 LDI r2, 16
-LDI r3, 0x40
+LDI r3, 64
 event:
 LOAD r0, r1
 PWRITE r0, r3

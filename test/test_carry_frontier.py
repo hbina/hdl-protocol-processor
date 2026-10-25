@@ -35,7 +35,7 @@ def test_generated_carry_firmware_and_production_capacity():
         ("usb_out", out_source, 403),
     ]:
         source = (directory / f"{name}_candidate.asm").read_text()
-        assert source == generate()
+        assert source == generate().to_asm()
         assert len(assemble(source)) == length
         with pytest.raises(ValueError):
             production_assemble(source)

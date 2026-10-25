@@ -7,12 +7,11 @@ The existing three6-bit loader transfers already have room for18 bits.
 
 import re
 import sys
-import types
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from tools.assembler import AssemblyError
+from isa_variants import assemble_frontier
 
 
 def replace(source, old, new, count=1):
@@ -21,70 +20,8 @@ def replace(source, old, new, count=1):
     return source.replace(old, new)
 
 
-def base_assembler():
-    source = (ROOT / "tools/assembler.py").read_text()
-    source = replace(source, "PROGRAM_WORDS = 128", "PROGRAM_WORDS = 1024")
-    source = replace(
-        source,
-        "| (0x400 if address > 63 else 0) | address)",
-        "| (0x400 if address > 63 else 0) | (address & 255) | (0x200 if address & 256 else 0) | (0x20000 if address & 512 else 0))",
-    )
-    source = replace(
-        source,
-        "word = opcode << 12 | rd << 8 | (0x400 if address > 63 else 0) | address",
-        "word = opcode << 12 | rd << 8 | (0x400 if address > 63 else 0) | (address & 255) | (0x800 if address & 256 else 0) | (0x20000 if address & 512 else 0)",
-    )
-    module = types.ModuleType("frontier_assembler")
-    # Trusted local assembler, after exact checked replacements.
-    exec(compile(source, "<frontier_assembler>", "exec"), module.__dict__)  # noqa: S102
-    return module
-
-
 def assemble(source):
-    assembler = base_assembler()
-    parsed, labels = assembler._parse_lines(source)
-    if any(re.fullmatch(r"[rR][0-7]", name) for name in labels):
-        raise AssemblyError("register names cannot be labels in frontier assembly")
-    normalized = re.sub(r"\b[rR]([4-7])\b", lambda m: f"r{int(m[1]) & 3}", source)
-    words = assembler.assemble(normalized)
-    rd_ops = {
-        "LDI",
-        "CMPI",
-        "CMPLTI",
-        "ADDI",
-        "ANDI",
-        "ORI",
-        "XORI",
-        "IN",
-        "OUT",
-        "OE",
-        "LOAD",
-        "STORE",
-        "PREAD",
-        "PWRITE",
-        "CMPLT",
-        "MOV",
-        "XOR",
-        "OR",
-        "AND",
-        "SHL",
-        "SHR",
-        "ROL",
-        "ROR",
-        "OUTBIT",
-        "INBIT",
-        "OEBIT",
-        "OEBITN",
-        "JZ",
-        "DJNZ",
-    }
-    rs_ops = {"LOAD", "STORE", "PREAD", "PWRITE", "CMPLT", "MOV", "XOR", "OR", "AND"}
-    for index, (_line, opcode, args) in enumerate(parsed):
-        if opcode in rd_ops and int(args[0][1:]) >= 4:
-            words[index] |= 0x10000
-        if opcode in rs_ops and int(args[1][1:]) >= 4:
-            words[index] |= 0x20000
-    return words
+    return assemble_frontier(source)
 
 
 def expanded_source():

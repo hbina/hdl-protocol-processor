@@ -56,7 +56,7 @@ def test_generated_program_and_capacity_boundary():
     directory = ROOT / "study/protocol_exploration"
     shared = (directory / "usb_live_candidate.asm").read_text()
     inline = (directory / "usb_live_inline_candidate.asm").read_text()
-    assert generate() == shared and generate(False) == inline
+    assert generate().to_asm() == shared and generate(False).to_asm() == inline
     assert len(assemble(shared)) == 947
     with pytest.raises(
         ValueError, match="program contains 1221 words; maximum is 1024"

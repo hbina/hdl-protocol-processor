@@ -6,7 +6,7 @@
 SETO 1
 SETOE 1
 idle:
-LDI r3, 0x22
+LDI r3, 34
 PREAD r0, r3
 JFAIL idle
 LDI r1, 128
@@ -88,7 +88,7 @@ LDI r3, 252
 LOAD r0, r3
 JZ r0, crc_begin
 payload_byte:
-LDI r3, 0x11
+LDI r3, 17
 PREAD r0, r3
 LDI r2, 8
 payload_bits:
@@ -141,8 +141,8 @@ ANDI r1, 1
 OR r3, r1
 ANDI r2, 254
 JZ r0, balance_101_yes
-XORI r2, 0x99
-XORI r3, 0x45
+XORI r2, 153
+XORI r3, 69
 JMP balance_101_end
 balance_101_yes:
 WAIT 2
@@ -355,7 +355,7 @@ STORE r2, r1
 publish:
 LDI r1, 128
 LDI r2, 16
-LDI r3, 0x40
+LDI r3, 64
 event:
 LOAD r0, r1
 PWRITE r0, r3

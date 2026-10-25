@@ -4,31 +4,13 @@ CALL uses opcode0,bit10 plus a10-bit target; RET is0x0800. A10-bit link
 register saves PC+1. No protocol state or arithmetic is implemented in RTL.
 """
 
-from generic_frontier import assemble as base_assemble
-from generic_frontier import base_assembler, replace
+from generic_frontier import replace
+from isa_variants import assemble_call_frontier
 from generic_frontier import expanded_source as base_source
 
 
 def assemble(source):
-    parser = base_assembler()
-    parsed, labels = parser._parse_lines(source)
-    addresses = {}
-    for name, address in labels.items():
-        addresses.setdefault(address, []).append(name)
-    lowered = []
-    for index, (_line, op, args) in enumerate(parsed):
-        lowered += [f"{name}:" for name in addresses.get(index, [])]
-        lowered.append("NOP" if op in {"CALL", "RET"} else op + " " + ", ".join(args))
-    lowered += [f"{name}:" for name in addresses.get(len(parsed), [])]
-    words = base_assemble("\n".join(lowered))
-    for index, (line, op, args) in enumerate(parsed):
-        if op == "CALL":
-            parser._expect(args, 1, op, line)
-            words[index] = 0x400 | parser._bounded(args[0], labels, 1023, "call target")
-        elif op == "RET":
-            parser._expect(args, 0, op, line)
-            words[index] = 0x800
-    return words
+    return assemble_call_frontier(source)
 
 
 def expanded_source():

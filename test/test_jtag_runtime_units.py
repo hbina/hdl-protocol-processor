@@ -17,7 +17,7 @@ def test_jtag_runtime_generation_and_capacity():
     source = (
         ROOT / "study/protocol_exploration/jtag_runtime_candidate.asm"
     ).read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     words = candidate_words("jtag_runtime")
     assert len(words) == 198 and all(0 <= word < 65536 for word in words)
     with pytest.raises(ValueError, match="program contains 198 words; maximum is 128"):

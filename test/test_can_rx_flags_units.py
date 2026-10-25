@@ -19,7 +19,7 @@ def test_can_rx_flags_generation_and_capacity():
         ROOT / "study/protocol_exploration/can_rx_flags_compact_candidate.asm"
     ).read_text()
     large = (ROOT / "study/protocol_exploration/can_rx_flags_candidate.asm").read_text()
-    assert source == generate() and large == unoptimized()
+    assert source == generate().to_asm() and large == unoptimized().to_asm()
     assert len(call_assemble(source)) == 1021
     with pytest.raises(
         ValueError, match="program contains 1069 words; maximum is 1024"

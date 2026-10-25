@@ -107,7 +107,7 @@
     "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
     "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
     "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
-    "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
-    "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    "tools/assembler.py": "f825ea8eb0d7b3f3323a0beb2bc0859ed633a309ab12e97028fc13cda7e611f8",
+    "tools/runtime.py": "42b451e5c759549d7cfc3a18f7a45d731d26ba7421afb9f1b91d1376d387f145"
   }
 }

@@ -5,7 +5,7 @@ SETO 1
 SETOE 1
 LDI r3, 0
 idle:
-LDI r7, 0x22
+LDI r7, 34
 PREAD r0, r7
 JFAIL idle
 LDI r1, 128
@@ -122,7 +122,7 @@ JMP reject
 transmit:
 LDI r1, 148
 LOAD r1, r1
-LDI r7, 0x11
+LDI r7, 17
 JZ r1, receive
 tx_byte:
 PREAD r0, r7
@@ -147,7 +147,7 @@ LOAD r0, r1
 LDI r1, 160
 STORE r0, r1
 JZ r0, publish
-LDI r3, 0xa5
+LDI r3, 165
 LDI r1, 0
 JMP start_deadline
 rx_byte:
@@ -249,7 +249,7 @@ DJNZ r1, rx_bit
 IN r1
 ANDI r1, 2
 JZ r1, framing
-LDI r7, 0x30
+LDI r7, 48
 PWRITE r0, r7
 LDI r0, 0
 ADDI r7, 1
@@ -277,7 +277,7 @@ JMP publish
 reject:
 LDI r1, 147
 STORE r2, r1
-LDI r7, 0x11
+LDI r7, 17
 discard:
 PREAD r0, r7
 JFAIL publish
@@ -286,13 +286,13 @@ publish:
 LDI r3, 0
 LDI r1, 144
 LDI r2, 16
-LDI r7, 0x40
+LDI r7, 64
 event:
 LOAD r0, r1
 PWRITE r0, r7
 ADDI r1, 1
 DJNZ r2, event
-LDI r7, 0x41
+LDI r7, 65
 LDI r0, 0
 PWRITE r0, r7
 JMP idle

@@ -18,7 +18,7 @@ from tools.assembler import assemble as production_assemble
 
 def test_generated_bidirectional_usb_source_and_capacity():
     source = (ROOT / "study/protocol_exploration/usb_in_candidate.asm").read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     assert len(assemble(source)) == 629
     with pytest.raises(ValueError):
         production_assemble(source)

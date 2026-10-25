@@ -4,30 +4,13 @@ SHRC: logical right shift, carry=old bit0. RRC: shift right through carry.
 JNC: branch if carry0. No CRC polynomial or protocol state is in hardware.
 """
 
-from generic_call_frontier import assemble as base_assemble
 from generic_call_frontier import expanded_source as base_source
-from generic_frontier import base_assembler, replace
+from generic_frontier import replace
+from isa_variants import assemble_carry_frontier
 
 
 def assemble(source):
-    parser = base_assembler()
-    parsed, labels = parser._parse_lines(source)
-    addresses = {}
-    for name, address in labels.items():
-        addresses.setdefault(address, []).append(name)
-    lowered = []
-    for index, (_line, opcode, args) in enumerate(parsed):
-        lowered += [f"{name}:" for name in addresses.get(index, [])]
-        op = {"SHRC": "SHR", "RRC": "ROR", "JNC": "JFAIL"}.get(opcode, opcode)
-        lowered.append(op + " " + ", ".join(args))
-    lowered += [f"{name}:" for name in addresses.get(len(parsed), [])]
-    words = base_assemble("\n".join(lowered))
-    for index, (_line, opcode, _args) in enumerate(parsed):
-        if opcode in {"SHRC", "RRC"}:
-            words[index] |= 0x20000
-        elif opcode == "JNC":
-            words[index] |= 0x100
-    return words
+    return assemble_carry_frontier(source)
 
 
 def expanded_source():

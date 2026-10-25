@@ -8,7 +8,7 @@ CALL clear_counters
 SETO 1
 SETOE 1
 idle:
-LDI r3, 0x22
+LDI r3, 34
 PREAD r0, r3
 JFAIL idle
 LDI r1, 128
@@ -422,7 +422,7 @@ JFAIL payload_from_fifo
 LOAD r0, r7
 JMP payload_ready
 payload_from_fifo:
-LDI r3, 0x11
+LDI r3, 17
 PREAD r0, r3
 STORE r0, r7
 payload_ready:
@@ -681,7 +681,7 @@ DJNZ r2, clear_saved_payload
 # Output metadata defaults0; no per-byte nonzero metadata used here.
 LDI r1, 128
 LDI r2, 16
-LDI r3, 0x40
+LDI r3, 64
 event:
 LOAD r0, r1
 PWRITE r0, r3
@@ -893,8 +893,8 @@ LDI r2, 25
 JMP failure
 winner_loss:
 LDI r6, 3
-XORI r4, 0x99
-XORI r7, 0x45
+XORI r4, 153
+XORI r7, 69
 LDI r1, 247
 LOAD r1, r1
 MOV r0, r1
@@ -953,7 +953,7 @@ LDI r0, 3
 STORE r0, r1
 JMP publish
 bus_off_reject:
-LDI r3, 0x11
+LDI r3, 17
 drain_rejected_input:
 PREAD r0, r3
 JFAIL rejected_drained
@@ -1002,7 +1002,7 @@ CALL clear_counters
 SETOE 1
 JMP publish
 emit_byte:
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -1083,7 +1083,6 @@ WAIT 255
 WAIT 142
 DJNZ r3, passive_suspend_bit
 RET
-
 # 252 is dead transmit-packer scratch after an exchange abort. Save only the
 # current flag sample budget; the leaf calls clobber r0/r1 and return_pc.
 # No nested calls and no added data memory or protocol-specific operation.
@@ -1169,7 +1168,6 @@ LDI r2, 11
 DJNZ r3, shared_idle_bus
 LDI r2, 6
 JMP failure
-
 rx_intermission_dominant:
 CMPI r2, 1
 JFAIL rx_overload
@@ -1234,8 +1232,8 @@ ANDI r1, 1
 OR r3, r1
 ANDI r2, 254
 JZ r0, crc_zero_feedback
-XORI r2, 0x99
-XORI r3, 0x45
+XORI r2, 153
+XORI r3, 69
 JMP crc_step_done
 crc_zero_feedback:
 WAIT 2

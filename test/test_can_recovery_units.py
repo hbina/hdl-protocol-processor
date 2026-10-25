@@ -17,7 +17,7 @@ def test_can_recovery_generation_and_capacity():
     source = (
         ROOT / "study/protocol_exploration/can_recovery_candidate.asm"
     ).read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     assert len(frontier_assemble(source)) == 701
     with pytest.raises(ValueError, match="program contains 701 words; maximum is 128"):
         assemble(source)

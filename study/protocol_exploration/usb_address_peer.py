@@ -12,7 +12,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import Timer, ValueChange
 from cocotb.utils import get_sim_time
 from generic_carry_frontier import assemble
-from generic_frontier import base_assembler
+from isa_variants import label_addresses
 from usb_rx_peer import Transceiver, crc16, encode
 from usb_stream_peer import CONSTANTS, data_waveform, send_packets, token
 
@@ -21,7 +21,7 @@ from tools.runtime import Request
 
 
 async def trace_control(phy):
-    _, labels = base_assembler()._parse_lines(
+    labels = label_addresses(
         Path(__file__).with_name("usb_address_candidate.asm").read_text()
     )
     chosen = {

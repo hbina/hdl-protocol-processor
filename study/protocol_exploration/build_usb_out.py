@@ -8,147 +8,182 @@ body matching then checks CRC5 and destination without a post-token bit loop.
 from pathlib import Path
 
 from build_usb_dense import generate as receiver_source
+from tools.isa import (
+    ADDI,
+    ANDI,
+    CMPI,
+    DJNZ,
+    IN,
+    JFAIL,
+    JMP,
+    JZ,
+    LDI,
+    LOAD,
+    Label,
+    MOV,
+    OR,
+    ROR,
+    RRC,
+    SHL,
+    SHR,
+    SHRC,
+    STORE,
+    WAIT,
+    XOR,
+    XORI,
+    r0,
+    r1,
+    r2,
+    r3,
+    r4,
+    r5,
+    r6,
+    r7,
+)
+from tools.program import Comment
 
 
 def generate():
     source = receiver_source()
-    precompute = """
-    # Parameters0..36 are ACK flag/static CRC16 syndromes;37=address,38=endpoint.
-    LDI r0, 37
-    LOAD r0, r0
-    ANDI r0, 127
-    LDI r1, 38
-    LOAD r1, r1
-    ANDI r1, 15
-    MOV r4, r1
-    SHR r4
-    MOV r5, r1
-    ANDI r5, 1
-    ROR r5
-    OR r5, r0
-    LDI r1, 155
-    STORE r5, r1
-    ADDI r1, 1
-    STORE r4, r1
-    MOV r0, r5
-    MOV r1, r4
-    LDI r2, 31
-    LDI r3, 11
-token_crc5:
-    MOV r4, r0
-    ANDI r4, 1
-    XOR r4, r2
-    ANDI r4, 1
-    SHR r2
-    JZ r4, token_crc_no_xor
-    XORI r2, 20
-token_crc_no_xor:
-    SHRC r1
-    RRC r0
-    DJNZ r3, token_crc5
-    XORI r2, 31
-    SHL r2
-    SHL r2
-    SHL r2
-    LDI r4, 156
-    LOAD r0, r4
-    OR r0, r2
-    STORE r0, r4
-    LDI r4, 157
-    LDI r0, 0
-    STORE r0, r4
-    ADDI r4, 1
-    LDI r0, 16
-    STORE r0, r4
-rearm:
-    """
-    marker = "LDI r2, 0\nLDI r3, 0\nwait_idle:"
+    precompute = [
+        Comment(
+            "Parameters0..36 are ACK flag/static CRC16 syndromes;37=address,38=endpoint."
+        ),
+        LDI(r0, 37),
+        LOAD(r0, r0),
+        ANDI(r0, 127),
+        LDI(r1, 38),
+        LOAD(r1, r1),
+        ANDI(r1, 15),
+        MOV(r4, r1),
+        SHR(r4),
+        MOV(r5, r1),
+        ANDI(r5, 1),
+        ROR(r5),
+        OR(r5, r0),
+        LDI(r1, 155),
+        STORE(r5, r1),
+        ADDI(r1, 1),
+        STORE(r4, r1),
+        MOV(r0, r5),
+        MOV(r1, r4),
+        LDI(r2, 31),
+        LDI(r3, 11),
+        Label("token_crc5"),
+        MOV(r4, r0),
+        ANDI(r4, 1),
+        XOR(r4, r2),
+        ANDI(r4, 1),
+        SHR(r2),
+        JZ(r4, Label("token_crc_no_xor")),
+        XORI(r2, 20),
+        Label("token_crc_no_xor"),
+        SHRC(r1),
+        RRC(r0),
+        DJNZ(r3, Label("token_crc5")),
+        XORI(r2, 31),
+        SHL(r2),
+        SHL(r2),
+        SHL(r2),
+        LDI(r4, 156),
+        LOAD(r0, r4),
+        OR(r0, r2),
+        STORE(r0, r4),
+        LDI(r4, 157),
+        LDI(r0, 0),
+        STORE(r0, r4),
+        ADDI(r4, 1),
+        LDI(r0, 16),
+        STORE(r0, r4),
+        Label("rearm"),
+    ]
+    marker = [LDI(r2, 0), LDI(r3, 0), Label("wait_idle")]
     assert source.count(marker) == 1
     source = source.replace(marker, precompute + marker)
     # Charge every detected SOP against a finite request budget. Most work
     # replaces initial delay; the first SYNC sample moves40ns later.
-    marker = "JFAIL sop_tick\nLDI r1, 1"
+    marker = [JFAIL(Label("sop_tick")), LDI(r1, 1)]
     assert source.count(marker) == 1
     source = source.replace(
         marker,
-        """JFAIL sop_tick
-    LDI r4, 158
-    LOAD r0, r4
-    ADDI r0, 255
-    STORE r0, r4
-    JZ r0, timeout
-packet_start:
-    LDI r1, 1""",
+        [
+            JFAIL(Label("sop_tick")),
+            LDI(r4, 158),
+            LOAD(r0, r4),
+            ADDI(r0, 255),
+            STORE(r0, r4),
+            JZ(r0, Label("timeout")),
+            Label("packet_start"),
+            LDI(r1, 1),
+        ],
     )
-    source = source.replace("WAIT 4\nIN r0", "IN r0", 1)
-    marker = "length_ok:\nLDI r0, 144\nLOAD r5, r0\n"
+    source = source.replace([WAIT(4), IN(r0)], [IN(r0)], 1)
+    marker = [Label("length_ok"), LDI(r0, 144), LOAD(r5, r0)]
     assert source.count(marker) == 1
-    gate = """
-length_ok:
-    LDI r0, 144
-    LOAD r5, r0
-    CMPI r5, 0xe1
-    JFAIL maybe_setup
-    JMP token_match
-maybe_setup:
-    CMPI r5, 0x2d
-    JFAIL maybe_in
-    JMP token_match
-maybe_in:
-    CMPI r5, 0x69
-    JFAIL data_gate
-    JMP ignore_token
-token_match:
-    CMPI r7, 147
-    JFAIL ignore_token
-    LDI r0, 145
-    LOAD r4, r0
-    LDI r0, 155
-    LOAD r6, r0
-    XOR r4, r6
-    JZ r4, token_high
-    JMP ignore_token
-token_high:
-    LDI r0, 146
-    LOAD r4, r0
-    LDI r0, 156
-    LOAD r6, r0
-    XOR r4, r6
-    JZ r4, token_valid
-    JMP ignore_token
-token_valid:
-    LDI r0, 157
-    STORE r5, r0
-    JMP rearm
-ignore_token:
-    LDI r0, 157
-    LDI r4, 0
-    STORE r4, r0
-    JMP rearm
-data_gate:
-    LDI r0, 157
-    LOAD r6, r0
-    JZ r6, rearm
-    LDI r4, 0
-    STORE r4, r0
-    CMPI r6, 0x2d
-    JFAIL out_data
-    CMPI r7, 155
-    JFAIL form_error
-    CMPI r5, 0xc3
-    JFAIL pid_error
-out_data:
-    LDI r0, 136
-    STORE r6, r0
-    """
+    gate = [
+        Label("length_ok"),
+        LDI(r0, 144),
+        LOAD(r5, r0),
+        CMPI(r5, 0xE1),
+        JFAIL(Label("maybe_setup")),
+        JMP(Label("token_match")),
+        Label("maybe_setup"),
+        CMPI(r5, 0x2D),
+        JFAIL(Label("maybe_in")),
+        JMP(Label("token_match")),
+        Label("maybe_in"),
+        CMPI(r5, 0x69),
+        JFAIL(Label("data_gate")),
+        JMP(Label("ignore_token")),
+        Label("token_match"),
+        CMPI(r7, 147),
+        JFAIL(Label("ignore_token")),
+        LDI(r0, 145),
+        LOAD(r4, r0),
+        LDI(r0, 155),
+        LOAD(r6, r0),
+        XOR(r4, r6),
+        JZ(r4, Label("token_high")),
+        JMP(Label("ignore_token")),
+        Label("token_high"),
+        LDI(r0, 146),
+        LOAD(r4, r0),
+        LDI(r0, 156),
+        LOAD(r6, r0),
+        XOR(r4, r6),
+        JZ(r4, Label("token_valid")),
+        JMP(Label("ignore_token")),
+        Label("token_valid"),
+        LDI(r0, 157),
+        STORE(r5, r0),
+        JMP(Label("rearm")),
+        Label("ignore_token"),
+        LDI(r0, 157),
+        LDI(r4, 0),
+        STORE(r4, r0),
+        JMP(Label("rearm")),
+        Label("data_gate"),
+        LDI(r0, 157),
+        LOAD(r6, r0),
+        JZ(r6, Label("rearm")),
+        LDI(r4, 0),
+        STORE(r4, r0),
+        CMPI(r6, 0x2D),
+        JFAIL(Label("out_data")),
+        CMPI(r7, 155),
+        JFAIL(Label("form_error")),
+        CMPI(r5, 0xC3),
+        JFAIL(Label("pid_error")),
+        Label("out_data"),
+        LDI(r0, 136),
+        STORE(r6, r0),
+    ]
     source = source.replace(marker, gate)
-    source = source.replace(
-        "# GENERATED by build_usb_dense.py.", "# GENERATED by build_usb_out.py."
+    source = source.replace_comment_text(
+        "GENERATED by build_usb_dense.py.", "GENERATED by build_usb_out.py."
     )
-    return (
-        "\n".join(line.strip() for line in source.splitlines() if line.strip()) + "\n"
-    )
+    return source
 
 
 if __name__ == "__main__":
-    Path(__file__).with_name("usb_out_candidate.asm").write_text(generate())
+    Path(__file__).with_name("usb_out_candidate.asm").write_text(generate().to_asm())

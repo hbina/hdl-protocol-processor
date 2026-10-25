@@ -4,84 +4,133 @@
 from pathlib import Path
 
 from build_can_frontier import generate as frontier_source
-from build_can_rx import Block, put
+from fragments import Fragment, put
+from tools.isa import (
+    ADDI,
+    ANDI,
+    CMPI,
+    DJNZ,
+    INBIT,
+    JFAIL,
+    JMP,
+    JZ,
+    LDI,
+    LOAD,
+    Label,
+    SETO,
+    STORE,
+    r0,
+    r1,
+    r2,
+    r3,
+    r4,
+    r5,
+    r6,
+)
 
 
 def generate():
     source = frontier_source()
-    marker = "LDI r1, 250\nLOAD r0, r1\nCMPI r0, 2\nJFAIL rx_entry\nJMP tx_entry"
+    marker = [
+        LDI(r1, 250),
+        LOAD(r0, r1),
+        CMPI(r0, 2),
+        JFAIL(Label("rx_entry")),
+        JMP(Label("tx_entry")),
+    ]
     assert source.count(marker) == 1
     source = source.replace(
         marker,
-        """LDI r1, 250
-LOAD r0, r1
-LDI r4, 0
-LDI r5, 0
-LDI r6, 0
-CMPI r0, 3
-JFAIL legacy_dispatch
-LDI r4, 3
-LDI r6, 1
-JMP tx_entry
-legacy_dispatch:
-CMPI r0, 2
-JFAIL rx_entry
-JMP tx_entry""",
+        [
+            LDI(r1, 250),
+            LOAD(r0, r1),
+            LDI(r4, 0),
+            LDI(r5, 0),
+            LDI(r6, 0),
+            CMPI(r0, 3),
+            JFAIL(Label("legacy_dispatch")),
+            LDI(r4, 3),
+            LDI(r6, 1),
+            JMP(Label("tx_entry")),
+            Label("legacy_dispatch"),
+            CMPI(r0, 2),
+            JFAIL(Label("rx_entry")),
+            JMP(Label("tx_entry")),
+        ],
     )
-    marker = "LDI r1, 242\nLDI r0, 1\nSTORE r0, r1"
+    marker = [LDI(r1, 242), LDI(r0, 1), STORE(r0, r1)]
     # One RX initializer, one TX initializer. Only TX counts transmission attempts.
-    position = source.index(marker, source.index("tx_crc_low:"))
-    source = source[:position] + "ADDI r5, 1\n" + source[position:]
-    marker = "LDI r2, 24\nJMP failure"
+    position = source.index(marker, source.index([Label("tx_crc_low")]))
+    source = source[:position] + [ADDI(r5, 1)] + source[position:]
+    marker = [LDI(r2, 24), JMP(Label("failure"))]
     assert source.count(marker) == 1
-    source = source.replace(marker, "JMP ack_error")
+    source = source.replace(marker, [JMP(Label("ack_error"))])
     source = source.replace(
-        "publish:\n",
-        "publish:\nJZ r6, ordinary_event\nLDI r1, 136\nSTORE r5, r1\nordinary_event:\n",
+        [Label("publish")],
+        [
+            Label("publish"),
+            JZ(r6, Label("ordinary_event")),
+            LDI(r1, 136),
+            STORE(r5, r1),
+            Label("ordinary_event"),
+        ],
         1,
     )
-    tail = Block("""
-ack_error:
-JZ r6, legacy_no_ack
-ADDI r4, 255
-""")
+    tail = Fragment([Label("ack_error"), JZ(r6, Label("legacy_no_ack")), ADDI(r4, 255)])
     # ACK INBIT/mask/JZ/JMP consumed4 clocks. At75% sample,100 clocks
     # remain before the next bit:4+JZ1+ADDI1+delay94.
-    tail.add(Block.delay(94)).add("SETO 0")
-    tail.add(Block.delay(2399)).add("SETO 1\nLDI r2, 8\nLDI r3, 32")
-    tail.add(Block.delay(297)).add("""
-error_delimiter_sample:
-INBIT r0, 1
-ANDI r0, 1
-JZ r0, error_still_dominant
-DJNZ r2, error_more
-JMP error_delimited
-error_still_dominant:
-LDI r2, 8
-error_more:
-DJNZ r3, error_delay
-JMP recovery_timeout
-error_delay:
-""")
-    tail.add(Block.delay(394)).add("JMP error_delimiter_sample\nerror_delimited:")
+    tail.add(Fragment.delay(94)).add([SETO(0)])
+    tail.add(Fragment.delay(2399)).add([SETO(1), LDI(r2, 8), LDI(r3, 32)])
+    tail.add(Fragment.delay(297)).add(
+        [
+            Label("error_delimiter_sample"),
+            INBIT(r0, 1),
+            ANDI(r0, 1),
+            JZ(r0, Label("error_still_dominant")),
+            DJNZ(r2, Label("error_more")),
+            JMP(Label("error_delimited")),
+            Label("error_still_dominant"),
+            LDI(r2, 8),
+            Label("error_more"),
+            DJNZ(r3, Label("error_delay")),
+            JMP(Label("recovery_timeout")),
+            Label("error_delay"),
+        ]
+    )
+    tail.add(Fragment.delay(394)).add(
+        [JMP(Label("error_delimiter_sample")), Label("error_delimited")]
+    )
     # Enter5 clocks after the eighth recessive sample. Verify3 intermission
     # cells, then schedule the retry SOF exactly at the following bit boundary.
-    tail.add(Block.delay(395))
+    tail.add(Fragment.delay(395))
     for index in range(3):
-        tail.add("INBIT r0, 1\nANDI r0, 1\nJZ r0, recovery_timeout")
+        tail.add([INBIT(r0, 1), ANDI(r0, 1), JZ(r0, Label("recovery_timeout"))])
         if index < 2:
-            tail.add(Block.delay(397))
-    tail.add("JZ r4, retry_exhausted")
+            tail.add(Fragment.delay(397))
+    tail.add([JZ(r4, Label("retry_exhausted"))])
     for address, value in [(242, 1), (243, 0), (245, 0), (247, 144)]:
         tail.add(put(address, value))
-    tail.add("ADDI r5, 1").add(Block.delay(28)).add("JMP tx_tx_cell\nretry_exhausted:")
-    tail.add(Block.delay(96)).add(
-        "LDI r2, 24\nJMP failure\nrecovery_timeout:\nLDI r2, 25\nJMP failure\nlegacy_no_ack:\nLDI r2, 24\nJMP failure"
+    tail.add([ADDI(r5, 1)]).add(Fragment.delay(28)).add(
+        [JMP(Label("tx_tx_cell")), Label("retry_exhausted")]
     )
-    return (source + "\n".join(tail.lines) + "\n").replace(
-        "# GENERATED by build_can_frontier.py.", "# GENERATED by build_can_recovery.py."
+    tail.add(Fragment.delay(96)).add(
+        [
+            LDI(r2, 24),
+            JMP(Label("failure")),
+            Label("recovery_timeout"),
+            LDI(r2, 25),
+            JMP(Label("failure")),
+            Label("legacy_no_ack"),
+            LDI(r2, 24),
+            JMP(Label("failure")),
+        ]
+    )
+    return (source + tail.program).replace_comment_text(
+        "GENERATED by build_can_frontier.py.", "GENERATED by build_can_recovery.py."
     )
 
 
 if __name__ == "__main__":
-    Path(__file__).with_name("can_recovery_candidate.asm").write_text(generate())
+    Path(__file__).with_name("can_recovery_candidate.asm").write_text(
+        generate().to_asm()
+    )

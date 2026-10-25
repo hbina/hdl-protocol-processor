@@ -80,6 +80,10 @@ def main():
         Path(__file__),
         ROOT / "test/test.py",
         ROOT / "tools/assembler.py",
+        ROOT / "tools/isa.py",
+        ROOT / "tools/program.py",
+        HERE / "isa_variants.py",
+        HERE / "fragments.py",
         ROOT / "tools/runtime.py",
         HERE / "run_can.py",
     ]

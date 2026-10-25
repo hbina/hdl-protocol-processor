@@ -40,7 +40,7 @@ def test_generated_live_and_control_sources_and_capacity():
         ("usb_control", control_source, 776),
     ]:
         source = (directory / f"{name}_candidate.asm").read_text()
-        assert source == generate()
+        assert source == generate().to_asm()
         assert len(assemble(source)) == count
         with pytest.raises(ValueError):
             production_assemble(source)

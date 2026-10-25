@@ -38,11 +38,13 @@ The [original tail investigation](docs/can_tail_study.md) preserves three
 old-image wire failures and an unverified 1,067-word draft. The separate
 [compact tail candidate](docs/can_tail_compact_study.md) fits 1,024 model words
 and freshly passes all seven selected RX-tail/overload groups. Full CAN behavior
-and production fit remain open. Pre-commit checks pass all 57 project units and
-ten production RTL integration tests. Some older study source fingerprints
-predate formatting changes; the aggregate provenance audit currently rejects
-the checkout. Historical outcomes are preserved, not claimed as fresh checks.
-See [commit verification](docs/commit_verification.json).
+and production fit remain open. After the typed-ISA migration, all 155 project
+unit tests pass and strict Pyright reports zero errors. The aggregate provenance
+audit now verifies 17 saved source/XML records and reproduces 17 production
+capacity failures. See [migration verification](docs/typed_isa_verification.json).
+The earlier [pre-migration verification](docs/commit_verification.json) remains
+historical evidence; its 57-unit count and failed provenance audit describe that
+earlier source tree.
 
 The [validated UART runtime candidate](docs/uart_runtime_study.md) now passes
 the specified request ABI, input draining, clock deadlines and reset/recovery
@@ -163,8 +165,11 @@ role is a separate scope decision.
 
 | Check | Latest result |
 |---|---:|
-| Fresh pre-commit units / production RTL / compact CAN tails | 57 / 10 / 7 passed; [evidence](docs/commit_verification.json) |
+| Post-migration project units / strict type check | 155 passed / 0 errors; [evidence](docs/typed_isa_verification.json) |
+| Historical pre-migration units / production RTL / compact CAN tails | 57 / 10 / 7 passed; [earlier evidence](docs/commit_verification.json) |
 | Assembler unit tests | 16 passed |
+| Typed ISA model / program builder / RTL-and-doc sync units | 36 / 14 / 2 passed; strict `pyright` 0 errors on `tools/isa.py`, `tools/program.py`, `tools/assembler.py` and study `isa_variants.py`/`fragments.py` |
+| ISA golden snapshot (`test/test_isa_golden.py`) | 46 passed; all 45 checked-in programs bit-identical under all six `IsaConfig` variants (124 encodings, 146 pinned errors) |
 | Runtime storage/FIFO unit tests | 5 passed |
 | Controller ABI/recovery unit tests | 4 passed |
 | Icarus RTL protocol/runtime/probe regression | 10 passed |
@@ -200,7 +205,7 @@ role is a separate scope decision.
 | CAN flag-bit investigation / new unit | Old image:2 counter failures,1 passive control passed; draft1,076>1,024 model;54 total units; draft behavior unverified |
 | CAN compact flag-error/restart model / regressions / new unit | 5 fault +5 post-flag +2 selected RX groups passed;55 total units;1,024 words after52-word saving;58 restart samples at400 clocks |
 | CAN tail investigation / new unit | Old image:3 wire failures,1 ordinary-frame control passed;1,067-word draft exceeds model1,024;56 total units; draft unverified |
-| Nine-protocol evidence/capacity audit | 17 passing source/XML records checked; 17 production size failures reproduced; acceptance gaps remain |
+| Nine-protocol evidence/capacity audit | Rechecked 2026-10-25 after the typed-ISA migration: 17 saved passing source/XML records verified and 17 production size failures reproduced; [audit evidence](docs/protocol_acceptance_results.json). This check does not rerun simulations or prove full protocol acceptance |
 | Verilator RTL baseline regression | 5 passed (historical; probes not rerun) |
 | Post-route runtime regression | 5 passed (Icarus, CMOS5L functional models) |
 | Baseline post-route UART/SPI/I2C regression | Passed for v0.1 |
@@ -290,6 +295,10 @@ See [the baseline design report](docs/design.md) for historical results and
       and production physical implementation; validate hardware interoperability.
 - [x] Implement the programmable GPIO processor and loader.
 - [x] Add an assembler and example firmware workflow.
+- [x] Model instructions as a typed sum type (`tools/isa.py`) with exhaustive,
+  type-checked encode/decode; build test and study programs from typed values
+  instead of assembly text; replace the five text-patched study assemblers with
+  `IsaConfig` variants ([design §4/§6](docs/design.md)).
 - [x] Demonstrate UART TX, SPI mode 0, and I2C address-write signaling.
 - [x] Pass RTL and post-route gate-level regression.
 - [x] Complete the pinned CMOS5L RTL-to-GDS flow.
@@ -314,14 +323,27 @@ See [the baseline design report](docs/design.md) for historical results and
 
 ### Known limitations and signoff gaps
 
+- The instruction sum type exists only in Python. The RTL keeps hand-written
+  `OP_*` localparams (Verilog-2005/Yosys have no tagged unions, and the RTL is
+  frozen by the physical baseline); `test/test_isa_sync.py` detects drift but
+  does not prevent it. Study `expanded_source()` functions still derive widened
+  RTL by exact text replacement on `protocol_core.v`; only the assembler side is
+  typed. Instruction semantics are modelled only for cycle counts; there is no
+  Python reference simulator.
+- Generated study candidates (`*_candidate.asm`) were regenerated in the typed
+  model's canonical listing format (decimal operands). Their words and labels
+  are unchanged, but study documents quoting the old text spelling (for example
+  `0x22`) no longer match the listings character for character.
 - The acceptance audit verifies source/result integrity and capacity diagnostics;
   it does not prove the full protocol contracts. UART's named test and model
   candidate now exist; the production image is blocked by251-word/eight-register
   requirements. JTAG rejection now passes on a198-word model candidate; CAN node
   recovery remains open.
-  Changes are split into feature/study commits. Historical study hashes can
-  predate current formatting; the aggregate provenance audit rejects changed
-  source/XML hashes until the affected experiments and records are refreshed.
+  The post-migration aggregate audit passes for its 17 recorded source/XML
+  pairs. It requires matching saved simulator artifacts, which are not tracked
+  in Git; a fresh checkout must regenerate them before running the audit.
+  The earlier pre-migration verification record retains its historical hashes
+  and audit failure and is not evidence for the current instruction model.
   See the audit for the requirement matrix and next implementation task.
 - UART/SPI/JTAG exploration probes have RTL TX/RX evidence for valid requests only.
   The compact production probes ignore request operation/shape validation and
@@ -445,11 +467,17 @@ To use Verilator instead:
 uv run make -C test SIM=verilator
 ```
 
-Run the assembler unit tests separately:
+Run the instruction-model, assembler and runtime unit tests, and type-check
+the instruction model, separately:
 
 ```sh
-uv run pytest test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py
+uv run pytest test/test_assembler.py test/test_isa.py test/test_program.py test/test_isa_golden.py test/test_isa_sync.py test/test_runtime_units.py test/test_runtime_driver.py
+uv run pyright
 ```
+
+After an intentional encoding change, regenerate the golden snapshot with
+`uv run python -m tools.snapshot_isa` and the design-document encoding table
+with `uv run python -m tools.isa --doc`.
 
 The default Icarus test produces `test/tb.fst`, which can be opened with
 GTKWave or Surfer.

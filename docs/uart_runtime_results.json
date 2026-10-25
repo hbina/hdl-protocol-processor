@@ -14,7 +14,7 @@
     "stderr": "Actual ASIC capacity: program contains 251 words; maximum is 128"
   },
   "model": {
-    "executed_at_utc": "2026-10-25T02:16:46.584836+00:00",
+    "executed_at_utc": "2026-10-25T14:44:08.255757+00:00",
     "model": "counterfactual1024x18_eight_registers",
     "candidate_words": 251,
     "production_capacity_words": 128,
@@ -39,18 +39,22 @@
       "test/sim_build/uart_runtime_frontier1024/protocol_core_frontier1024.v": "d87a80938c8b316a02abbd465c67a1e70b4ed419769668d92affb0909072c411",
       "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
       "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
-      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
-      "test/test_uart_probe.py": "79a54bf739aeb7c7ba88aad930c4dacbd55f228123c2f833324e9d7ec88a2b39",
-      "test/test_uart_runtime.py": "5edb42ada9c2af1652bd2ad72e9842b36edfb1bf2cdea605837880f9f1dc6a89",
-      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca",
-      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
-      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
-      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
-      "study/protocol_exploration/build_uart_runtime.py": "ec2a32346bbfb77e448e4188e713ecce1f933a93946d368865843bf5f3430da2",
-      "study/protocol_exploration/uart_runtime_candidate.asm": "058229ed62f2e701e84031bebf16a9362d5a2bbeb1b1cdc8f1c3936fa25740f5",
-      "study/protocol_exploration/run_uart_runtime.py": "c39049204bc15487e6fb1cfb35952a66d492fc8763cae05bbe04e08bd93b54d5"
+      "test/test.py": "84da7b0cdb1fc77b32b7027aff5b664a77c50120b23a70483189e558c0e8b43e",
+      "test/test_uart_probe.py": "81e66ad6efb0dfd3a3bc9e56615883549c86fe64eae12db719c225c5c83aa6e7",
+      "test/test_uart_runtime.py": "a9703a00e8fb453a74ed11290b629290239ca110b709ee97847474c8896679a9",
+      "tools/runtime.py": "42b451e5c759549d7cfc3a18f7a45d731d26ba7421afb9f1b91d1376d387f145",
+      "tools/assembler.py": "f825ea8eb0d7b3f3323a0beb2bc0859ed633a309ab12e97028fc13cda7e611f8",
+      "tools/isa.py": "0c519c63169659808eb231b2186393c33be8d227f12728acd4d524565a8a5c47",
+      "tools/program.py": "b8d333be296c6b95f990a2892fc894466e0428f084f3857152f759786a61b134",
+      "study/protocol_exploration/isa_variants.py": "4532cfb582212bbe9b7ad69cc7107583a2bbdcab2dcb55fd97b15a54b4885483",
+      "study/protocol_exploration/fragments.py": "04982c1995ba3177ca234e46d4a7e3009d5dfa36366960a5304443e4ab804310",
+      "study/protocol_exploration/build_can_rx.py": "09cdef1b62c718f846cecddc1534d2d19953da2b304805ac5924a2f76d1d995e",
+      "study/protocol_exploration/generic_frontier.py": "f35171a68b157866767af00befa56132d5dd1ed024e323d299815cf978ac3f98",
+      "study/protocol_exploration/build_uart_runtime.py": "6cb741a711c06f0560b67d9a00db7d731bbd25a0df8f15925983043e2a163bf3",
+      "study/protocol_exploration/uart_runtime_candidate.asm": "15c33da2f2fe014521429dc2ca0f8aa389cb09aba9562c5db127c9757faec10c",
+      "study/protocol_exploration/run_uart_runtime.py": "db793dce581a98ec2923ee20b52dce47a74e412eb6233b92e26d8a043e33214a"
     },
-    "results_xml_sha256": "7879df0aa1b0d216365bd7f3f1aec26d6d65ea04e52e2431110c485e03875109"
+    "results_xml_sha256": "e485dd6bb05ff49ed4167a19b5b3efa72114614331dc17eb11ee1320837372ed"
   },
   "deadline_measurements": {
     "deadline_timings": {

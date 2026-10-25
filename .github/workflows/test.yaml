@@ -23,9 +23,12 @@ jobs:
           uv python install
           uv sync --locked
 
+      - name: Type-check the instruction model (strict)
+        run: uv run --locked pyright
+
       - name: Run tests
         run: |
-          uv run pytest test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py
+          uv run pytest test/test_assembler.py test/test_isa.py test/test_program.py test/test_isa_golden.py test/test_isa_sync.py test/test_runtime_units.py test/test_runtime_driver.py
           cd test
           uv run make clean
           uv run make

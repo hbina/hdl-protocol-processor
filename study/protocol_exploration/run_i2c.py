@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import importlib.util
 import json
 from pathlib import Path
 import sys
@@ -20,18 +19,13 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from isa_variants import assemble_wide256
+
 from tools.assembler import AssemblyError, assemble
 
 
 def candidate_words():
-    # Isolated assembler module; no mutation of tools.assembler's real limit.
-    spec = importlib.util.spec_from_file_location(
-        "capacity_assembler", ROOT / "tools/assembler.py"
-    )
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    module.PROGRAM_WORDS = 256
-    return module.assemble((HERE / "i2c_candidate.asm").read_text())
+    return assemble_wide256((HERE / "i2c_candidate.asm").read_text())
 
 
 def expanded_source():
@@ -91,6 +85,10 @@ def main():
         Path(__file__),
         ROOT / "test/test.py",
         ROOT / "tools/assembler.py",
+        ROOT / "tools/isa.py",
+        ROOT / "tools/program.py",
+        HERE / "isa_variants.py",
+        HERE / "fragments.py",
         ROOT / "tools/runtime.py",
     ]
     digests = {

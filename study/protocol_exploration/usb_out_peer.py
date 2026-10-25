@@ -11,7 +11,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, Timer, ValueChange
 from cocotb.utils import get_sim_time
 from generic_carry_frontier import assemble
-from generic_frontier import base_assembler
+from isa_variants import label_addresses
 from usb_rx_peer import Transceiver, crc16, encode
 
 from test import PinController, load_program, reset
@@ -39,7 +39,7 @@ def token(address, endpoint, pid=0xE1):
 
 async def trace_packets(dut, phy):
     source = Path(__file__).with_name("usb_out_candidate.asm").read_text()
-    _, labels = base_assembler()._parse_lines(source)
+    labels = label_addresses(source)
     samples = {labels[f"sample_{phase}"]: phase for phase in range(3)}
     core = dut.user_project.core
     group = None

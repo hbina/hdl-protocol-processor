@@ -12,6 +12,25 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from tools.assembler import PROGRAM_WORDS, assemble  # noqa: E402
+from tools.isa import (  # noqa: E402
+    CMPI,
+    CMPLT,
+    CMPLTI,
+    DJNZ,
+    HALT,
+    JFAIL,
+    JMP,
+    JZ,
+    LDI,
+    LOAD,
+    STORE,
+    Label,
+    r0,
+    r1,
+    r2,
+    r3,
+)
+from tools.program import Image, Program  # noqa: E402
 from tools.runtime import Request, RuntimeController, TransportError  # noqa: E402
 import random
 
@@ -33,9 +52,16 @@ async def reset(dut, pin_input: int = 0) -> None:
     await RisingEdge(dut.clk)
 
 
-async def load_program(dut, words: list[int]) -> None:
+async def load_program(dut, program: list[int] | Image | Program) -> None:
     """Load words through ui[7:0], using three six-bit chunks per word."""
 
+    if isinstance(program, Program):
+        program = program.link()
+    if isinstance(program, Image):
+        dut._log.debug("loading program:\n%s", program.disassemble())
+        words = program.words
+    else:
+        words = program
     dut.ui_in.value = 0x80
     await RisingEdge(dut.clk)
 
@@ -266,54 +292,28 @@ async def test_runtime_transport_and_boundaries(dut):
 async def test_runtime_isa_and_gpio_timing(dut):
     cocotb.start_soon(Clock(dut.clk, 20, unit="ns").start())
     await reset(dut)
-    source = """
-        LDI r0, 0x5a
-        LDI r1, 128
-        STORE r0, r1
-        LDI r0, 0
-        LOAD r2, r1
-        CMPI r2, 0x5a
-        JFAIL fail
-        CMPLTI r2, 100
-        JFAIL fail
-        CMPLT r0, r2
-        JFAIL fail
-        LDI r1, 0
-        STORE r2, r1
-        JFAIL expected
-    fail:
-        LDI r3, 0xee
-        HALT
-    expected:
-        JMP far
-    """
-    words = assemble(
-        source
-        + "NOP\n" * (127 - len(assemble(source.replace("JMP far", "JMP 127"))))
-        + "far: HALT"
+    fail, expected, far = Label("fail"), Label("expected"), Label("far")
+    program = Program(
+        [LDI(r0, 0x5A), LDI(r1, 128), STORE(r0, r1), LDI(r0, 0), LOAD(r2, r1)]
+        + [CMPI(r2, 0x5A), JFAIL(fail), CMPLTI(r2, 100), JFAIL(fail)]
+        + [CMPLT(r0, r2), JFAIL(fail), LDI(r1, 0), STORE(r2, r1), JFAIL(expected)]
+        + [fail, LDI(r3, 0xEE), HALT()]
+        + [expected, JMP(far)]
     )
-    await load_program(dut, words)
+    program.pad_to(127).mark(far)  # the last program word
+    program += HALT()
+    await load_program(dut, program.link())
     await ClockCycles(dut.clk, 100)
     controller = PinController(dut)
     assert await controller.read(0x10D) == 0x5A
     assert await controller.read(0x10E) == 0
     # Loader crosses 64 words; both long conditional/decrement branches execute.
-    source = (
-        "JMP far\n"
-        + "NOP\n" * 63
-        + """far:
-        LDI r0, 0
-        JZ r0, conditional
-        LDI r3, 1
-    conditional:
-        LDI r0, 2
-    loop:
-        DJNZ r0, loop
-        HALT
-    """
-    )
+    far, conditional, loop = Label("far"), Label("conditional"), Label("loop")
+    program = Program([JMP(far)]).pad_to(64).mark(far)
+    program += [LDI(r0, 0), JZ(r0, conditional), LDI(r3, 1)]
+    program += [conditional, LDI(r0, 2), loop, DJNZ(r0, loop), HALT()]
     await reset(dut)
-    await load_program(dut, assemble(source))
+    await load_program(dut, program.link())
     await ClockCycles(dut.clk, 20)
     controller = PinController(dut)
     assert await controller.read(0x10B) == 0

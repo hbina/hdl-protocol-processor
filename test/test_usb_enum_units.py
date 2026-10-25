@@ -36,7 +36,7 @@ def test_generated_enumeration_sources_and_capacity():
         ("usb_enum_unoptimized", False, 991),
     ]:
         source = (directory / f"{name}_candidate.asm").read_text()
-        assert source == generate(pipeline)
+        assert source == generate(pipeline).to_asm()
         assert len(assemble(source)) == count
         with pytest.raises(ValueError):
             production_assemble(source)

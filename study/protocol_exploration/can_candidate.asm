@@ -5,7 +5,7 @@
 SETO 1
 SETOE 1
 idle:
-LDI r3, 0x22
+LDI r3, 34
 PREAD r0, r3
 JFAIL idle
 LDI r1, 128
@@ -166,8 +166,8 @@ ANDI r1, 1
 OR r3, r1
 ANDI r2, 254
 JZ r0, balance_3_yes
-XORI r2, 0x99
-XORI r3, 0x45
+XORI r2, 153
+XORI r3, 69
 JMP balance_3_end
 balance_3_yes:
 WAIT 2
@@ -305,7 +305,7 @@ SHL r0
 OR r0, r3
 ADDI r1, 1
 DJNZ r2, id_high
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -320,7 +320,7 @@ SHL r0
 OR r0, r3
 ADDI r1, 1
 DJNZ r2, id_low
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -354,7 +354,7 @@ ANDI r3, 7
 JZ r3, output_byte
 JMP data_bit
 output_byte:
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -379,7 +379,7 @@ publish:
 # Output metadata defaults0; no per-byte nonzero metadata used here.
 LDI r1, 128
 LDI r2, 16
-LDI r3, 0x40
+LDI r3, 64
 event:
 LOAD r0, r1
 PWRITE r0, r3

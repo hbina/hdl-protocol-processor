@@ -14,7 +14,7 @@ SETO 1
 WAIT 249
 SETO 0
 idle:
-LDI r3, 0x22
+LDI r3, 34
 PREAD r0, r3
 JFAIL idle
 LDI r1, 128
@@ -144,7 +144,7 @@ SETO 1
 WAIT 249
 SETO 0
 byte:
-LDI r3, 0x11
+LDI r3, 17
 PREAD r0, r3
 LDI r1, 0
 LDI r2, 16
@@ -176,7 +176,7 @@ OUTBIT r3, 0
 ADDI r2, 254
 CMPLTI r2, 2
 JFAIL bit
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r1, r3
 LDI r0, 0
 ADDI r3, 1
@@ -203,7 +203,7 @@ SETO 0
 publish:
 LDI r1, 144
 LDI r2, 16
-LDI r3, 0x40
+LDI r3, 64
 event:
 LOAD r0, r1
 PWRITE r0, r3
@@ -216,7 +216,7 @@ JMP idle
 reject:
 LDI r1, 147
 STORE r2, r1
-LDI r3, 0x11
+LDI r3, 17
 discard:
 PREAD r0, r3
 JFAIL publish

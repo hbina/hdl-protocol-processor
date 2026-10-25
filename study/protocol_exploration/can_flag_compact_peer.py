@@ -14,14 +14,14 @@ from can_recovery_peer import BIT, until
 from can_rx_flags_peer import receive_good
 from cocotb.triggers import RisingEdge, Timer, ValueChange, with_timeout
 from cocotb.utils import get_sim_time
-from generic_call_frontier import base_assembler
+from isa_variants import label_addresses
 
 from tools.runtime import Request
 
 
 async def trace_flags(bus):
     source = Path(os.environ["CAN_FLAG_BIT_SOURCE"]).read_text()
-    _, labels = base_assembler()._parse_lines(source)
+    labels = label_addresses(source)
     core = bus.dut.user_project.core
     while True:
         await ValueChange(core.pc)

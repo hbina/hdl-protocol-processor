@@ -13,7 +13,8 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, Timer, ValueChange
 from cocotb.utils import get_sim_time
 from frontier_peer import rx, tx
-from generic_frontier import assemble, base_assembler
+from generic_frontier import assemble
+from isa_variants import label_addresses
 
 from test import PinController, load_program, reset
 from tools.runtime import Request
@@ -21,7 +22,7 @@ from tools.runtime import Request
 
 class DriftPeer(ArbitrationPeer):
     async def trace_samples(self, source):
-        _, labels = base_assembler()._parse_lines(source)
+        labels = label_addresses(source)
         core = self.dut.user_project.core
         while True:
             await ValueChange(core.pc)

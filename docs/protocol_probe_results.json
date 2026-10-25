@@ -81,15 +81,17 @@
       "firmware/uart_probe.asm": "4b2d7a3b3920b047ec06d7b186e9424b28a799217997c1e3340af5f8643a6209",
       "firmware/spi_probe.asm": "18de8782dd6fee142c73eb4fe9a97e2d6e8ee727ded0ddbc16233a9abb7fe783",
       "firmware/jtag_probe.asm": "9b93d43622db454e62c3b162cfa5e39a8dfdfca423313183d933e17aa209470d",
-      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
-      "test/test_uart_probe.py": "79a54bf739aeb7c7ba88aad930c4dacbd55f228123c2f833324e9d7ec88a2b39",
-      "test/test_spi_probe.py": "1ed8cae626df8ae6a36feff8de9b76283100458a2ba761db079abe17e924b730",
-      "test/test_jtag_probe.py": "8a3d0eb2f164e5852f9b0cf8f43df20c9a7bfa7a6540f5f3499b430a57cc55fb",
+      "test/test.py": "84da7b0cdb1fc77b32b7027aff5b664a77c50120b23a70483189e558c0e8b43e",
+      "test/test_uart_probe.py": "81e66ad6efb0dfd3a3bc9e56615883549c86fe64eae12db719c225c5c83aa6e7",
+      "test/test_spi_probe.py": "281a69ff4acce2cb44ddacd9ae71e906e633a35a8d8fd6b949e68f409aeeb826",
+      "test/test_jtag_probe.py": "7a02a07521d35a4cd0e12251825bfb1a703982678a9d0e304f4fc9e390094e3e",
       "test/Makefile": "39e61273349dc0f471a1d59d1164481ff7a83e47f59535046458f8e45c2898d8",
-      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca",
-      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd"
+      "tools/runtime.py": "42b451e5c759549d7cfc3a18f7a45d731d26ba7421afb9f1b91d1376d387f145",
+      "tools/assembler.py": "f825ea8eb0d7b3f3323a0beb2bc0859ed633a309ab12e97028fc13cda7e611f8",
+      "tools/isa.py": "0c519c63169659808eb231b2186393c33be8d227f12728acd4d524565a8a5c47",
+      "tools/program.py": "b8d333be296c6b95f990a2892fc894466e0428f084f3857152f759786a61b134"
     },
-    "results_xml_sha256": "a1074cc92734bfeeb7df7c025163abc7d734c6f8c82ef35a35cfb5b4d5268d5f",
+    "results_xml_sha256": "1d8f0f2b39db60fcb9fb52b706f0d52ae0379c22ae6fa8c186cc8dcb3325a0dc",
     "exit_code": 0
   },
   "images": {

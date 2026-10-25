@@ -8,9 +8,11 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import Event, First, RisingEdge, Timer, ValueChange
 from cocotb.utils import get_sim_time
-from run_wave_c import candidate_words, study_assembler
+from run_wave_c import candidate_words
 
 from test import PinController, load_program, reset
+from tools.isa import CMPI, DJNZ, HALT, JFAIL, JMP, JZ, LDI, WIDE512, r0, r2, r3
+from tools.program import place
 from tools.runtime import Request
 
 
@@ -173,25 +175,26 @@ async def transact(
 async def test_wave_c_generic_addressing(dut):
     cocotb.start_soon(Clock(dut.clk, 20, unit="ns").start())
     await reset(dut)
-    lines = ["HALT"] * 512
-    for index, instruction in {
-        0: "JMP 260",
-        260: "LDI r0, 0",
-        261: "JZ r0, 300",
-        300: "LDI r2, 2",
-        301: "DJNZ r2, 301",
-        302: "CMPI r2, 1",
-        303: "JFAIL 400",
-        400: "CMPI r2, 0",
-        401: "JFAIL 499",
-        402: "LDI r0, 0x5a",
-        403: "LDI r3, 0xa5",
-        404: "JMP 511",
-        511: "HALT",
-    }.items():
-        lines[index] = instruction
+    image = place(
+        {
+            0: JMP(260),
+            260: LDI(r0, 0),
+            261: JZ(r0, 300),
+            300: LDI(r2, 2),
+            301: DJNZ(r2, 301),
+            302: CMPI(r2, 1),
+            303: JFAIL(400),
+            400: CMPI(r2, 0),
+            401: JFAIL(499),
+            402: LDI(r0, 0x5A),
+            403: LDI(r3, 0xA5),
+            404: JMP(511),
+            511: HALT(),
+        },
+        512,
+    )
     # Both 9-bit PC/loader and branch bank bits matter; finish at the last word.
-    await load_program(dut, study_assembler().assemble("\n".join(lines)))
+    await load_program(dut, image.link(WIDE512).words)
     await Timer(600, unit="ns")
     dut.ena.value = 0
     controller = PinController(dut)

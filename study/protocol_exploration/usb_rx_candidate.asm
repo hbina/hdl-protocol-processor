@@ -6,7 +6,7 @@
 SETO 56
 SETOE 60
 idle:
-LDI r3, 0x22
+LDI r3, 34
 PREAD r0, r3
 JFAIL idle
 LDI r1, 128
@@ -311,11 +311,11 @@ XOR r0, r2
 ANDI r0, 15
 CMPI r0, 15
 JFAIL pid_error
-CMPI r2, 0xc3
+CMPI r2, 195
 JFAIL maybe_data1
 JMP crc_begin
 maybe_data1:
-CMPI r2, 0x4b
+CMPI r2, 75
 JFAIL unsupported
 crc_begin:
 LDI r2, 255
@@ -363,7 +363,7 @@ JMP crc_byte
 crc_done:
 CMPI r2, 1
 JFAIL crc_error
-CMPI r3, 0xb0
+CMPI r3, 176
 JFAIL crc_error
 # Optional diagnostic ACK: measure this path, do not claim timely USB.
 LDI r1, 0
@@ -418,7 +418,7 @@ STORE r0, r1
 LDI r1, 144
 output_byte:
 LOAD r0, r1
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -456,7 +456,7 @@ publish:
 # Output metadata defaults0; no per-byte nonzero metadata used here.
 LDI r1, 128
 LDI r2, 16
-LDI r3, 0x40
+LDI r3, 64
 event:
 LOAD r0, r1
 PWRITE r0, r3

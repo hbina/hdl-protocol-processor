@@ -1,0 +1,53 @@
+{
+  "executed_at_utc": "2026-10-25T15:08:04.409947+00:00",
+  "scope": "post_migration_units_strict_types_and_saved_source_xml_integrity",
+  "full_protocol_acceptance_proven": false,
+  "project_units": {
+    "command": "uv run --locked pytest -q test --junitxml=/tmp/asic-reconcile-units.xml",
+    "exit_code": 0,
+    "passed": 155,
+    "failed": 0,
+    "skipped": 0
+  },
+  "strict_types": {
+    "command": "uv run --locked pyright --outputjson",
+    "exit_code": 0,
+    "summary": {
+      "filesAnalyzed": 5,
+      "errorCount": 0,
+      "warningCount": 0,
+      "informationCount": 0,
+      "timeInSec": 0.656
+    }
+  },
+  "aggregate_audit": {
+    "command": "uv run --locked python tools/audit_exploration.py --output docs/protocol_acceptance_results.json",
+    "exit_code": 0,
+    "records_verified": 17,
+    "production_capacity_failures_reproduced": 17,
+    "evidence": "docs/protocol_acceptance_results.json",
+    "evidence_sha256": "e7d0369f670d0d8decb66b3138091e44eca0a43f9e40fd197ae064b78459771c"
+  },
+  "source_sha256": {
+    "pyproject.toml": "b6d25e71aba7336d8e643f18f171d5c1c7bb0e2544cc0bbd960d7d3cd7597387",
+    "uv.lock": "5f696596a912f4767fdc78c3e50e94dc439a8742324584c63c5c023df4b271b0",
+    "tools/isa.py": "0c519c63169659808eb231b2186393c33be8d227f12728acd4d524565a8a5c47",
+    "tools/program.py": "b8d333be296c6b95f990a2892fc894466e0428f084f3857152f759786a61b134",
+    "tools/assembler.py": "f825ea8eb0d7b3f3323a0beb2bc0859ed633a309ab12e97028fc13cda7e611f8",
+    "study/protocol_exploration/isa_variants.py": "4532cfb582212bbe9b7ad69cc7107583a2bbdcab2dcb55fd97b15a54b4885483",
+    "study/protocol_exploration/fragments.py": "04982c1995ba3177ca234e46d4a7e3009d5dfa36366960a5304443e4ab804310",
+    "test/test_isa.py": "658bbc82198bbb2c6304a6d3fc1b9035418e26169da69291132ad3515d5516d4",
+    "test/test_program.py": "dc25ed705ff75835ba9ea50e01132f51cdc35cec6583af0ba11e8828cfab1d9f",
+    "test/test_isa_golden.py": "7ede0c33bc4202ea34d3a98f978e46d1551cfd3b8553e61e47db696c821ef1ad",
+    "test/test_isa_sync.py": "79afea0dcf74785849703e20b319552f47c4614d9ae4edc3e474ac3ec7376ce3",
+    "test/golden/isa_words.json": "2136443b8bc51f8198013f8a7fb47b1f281bd36c0c51094cdac727ed25f7bbc3"
+  },
+  "historical_verification": "docs/commit_verification.json",
+  "limitations": [
+    "This reconciliation reran unit tests, strict type checking and the aggregate audit; it did not rerun protocol simulations.",
+    "The aggregate audit checks 17 saved source/XML records and reproduces assembly-capacity failures; it does not establish all protocol coverage or validate every study record.",
+    "Saved simulator artifacts are not tracked in Git; regenerate them in a fresh checkout before running the aggregate audit.",
+    "The historical verification record describes the pre-migration source tree, including its then-failing aggregate audit.",
+    "No new physical implementation, mapped tests or hardware tests were run."
+  ]
+}

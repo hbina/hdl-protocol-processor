@@ -17,7 +17,7 @@ def test_flag_bit_draft_freshness_and_capacity():
     source = (
         ROOT / "study/protocol_exploration/can_flag_bit_candidate.asm"
     ).read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     with pytest.raises(
         ValueError, match="program contains 1076 words; maximum is 1024"
     ):

@@ -15,7 +15,7 @@ from tools.assembler import assemble
 
 def test_can_tail_draft_freshness_and_capacity():
     source = (ROOT / "study/protocol_exploration/can_tail_candidate.asm").read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     with pytest.raises(
         ValueError, match="program contains 1067 words; maximum is 1024"
     ):

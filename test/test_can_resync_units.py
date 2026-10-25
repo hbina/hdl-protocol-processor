@@ -15,7 +15,7 @@ from tools.assembler import assemble
 
 def test_can_resync_generation_and_capacity():
     source = (ROOT / "study/protocol_exploration/can_resync_candidate.asm").read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     assert len(frontier_assemble(source)) == 819
     with pytest.raises(ValueError, match="program contains 819 words; maximum is 128"):
         assemble(source)

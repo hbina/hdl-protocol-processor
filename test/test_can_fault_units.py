@@ -17,14 +17,14 @@ from tools.assembler import assemble
 
 def test_can_fault_generation_and_capacity():
     source = (ROOT / "study/protocol_exploration/can_fault_candidate.asm").read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     assert len(call_assemble(source)) == 1016
     with pytest.raises(ValueError, match="program contains 1016 words; maximum is 128"):
         assemble(source)
     inlined = (
         ROOT / "study/protocol_exploration/can_fault_inline_candidate.asm"
     ).read_text()
-    assert inlined == inline_source()
+    assert inlined == inline_source().to_asm()
     with pytest.raises(
         ValueError, match="program contains 1092 words; maximum is 1024"
     ):

@@ -9,7 +9,8 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, Timer, ValueChange, with_timeout
 from cocotb.utils import get_sim_time
-from generic_frontier import assemble, base_assembler
+from generic_frontier import assemble
+from isa_variants import label_addresses
 from test_uart_probe import BIT_PS, armed, decode_tx, send_rx
 
 from test import PinController, load_program, reset
@@ -20,7 +21,7 @@ CANDIDATE = ROOT / "study/protocol_exploration/uart_runtime_candidate.asm"
 
 
 async def trace_deadlines(dut, trace):
-    _, labels = base_assembler()._parse_lines(CANDIDATE.read_text())
+    labels = label_addresses(CANDIDATE.read_text())
     watched = {
         labels[name]: name
         for name in [

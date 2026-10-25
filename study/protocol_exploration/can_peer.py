@@ -13,7 +13,8 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, Timer, ValueChange
 from cocotb.utils import get_sim_time
-from run_can import candidate_words, study_assembler
+from run_can import candidate_words
+from isa_variants import label_addresses
 
 from test import PinController, load_program, reset
 from tools.runtime import Request
@@ -73,7 +74,7 @@ class Bus:
         # Observe only timing of real instruction execution. Wire/data oracles
         # above remain independent of the implementation and instruction trace.
         source = Path(__file__).with_name("can_candidate.asm").read_text()
-        _, labels = study_assembler()._parse_lines(source)
+        labels = label_addresses(source)
         core = self.dut.user_project.core
         while True:
             await ValueChange(core.pc)

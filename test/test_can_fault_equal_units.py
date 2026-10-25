@@ -17,7 +17,7 @@ def test_can_fault_equal_generation_and_capacity():
     source = (
         ROOT / "study/protocol_exploration/can_fault_equal_candidate.asm"
     ).read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     assert len(call_assemble(source)) == 1020
     with pytest.raises(ValueError, match="program contains 1020 words; maximum is 128"):
         assemble(source)

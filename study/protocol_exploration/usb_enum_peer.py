@@ -12,7 +12,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import Timer, ValueChange
 from cocotb.utils import get_sim_time
 from generic_carry_frontier import assemble
-from generic_frontier import base_assembler
+from isa_variants import label_addresses
 from usb_rx_peer import Transceiver, crc16, encode
 from usb_stream_peer import CONSTANTS, data_waveform, send_packets, token
 
@@ -29,7 +29,7 @@ EXPECTED_CONFIG = bytes.fromhex("0902120001010080320904000000ff000000")
 
 
 async def trace_control(phy):
-    _, labels = base_assembler()._parse_lines(
+    labels = label_addresses(
         Path(__file__)
         .with_name(os.environ.get("USB_ENUM_CANDIDATE", "usb_enum_candidate.asm"))
         .read_text()

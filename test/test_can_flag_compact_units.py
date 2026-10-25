@@ -17,7 +17,7 @@ def test_flag_bit_compaction_and_capacity():
     source = (
         ROOT / "study/protocol_exploration/can_flag_compact_candidate.asm"
     ).read_text()
-    assert source == generate()
+    assert source == generate().to_asm()
     assert len(model_assemble(source)) == 1024
     with pytest.raises(ValueError, match="program contains 1024 words; maximum is 128"):
         assemble(source)

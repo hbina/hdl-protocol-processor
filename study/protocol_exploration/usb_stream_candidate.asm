@@ -3,7 +3,7 @@
 SETO 56
 SETOE 60
 idle:
-LDI r3, 0x22
+LDI r3, 34
 PREAD r0, r3
 JFAIL idle
 LDI r1, 128
@@ -254,19 +254,19 @@ LOAD r5, r0
 LDI r0, 40
 LOAD r0, r0
 JZ r0, out_gate
-CMPI r5, 0xd2
+CMPI r5, 210
 JFAIL in_gate
 CMPI r7, 145
 JFAIL rearm
 LDI r0, 185
 LOAD r0, r0
 JZ r0, rearm
-LDI r0, 0x69
+LDI r0, 105
 LDI r1, 136
 STORE r0, r1
 JMP publish
 in_gate:
-CMPI r5, 0x69
+CMPI r5, 105
 JFAIL rearm
 JMP token_match
 out_gate:
@@ -274,15 +274,15 @@ CMPLTI r7, 147
 JFAIL out_length_ok
 JMP rearm
 out_length_ok:
-CMPI r5, 0xe1
+CMPI r5, 225
 JFAIL maybe_setup
 JMP token_match
 maybe_setup:
-CMPI r5, 0x2d
+CMPI r5, 45
 JFAIL maybe_in
 JMP token_match
 maybe_in:
-CMPI r5, 0x69
+CMPI r5, 105
 JFAIL data_gate
 JMP ignore_token
 token_match:
@@ -304,7 +304,7 @@ XOR r4, r6
 JZ r4, token_valid
 JMP ignore_token
 token_valid:
-CMPI r5, 0x69
+CMPI r5, 105
 JFAIL out_token_valid
 JMP tx_packet
 out_token_valid:
@@ -322,11 +322,11 @@ LOAD r6, r0
 JZ r6, rearm
 LDI r4, 0
 STORE r4, r0
-CMPI r6, 0x2d
+CMPI r6, 45
 JFAIL out_data
 CMPI r7, 155
 JFAIL form_error
-CMPI r5, 0xc3
+CMPI r5, 195
 JFAIL pid_error
 out_data:
 LDI r0, 136
@@ -344,11 +344,11 @@ MOV r0, r7
 ADDI r0, 109
 SHL r0
 ADDI r0, 1
-CMPI r5, 0xc3
+CMPI r5, 195
 JFAIL maybe_data1
 JMP syndrome
 maybe_data1:
-CMPI r5, 0x4b
+CMPI r5, 75
 JFAIL unsupported
 ADDI r0, 18
 syndrome:
@@ -417,7 +417,7 @@ STORE r0, r1
 LDI r1, 144
 output_byte:
 LOAD r0, r1
-LDI r3, 0x30
+LDI r3, 48
 PWRITE r0, r3
 LDI r0, 0
 ADDI r3, 1
@@ -494,7 +494,7 @@ publish:
 # Output metadata defaults0; no per-byte nonzero metadata used here.
 LDI r1, 128
 LDI r2, 16
-LDI r3, 0x40
+LDI r3, 64
 event:
 LOAD r0, r1
 PWRITE r0, r3
@@ -511,18 +511,18 @@ CMPLTI r6, 9
 JFAIL form_error
 LDI r0, 39
 LOAD r4, r0
-CMPI r4, 0xc3
+CMPI r4, 195
 JFAIL stream_data1
 JMP stream_pid_ok
 stream_data1:
-CMPI r4, 0x4b
+CMPI r4, 75
 JFAIL pid_error
 stream_pid_ok:
 LDI r7, 160
 STORE r4, r7
 JZ r6, rearm
 stream_payload:
-LDI r0, 0x11
+LDI r0, 17
 PREAD r4, r0
 ADDI r7, 1
 STORE r4, r7
@@ -540,7 +540,7 @@ LOAD r1, r7
 LDI r5, 8
 LDI r4, 1
 LDI r0, 36
-CMPI r1, 0xc3
+CMPI r1, 195
 JFAIL stream_seed1
 LDI r2, 151
 LDI r3, 254

@@ -16,7 +16,8 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, Timer, ValueChange, with_timeout
 from cocotb.utils import get_sim_time
 from frontier_peer import tx
-from generic_call_frontier import assemble, base_assembler
+from generic_call_frontier import assemble
+from isa_variants import label_addresses
 
 from test import PinController, load_program, reset
 from tools.runtime import Request
@@ -35,7 +36,7 @@ def extra_count(pattern, receiver):
 
 class PostflagPeer(ReceivePeer):
     async def delimiter_trace(self, source):
-        _, labels = base_assembler()._parse_lines(source)
+        labels = label_addresses(source)
         core = self.dut.user_project.core
         while True:
             await ValueChange(core.pc)

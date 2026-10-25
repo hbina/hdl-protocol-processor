@@ -1,18 +1,61 @@
 #!/usr/bin/env python3
-"""Assembler for the protocol emulator's compact 16-bit instruction set."""
+"""Assembler for the protocol emulator's compact instruction set.
+
+Text is parsed into the typed instruction model in ``tools.isa`` and linked by
+``tools.program``; this module only handles syntax, labels and operand text.
+"""
 
 from __future__ import annotations
 
 import argparse
 import pathlib
 import re
-from collections.abc import Iterable
+import sys
+from collections.abc import Callable, Iterable
 
-PROGRAM_WORDS = 128
+if __package__ in (None, ""):  # Run as a script: make the `tools` package importable.
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+
+from tools.isa import (
+    BASE,
+    CONFIGS,
+    Call,
+    CondJump,
+    CondJumpOp,
+    Halt,
+    Imm,
+    ImmOp,
+    Instruction,
+    IsaConfig,
+    IsaError,
+    Jump,
+    JumpOp,
+    Label,
+    Nop,
+    PinOp,
+    Reg,
+    RegImm,
+    RegImmOp,
+    RegPin,
+    RegReg,
+    RegRegOp,
+    Ret,
+    Target,
+    Unary,
+    UnaryOp,
+    WaitPin,
+)
+from tools.program import Comment, Image, Program
+
+PROGRAM_WORDS = BASE.program_words
+
+AssemblyError = IsaError
+"""Raised when source cannot be encoded (a ``ValueError``)."""
 
 
-class AssemblyError(ValueError):
-    """Raised when source cannot be encoded."""
+type ParsedLine = tuple[int, str, list[str]]
+# Source order of labels, instructions (by index) and full-line comments.
+type Event = tuple[str, str | int]
 
 
 def _number(token: str, labels: dict[str, int]) -> int:
@@ -32,18 +75,24 @@ def _bounded(token: str, labels: dict[str, int], maximum: int, kind: str) -> int
     return value
 
 
-def _register(token: str) -> int:
-    match = re.fullmatch(r"[rR]([0-3])", token.strip())
-    if not match:
-        raise AssemblyError(f"expected register r0..r3: {token}")
-    return int(match.group(1))
+def _register(token: str, cfg: IsaConfig) -> Reg:
+    match = re.fullmatch(r"[rR]([0-7])", token.strip())
+    if not match or int(match.group(1)) >= cfg.registers:
+        raise AssemblyError(f"expected register r0..r{cfg.registers - 1}: {token}")
+    return Reg(int(match.group(1)))
 
 
-def _parse_lines(source: str) -> tuple[list[tuple[int, str, list[str]]], dict[str, int]]:
-    instructions: list[tuple[int, str, list[str]]] = []
+def _parse_lines(
+    source: str, cfg: IsaConfig = BASE, events: list[Event] | None = None
+) -> tuple[list[ParsedLine], dict[str, int]]:
+    instructions: list[ParsedLine] = []
     labels: dict[str, int] = {}
+    order: list[Event] = [] if events is None else events
 
     for line_number, original in enumerate(source.splitlines(), start=1):
+        if original.strip().startswith("#"):
+            order.append(("comment", original.strip()[1:].strip()))
+            continue
         line = original.split("#", 1)[0].split(";", 1)[0].strip()
         if not line:
             continue
@@ -53,130 +102,184 @@ def _parse_lines(source: str) -> tuple[list[tuple[int, str, list[str]]], dict[st
             label = label.strip()
             if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", label):
                 raise AssemblyError(f"line {line_number}: invalid label {label!r}")
+            if re.fullmatch(r"[rR][0-7]", label):
+                raise AssemblyError(
+                    f"line {line_number}: register names cannot be labels: {label!r}"
+                )
             if label in labels:
                 raise AssemblyError(f"line {line_number}: duplicate label {label!r}")
             labels[label] = len(instructions)
+            order.append(("label", label))
             line = line.strip()
             if not line:
                 continue
 
         fields = line.replace(",", " ").split()
+        order.append(("insn", len(instructions)))
         instructions.append((line_number, fields[0].upper(), fields[1:]))
 
-    if len(instructions) > PROGRAM_WORDS:
+    if len(instructions) > cfg.program_words:
         raise AssemblyError(
-            f"program contains {len(instructions)} words; maximum is {PROGRAM_WORDS}"
+            f"program contains {len(instructions)} words; maximum is {cfg.program_words}"
         )
     return instructions, labels
 
 
-def _expect(args: list[str], count: int, mnemonic: str, line_number: int) -> None:
+def _expect(args: list[str], count: int, mnemonic: str) -> None:
     if len(args) != count:
-        raise AssemblyError(
-            f"line {line_number}: {mnemonic} expects {count} operand(s), got {len(args)}"
+        raise AssemblyError(f"{mnemonic} expects {count} operand(s), got {len(args)}")
+
+
+class _Operands:
+    """Operand decoding for one source program."""
+
+    def __init__(self, cfg: IsaConfig, labels: dict[str, int]) -> None:
+        self.cfg = cfg
+        self.labels = labels
+        self.objects = {name: Label(name) for name in labels}
+
+    def register(self, token: str) -> Reg:
+        return _register(token, self.cfg)
+
+    def byte(self, token: str) -> int:
+        return _bounded(token, self.labels, 0xFF, "immediate")
+
+    def pin(self, token: str) -> int:
+        return _bounded(token, self.labels, 7, "pin")
+
+    def target(self, token: str, maximum: int, kind: str = "address") -> Target:
+        if token.strip() in self.objects:
+            return self.objects[token.strip()]
+        return _bounded(token, self.labels, maximum, kind)
+
+
+def _extensions(cfg: IsaConfig) -> set[str]:
+    names: set[str] = set()
+    if cfg.call:
+        names |= {"CALL", "RET"}
+    if cfg.carry:
+        names |= {UnaryOp.SHRC.value, UnaryOp.RRC.value, JumpOp.JNC.value}
+    return names
+
+
+_OPTIONAL = {"CALL", "RET", UnaryOp.SHRC.value, UnaryOp.RRC.value, JumpOp.JNC.value}
+
+
+def _instruction(mnemonic: str, args: list[str], ops: _Operands) -> Instruction:
+    cfg = ops.cfg
+    if mnemonic in _OPTIONAL and mnemonic not in _extensions(cfg):
+        raise AssemblyError(f"unknown instruction {mnemonic}")
+    last = cfg.program_words - 1
+
+    def shape(count: int) -> list[str]:
+        _expect(args, count, mnemonic)
+        return args
+
+    if mnemonic in ("NOP", "HALT", "RET"):
+        shape(0)
+        return {"NOP": Nop(), "HALT": Halt(), "RET": Ret()}[mnemonic]
+    if mnemonic == "CALL":
+        (target,) = shape(1)
+        return Call(ops.target(target, 1023, "call target"))
+    if mnemonic == "WAITPIN":
+        pin, value = shape(2)
+        return WaitPin(ops.pin(pin), _bounded(value, ops.labels, 1, "pin value"))
+    if mnemonic in RegImmOp.__members__:
+        rd, imm = shape(2)
+        return RegImm(RegImmOp[mnemonic], ops.register(rd), ops.byte(imm))
+    if mnemonic in RegRegOp.__members__:
+        rd, rs = shape(2)
+        return RegReg(RegRegOp[mnemonic], ops.register(rd), ops.register(rs))
+    if mnemonic in UnaryOp.__members__:
+        (rd,) = shape(1)
+        return Unary(UnaryOp[mnemonic], ops.register(rd))
+    if mnemonic in ImmOp.__members__:
+        (imm,) = shape(1)
+        return Imm(ImmOp[mnemonic], ops.byte(imm))
+    if mnemonic in JumpOp.__members__:
+        (target,) = shape(1)
+        return Jump(JumpOp[mnemonic], ops.target(target, last))
+    if mnemonic in CondJumpOp.__members__:
+        rd, target = shape(2)
+        return CondJump(
+            CondJumpOp[mnemonic], ops.register(rd), ops.target(target, last)
         )
+    if mnemonic in PinOp.__members__:
+        rd, pin = shape(2)
+        return RegPin(PinOp[mnemonic], ops.register(rd), ops.pin(pin))
+    raise AssemblyError(f"unknown instruction {mnemonic}")
 
 
-def assemble(source: str) -> list[int]:
-    """Assemble source text and return a list of 16-bit instruction words."""
+def parse(source: str, cfg: IsaConfig = BASE) -> Program:
+    """Parse assembly text into a typed program for ``cfg``.
 
-    parsed, labels = _parse_lines(source)
-    words: list[int] = []
+    Labels, instructions and full-line comments keep their source order;
+    trailing comments on instruction lines are not retained.
+    """
 
-    for line_number, mnemonic, args in parsed:
-        try:
-            if mnemonic == "NOP":
-                _expect(args, 0, mnemonic, line_number)
-                word = 0x0000
-            elif mnemonic in {"LDI", "CMPI", "CMPLTI", "ADDI", "ANDI", "ORI", "XORI"}:
-                _expect(args, 2, mnemonic, line_number)
-                rd = _register(args[0])
-                imm = _bounded(args[1], labels, 0xFF, "immediate")
-                if mnemonic in {"LDI", "CMPI", "CMPLTI"}:
-                    base = {"LDI": 0x1000, "CMPI": 0x1400, "CMPLTI": 0x1C00}[mnemonic]
-                    word = base | (rd << 8) | imm
-                else:
-                    subop = {"ADDI": 0, "ANDI": 1, "ORI": 2, "XORI": 3}[mnemonic]
-                    word = 0xC000 | ((subop << 2 | rd) << 8) | imm
-            elif mnemonic in {"IN", "OUT", "OE"}:
-                _expect(args, 1, mnemonic, line_number)
-                rd = _register(args[0])
-                opcode = {"IN": 0x2, "OUT": 0x3, "OE": 0x4}[mnemonic]
-                word = opcode << 12 | rd << 8
-            elif mnemonic in {"SETO", "SETOE", "WAIT"}:
-                _expect(args, 1, mnemonic, line_number)
-                imm = _bounded(args[0], labels, 0xFF, "immediate")
-                opcode = {"SETO": 0x5, "SETOE": 0x6, "WAIT": 0x7}[mnemonic]
-                word = opcode << 12 | imm
-            elif mnemonic in {"LOAD", "STORE", "PREAD", "PWRITE", "CMPLT"}:
-                _expect(args, 2, mnemonic, line_number)
-                rd, ra = _register(args[0]), _register(args[1])
-                base = {"LOAD": 0x2400, "STORE": 0x3400, "PREAD": 0x2800,
-                        "PWRITE": 0x3800, "CMPLT": 0x1800}[mnemonic]
-                word = base | (rd << 8) | ra
-            elif mnemonic in {"JMP", "JFAIL"}:
-                _expect(args, 1, mnemonic, line_number)
-                address = _bounded(args[0], labels, PROGRAM_WORDS - 1, "address")
-                word = (0x8000 | (0x800 if mnemonic == "JFAIL" else 0)
-                        | (0x400 if address > 63 else 0) | address)
-            elif mnemonic in {"JZ", "DJNZ"}:
-                _expect(args, 2, mnemonic, line_number)
-                rd = _register(args[0])
-                address = _bounded(args[1], labels, PROGRAM_WORDS - 1, "address")
-                opcode = 0x9 if mnemonic == "JZ" else 0xA
-                word = opcode << 12 | rd << 8 | (0x400 if address > 63 else 0) | address
-            elif mnemonic in {"MOV", "XOR", "OR", "AND"}:
-                _expect(args, 2, mnemonic, line_number)
-                rd = _register(args[0])
-                rs = _register(args[1])
-                subop = {"MOV": 0, "XOR": 1, "OR": 2, "AND": 3}[mnemonic]
-                word = 0xB000 | ((subop << 2 | rd) << 8) | rs
-            elif mnemonic in {"SHL", "SHR", "ROL", "ROR"}:
-                _expect(args, 1, mnemonic, line_number)
-                rd = _register(args[0])
-                subop = {"SHL": 0, "SHR": 1, "ROL": 2, "ROR": 3}[mnemonic]
-                word = 0xD000 | ((subop << 2 | rd) << 8)
-            elif mnemonic in {"OUTBIT", "INBIT", "OEBIT", "OEBITN"}:
-                _expect(args, 2, mnemonic, line_number)
-                rd = _register(args[0])
-                pin = _bounded(args[1], labels, 7, "pin")
-                subop = {"OUTBIT": 0, "INBIT": 1, "OEBIT": 2, "OEBITN": 3}[
-                    mnemonic
-                ]
-                word = 0xE000 | ((subop << 2 | rd) << 8) | pin
-            elif mnemonic == "WAITPIN":
-                _expect(args, 2, mnemonic, line_number)
-                pin = _bounded(args[0], labels, 7, "pin")
-                expected = _bounded(args[1], labels, 1, "pin value")
-                word = 0xF000 | ((0b0100 | expected) << 8) | pin
-            elif mnemonic == "HALT":
-                _expect(args, 0, mnemonic, line_number)
-                word = 0xF000
-            else:
-                raise AssemblyError(f"line {line_number}: unknown instruction {mnemonic}")
-        except AssemblyError as exc:
-            if str(exc).startswith("line "):
-                raise
-            raise AssemblyError(f"line {line_number}: {exc}") from exc
-
-        words.append(word)
-
-    return words
+    events: list[Event] = []
+    parsed, labels = _parse_lines(source, cfg, events)
+    ops = _Operands(cfg, labels)
+    program = Program()
+    for kind, value in events:
+        if kind == "comment":
+            program.add(Comment(str(value)))
+        elif kind == "label":
+            program.mark(ops.objects[str(value)])
+        else:
+            line_number, mnemonic, args = parsed[int(value)]
+            try:
+                insn = _instruction(mnemonic, args, ops)
+            except IsaError as exc:
+                raise AssemblyError(f"line {line_number}: {exc}") from exc
+            program.add(insn, origin=f"line {line_number}")
+    return program
 
 
-def words_to_hex(words: Iterable[int]) -> str:
-    """Return one four-digit hexadecimal instruction per line."""
+def labels(source: str, cfg: IsaConfig = BASE) -> dict[str, int]:
+    """Return label addresses without encoding any instruction."""
 
-    return "".join(f"{word:04x}\n" for word in words)
+    return _parse_lines(source, cfg)[1]
+
+
+def assemble_image(source: str, cfg: IsaConfig = BASE) -> Image:
+    """Assemble source text into linked words and its label table."""
+
+    return parse(source, cfg).link(cfg)
+
+
+def assemble(source: str, cfg: IsaConfig = BASE) -> list[int]:
+    """Assemble source text and return a list of instruction words."""
+
+    return assemble_image(source, cfg).words
+
+
+def assembler_for(cfg: IsaConfig) -> Callable[[str], list[int]]:
+    return lambda source: assemble(source, cfg)
+
+
+def words_to_hex(words: Iterable[int], digits: int = 4) -> str:
+    """Return one hexadecimal instruction per line."""
+
+    return "".join(f"{word:0{digits}x}\n" for word in words)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=pathlib.Path, help="assembly input file")
     parser.add_argument("-o", "--output", type=pathlib.Path, help="hex output file")
+    parser.add_argument("--isa", choices=sorted(CONFIGS), default=BASE.name)
+    parser.add_argument(
+        "--disassemble", action="store_true", help="print an annotated listing"
+    )
     args = parser.parse_args()
 
-    output = words_to_hex(assemble(args.source.read_text()))
+    cfg = CONFIGS[args.isa]
+    image = assemble_image(args.source.read_text(), cfg)
+    if args.disassemble:
+        output = image.disassemble()
+    else:
+        output = words_to_hex(image.words, 4 if cfg.word_bits == 16 else 5)
     if args.output:
         args.output.write_text(output)
     else:

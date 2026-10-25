@@ -1,11 +1,38 @@
 #!/usr/bin/env python3
 """Compact the full RX-flag candidate using existing generic instructions only."""
 
-import re
 from pathlib import Path
 
-from build_can_rx import Block
 from build_can_rx_flags import generate as unoptimized_source
+from fragments import Fragment
+
+from tools.isa import (
+    ADDI,
+    ANDI,
+    CALL,
+    DJNZ,
+    JMP,
+    JZ,
+    LDI,
+    LOAD,
+    MOV,
+    OR,
+    RET,
+    ROL,
+    SHL,
+    STORE,
+    WAIT,
+    XOR,
+    XORI,
+    Label,
+    r0,
+    r1,
+    r2,
+    r3,
+    r4,
+    r6,
+)
+from tools.program import Comment
 
 
 def generate():
@@ -16,91 +43,110 @@ def generate():
         assert source.count(old) == 1, old
         source = source.replace(old, new)
 
-    unpack = "ROL r0\nMOV r3, r0\nANDI r3, 1\nSTORE r3, r1\nADDI r1, 1\nDJNZ r2, "
-    matches = list(
-        re.finditer(r"^(tx_\w+):\n" + re.escape(unpack) + r"\1$", source, re.MULTILINE)
-    )
-    assert len(matches) == 6
-    for match in reversed(matches):
-        source = (
-            source[: match.start()]
-            + match[1]
-            + ":\nCALL unpack_bits"
-            + source[match.end() :]
-        )
-    pack = "LOAD r3, r1\nSHL r0\nOR r0, r3\nADDI r1, 1\nDJNZ r2, "
-    for label in ["rx_id_high", "rx_id_low"]:
-        replace(label + ":\n" + pack + label, label + ":\nCALL pack_bits")
+    def unpack_loop(label):
+        return [
+            label,
+            ROL(r0),
+            MOV(r3, r0),
+            ANDI(r3, 1),
+            STORE(r3, r1),
+            ADDI(r1, 1),
+        ] + [DJNZ(r2, label)]
+
+    def pack_loop(label):
+        return [label, LOAD(r3, r1), SHL(r0), OR(r0, r3), ADDI(r1, 1), DJNZ(r2, label)]
+
+    tx_loops = [
+        item
+        for item in source
+        if isinstance(item, Label)
+        and item.name.startswith("tx_")
+        and source.count(unpack_loop(item)) == 1
+    ]
+    assert len(tx_loops) == 6
+    for label in tx_loops:
+        replace(unpack_loop(label), [label, CALL(Label("unpack_bits"))])
+    for name in ["rx_id_high", "rx_id_low"]:
+        replace(pack_loop(Label(name)), [Label(name), CALL(Label("pack_bits"))])
     replace(
-        """JZ r2, rx_output_done
-LDI r1, 163
-rx_data_byte:
-LDI r0, 0
-LDI r3, 8
-rx_data_bit:
-LOAD r3, r1
-SHL r0
-OR r0, r3
-ADDI r1, 1
-# Byte boundary via pointer modulo8: first payload address163.
-MOV r3, r1
-ADDI r3, 253
-ANDI r3, 7
-JZ r3, rx_output_byte
-JMP rx_data_bit
-rx_output_byte:
-CALL emit_byte
-DJNZ r2, rx_data_byte""",
-        """MOV r4, r2
-JZ r4, rx_output_done
-LDI r1, 163
-rx_data_byte:
-LDI r2, 8
-CALL pack_bits
-CALL emit_byte
-DJNZ r4, rx_data_byte""",
+        [
+            JZ(r2, Label("rx_output_done")),
+            LDI(r1, 163),
+            Label("rx_data_byte"),
+            LDI(r0, 0),
+            LDI(r3, 8),
+            Label("rx_data_bit"),
+            LOAD(r3, r1),
+            SHL(r0),
+            OR(r0, r3),
+            ADDI(r1, 1),
+            Comment("Byte boundary via pointer modulo8: first payload address163."),
+            MOV(r3, r1),
+            ADDI(r3, 253),
+            ANDI(r3, 7),
+            JZ(r3, Label("rx_output_byte")),
+            JMP(Label("rx_data_bit")),
+            Label("rx_output_byte"),
+            CALL(Label("emit_byte")),
+            DJNZ(r2, Label("rx_data_byte")),
+        ],
+        [
+            MOV(r4, r2),
+            JZ(r4, Label("rx_output_done")),
+            LDI(r1, 163),
+            Label("rx_data_byte"),
+            LDI(r2, 8),
+            CALL(Label("pack_bits")),
+            CALL(Label("emit_byte")),
+            DJNZ(r4, Label("rx_data_byte")),
+        ],
     )
     replace(
-        "CALL emit_byte\nLDI r0, 0\nLDI r2, 8\nrx_id_low:",
-        "CALL emit_byte\nLDI r2, 8\nrx_id_low:",
+        [CALL(Label("emit_byte")), LDI(r0, 0), LDI(r2, 8), Label("rx_id_low")],
+        [CALL(Label("emit_byte")), LDI(r2, 8), Label("rx_id_low")],
     )
-    replace("CALL emit_byte\nADDI r3, 254\nLDI r1, 249", "CALL emit_byte\nLDI r1, 249")
-    replace("LDI r4, 3\nLDI r6, 1", "LDI r6, 1")
-    replace("legacy_no_ack:\nLDI r2, 24\nJMP failure\n", "")
-    replace("JMP rx_delimiter\nWAIT 121\nJMP rx_balance_9_end", "JMP rx_delimiter")
+    replace(
+        [CALL(Label("emit_byte")), ADDI(r3, 254), LDI(r1, 249)],
+        [CALL(Label("emit_byte")), LDI(r1, 249)],
+    )
+    replace([LDI(r4, 3), LDI(r6, 1)], [LDI(r6, 1)])
+    replace([Label("legacy_no_ack"), LDI(r2, 24), JMP(Label("failure"))], [])
+    replace(
+        [JMP(Label("rx_delimiter")), WAIT(121), JMP(Label("rx_balance_9_end"))],
+        [JMP(Label("rx_delimiter"))],
+    )
     # Conditional XOR replaces six shifts. Keep original on-wire cycle costs;
     # offline TX CRC need not retain its slower old preparation cost.
-    shift = "\n".join(["SHL r1"] * 6) + "\nXOR r0, r1"
+    shift = [SHL(r1)] * 6 + [XOR(r0, r1)]
     assert source.count(shift) == 2
-    conditional = Block.choose("JZ r1", "", "XORI r0, 64")
-    source = source.replace(
-        shift, "\n".join(conditional.lines + Block.delay(4).lines), 1
-    )
-    conditional = Block.choose("JZ r1", "", "XORI r0, 64")
-    source = source.replace(shift, "\n".join(conditional.lines), 1)
-    mirror_shift = "MOV r2, r0\n" + "\n".join(["SHL r2"] * 6) + "\nXOR r1, r2"
-    conditional = Block.choose("JZ r0", "", "XORI r1, 64")
-    replace(mirror_shift, "\n".join(conditional.lines + Block.delay(5).lines))
-    source += """unpack_bits:
-ROL r0
-MOV r3, r0
-ANDI r3, 1
-STORE r3, r1
-ADDI r1, 1
-DJNZ r2, unpack_bits
-RET
-pack_bits:
-LOAD r3, r1
-SHL r0
-OR r0, r3
-ADDI r1, 1
-DJNZ r2, pack_bits
-RET
-"""
-    return source.replace(
-        "# GENERATED by build_can_rx_flags.py.",
-        "# GENERATED by build_can_rx_flags_compact.py. Generic code reuse; no ISA/RTL change.",
-    ).replace(
+    conditional = Fragment.choose(lambda t: JZ(r1, t), (), [XORI(r0, 64)])
+    source = source.replace(shift, (conditional.program + Fragment.delay(4).program), 1)
+    conditional = Fragment.choose(lambda t: JZ(r1, t), (), [XORI(r0, 64)])
+    source = source.replace(shift, (conditional.program), 1)
+    mirror_shift = [MOV(r2, r0)] + [SHL(r2)] * 6 + [XOR(r1, r2)]
+    conditional = Fragment.choose(lambda t: JZ(r0, t), (), [XORI(r1, 64)])
+    replace(mirror_shift, (conditional.program + Fragment.delay(5).program))
+    source += [
+        Label("unpack_bits"),
+        ROL(r0),
+        MOV(r3, r0),
+        ANDI(r3, 1),
+        STORE(r3, r1),
+        ADDI(r1, 1),
+        DJNZ(r2, Label("unpack_bits")),
+        RET(),
+        Label("pack_bits"),
+        LOAD(r3, r1),
+        SHL(r0),
+        OR(r0, r3),
+        ADDI(r1, 1),
+        DJNZ(r2, Label("pack_bits")),
+        RET(),
+    ]
+    return source.replace_comment_text(
+        "GENERATED by build_can_rx_flags.py.",
+        "GENERATED by build_can_rx_flags_compact.py. Generic code reuse; no ISA/RTL change.",
+    ).replace_comment_text(
         "RX error flags; capacity-only until assembled.",
         "RX error flags; isolated study model only.",
     )
@@ -108,5 +154,5 @@ RET
 
 if __name__ == "__main__":
     Path(__file__).with_name("can_rx_flags_compact_candidate.asm").write_text(
-        generate()
+        generate().to_asm()
     )

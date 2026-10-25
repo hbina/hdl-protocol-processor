@@ -17,7 +17,9 @@ def test_can_tail_compaction_freshness_and_capacity():
     here = ROOT / "study/protocol_exploration"
     source = (here / "can_tail_compact_candidate.asm").read_text()
     unsafe = (here / "can_tail_compact_unsafe_candidate.asm").read_text()
-    assert source == generate() and unsafe == generate(safe_idle=False)
+    assert (
+        source == generate().to_asm() and unsafe == generate(safe_idle=False).to_asm()
+    )
     assert source != unsafe
     assert len(model_assemble(source)) == len(model_assemble(unsafe)) == 1024
     with pytest.raises(ValueError, match="program contains 1024 words; maximum is 128"):

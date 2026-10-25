@@ -11,10 +11,33 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, Timer, ValueChange
 from cocotb.utils import get_sim_time
 from generic_carry_frontier import assemble
-from generic_frontier import base_assembler
+from isa_variants import label_addresses
 from usb_rx_peer import Transceiver, crc16, encode
 
 from test import PinController, load_program, reset
+from tools.isa import (
+    ADDI,
+    CALL,
+    CARRY_FRONTIER,
+    CMPI,
+    HALT,
+    JFAIL,
+    JMP,
+    JNC,
+    LDI,
+    Label,
+    MOV,
+    RET,
+    RRC,
+    SHR,
+    SHRC,
+    r0,
+    r1,
+    r3,
+    r4,
+    r6,
+)
+from tools.program import Program, place
 from tools.runtime import Request
 
 CONSTANTS = json.loads(Path(__file__).with_name("usb_live_constants.json").read_text())[
@@ -33,7 +56,7 @@ def final_stuff_vector():
 
 async def trace_live(dut, phy):
     source = Path(__file__).with_name("usb_dense_candidate.asm").read_text()
-    _, labels = base_assembler()._parse_lines(source)
+    labels = label_addresses(source)
     addresses = {labels[f"sample_{phase}"]: phase for phase in range(3)}
     core = dut.user_project.core
     while True:
@@ -207,21 +230,22 @@ async def test_live_usb_timeout_recovery(dut):
 async def test_generic_call_return_banks(dut):
     cocotb.start_soon(Clock(dut.clk, 20, unit="ns").start())
     await reset(dut)
-    lines = ["HALT"] * 1024
-    for address, instruction in {
-        0: "LDI r4, 1",
-        1: "CALL 900",
-        2: "JMP 510",
-        510: "CALL 768",
-        511: "MOV r0, r4",
-        512: "HALT",
-        768: "ADDI r4, 4",
-        769: "RET",
-        900: "ADDI r4, 2",
-        901: "RET",
-    }.items():
-        lines[address] = instruction
-    await load_program(dut, assemble("\n".join(lines)))
+    image = place(
+        {
+            0: LDI(r4, 1),
+            1: CALL(900),
+            2: JMP(510),
+            510: CALL(768),
+            511: MOV(r0, r4),
+            512: HALT(),
+            768: ADDI(r4, 4),
+            769: RET(),
+            900: ADDI(r4, 2),
+            901: RET(),
+        },
+        1024,
+    )
+    await load_program(dut, image.link(CARRY_FRONTIER).words)
     await Timer(2, unit="us")
     dut.ena.value = 0
     assert await PinController(dut).read(0x10B) == 7
@@ -236,23 +260,15 @@ async def test_generic_carry_shift_branch_and_reload(dut):
     # Exercise old carry=0/1, both register banks, multi-byte propagation,
     # conditional-flag independence and a branch across address bit9.
     for value in [0, 1, 0x0100, 0x80FF, 0xFFFF]:
-        source = f"""
-        LDI r0, 0
-        CMPI r0, 1
-        LDI r3, {value >> 8}
-        LDI r6, {value & 255}
-        SHRC r3
-        RRC r6
-        JFAIL flag_ok
-        HALT
-        flag_ok:
-        JNC 512
-        LDI r0, 1
-        JMP 513
-        """.strip().splitlines()
-        source += ["HALT"] * (512 - len(source) + 1)  # label occupies no word
-        source += ["LDI r0, 2", "LDI r1, 1", "SHR r1", "HALT"]
-        await load_program(dut, assemble("\n".join(source)))
+        flag_ok = Label("flag_ok")
+        program = Program(
+            [LDI(r0, 0), CMPI(r0, 1), LDI(r3, value >> 8), LDI(r6, value & 255)]
+            + [SHRC(r3), RRC(r6), JFAIL(flag_ok), HALT()]
+            + [flag_ok, JNC(512), LDI(r0, 1), JMP(513)]
+        )
+        program.pad_to(512, HALT())
+        program += [LDI(r0, 2), LDI(r1, 1), SHR(r1), HALT()]
+        await load_program(dut, program.link(CARRY_FRONTIER).words)
         await Timer(2, unit="us")
         core = dut.user_project.core
         assert int(core.halted.value) == 1

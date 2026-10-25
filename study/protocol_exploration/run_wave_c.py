@@ -10,7 +10,6 @@ import argparse
 import hashlib
 import json
 import sys
-import types
 import xml.etree.ElementTree as ET
 from datetime import UTC, datetime
 from pathlib import Path
@@ -19,6 +18,8 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from isa_variants import assemble_wide512
+
 from tools.assembler import AssemblyError, assemble
 
 
@@ -28,27 +29,8 @@ def replace_exact(source, old, new, count=1):
     return source.replace(old, new)
 
 
-def study_assembler():
-    source = (ROOT / "tools/assembler.py").read_text()
-    source = replace_exact(source, "PROGRAM_WORDS = 128", "PROGRAM_WORDS = 512")
-    source = replace_exact(
-        source,
-        "| (0x400 if address > 63 else 0) | address)",
-        "| (0x400 if address > 63 else 0) | (address & 255) | (0x200 if address > 255 else 0))",
-    )
-    source = replace_exact(
-        source,
-        "word = opcode << 12 | rd << 8 | (0x400 if address > 63 else 0) | address",
-        "word = opcode << 12 | rd << 8 | (0x400 if address > 63 else 0) | (address & 255) | (0x800 if address > 255 else 0)",
-    )
-    module = types.ModuleType("wave_c_assembler")
-    # Execute only the repository-local assembler after exact source replacements.
-    exec(compile(source, "<counterfactual512_assembler>", "exec"), module.__dict__)  # noqa: S102
-    return module
-
-
 def candidate_words(protocol):
-    return study_assembler().assemble((HERE / f"{protocol}_candidate.asm").read_text())
+    return assemble_wide512((HERE / f"{protocol}_candidate.asm").read_text())
 
 
 def expanded_source():
@@ -112,6 +94,10 @@ def main():
         Path(__file__),
         ROOT / "test/test.py",
         ROOT / "tools/assembler.py",
+        ROOT / "tools/isa.py",
+        ROOT / "tools/program.py",
+        HERE / "isa_variants.py",
+        HERE / "fragments.py",
         ROOT / "tools/runtime.py",
     ]
     digests = {

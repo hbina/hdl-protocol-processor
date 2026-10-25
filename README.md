@@ -18,6 +18,8 @@ other protocol-specific engines.
 
 Recorded runtime physical flow: 79.15% utilization, positive setup/hold slack at 50 MHz in three corners, zero routing/Magic DRC and LVS errors, and five mapped integration tests. See [source-bound runtime results](docs/runtime_results.json) and [physical flow](docs/physical_flow.md). These are historical 2026-10-07 results.
 
+Production UART/SPI/JTAG valid-request probes exchange arbitrary payloads without firmware reload; images use 107/72/125 words. Recorded Icarus suite: ten passing tests. See [contracts and results](docs/protocol_probe_results.md).
+
 Saved study records retain their original hashes and outcomes. Source formatting has changed since some recorded runs; historical evidence is not a fresh provenance check of this checkout. The production physical-source hashes remain unchanged.
 
 ### Challenge protocol coverage
@@ -26,10 +28,10 @@ All listed support is partial; no full protocol or board interoperability claim 
 
 | Protocol | Status | Scope |
 |---|---|---|
-| UART | Partial | Fixed-byte TX example |
-| SPI | Partial | Mode-0 byte example |
+| UART | Partial | Production valid-request TX/RX probe; mapped fixed-byte baseline only |
+| SPI | Partial | Production valid-request TX/RX probe; mapped fixed-byte baseline only |
 | I2C | Partial | Address write/ACK/stretch example |
-| JTAG | Not started | Pending |
+| JTAG | Partial | Valid-request TAP/IR/DR probe |
 | SWD | Not started | Pending |
 | PS/2 | Not started | Pending |
 | 10 Mbit Ethernet | Not started | Pending |
@@ -40,7 +42,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 
 - [x] Add bounded runtime transport and memory interface.
 - [x] Harden runtime design across three process corners.
-- [ ] Add runtime UART SPI and JTAG probes.
+- [x] Add runtime UART SPI and JTAG probes.
 - [ ] Measure I2C SWD PS2 and Ethernet capacity limits.
 - [ ] Add CAN receive transmit and generic frontier models.
 - [ ] Develop USB packet reception and transmission.

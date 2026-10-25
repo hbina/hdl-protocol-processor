@@ -30,10 +30,12 @@ To run the RTL simulation:
 uv run make -B -C test
 ```
 
-The default suite runs the five baseline integration groups.
+The default suite runs the five baseline integration groups plus UART/SPI/JTAG probes (ten tests total).
 
 Study evidence below is historical unless explicitly described as a fresh check; matching saved XML/generated model artifacts are required for provenance audits.
 
 Recorded runtime physical flow: 79.15% utilization, positive setup/hold slack at 50 MHz in three corners, zero routing/Magic DRC and LVS errors, and five mapped integration tests. See [source-bound runtime results](../docs/runtime_results.json) and [physical flow](../docs/physical_flow.md). These are historical 2026-10-07 results.
+
+Production UART/SPI/JTAG valid-request probes exchange arbitrary payloads without firmware reload; images use 107/72/125 words. Recorded Icarus suite: ten passing tests. See [contracts and results](../docs/protocol_probe_results.md).
 
 See each linked study for exact commands, filters and expected-negative comparisons. Production results and expanded-model results are separate.

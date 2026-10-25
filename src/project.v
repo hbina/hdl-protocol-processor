@@ -17,8 +17,23 @@ module tt_um_protocol_emulator (
 );
 
   wire [7:0] debug_data;
+  wire [31:0] debug_registers;
   wire [7:0] loader_status;
   wire       halted;
+  wire cpu_valid, cpu_write, host_valid, host_write;
+  wire [15:0] cpu_address, host_address;
+  wire [7:0] cpu_data, host_data, bus_result, runtime_response;
+  wire [3:0] bus_error;
+  wire host_ready = !cpu_valid;
+  runtime_bridge bridge (.clk(clk), .clear(!rst_n || ui_in[7]),
+      .request(ui_in[6]), .token(ui_in[5:0]), .response(runtime_response),
+      .valid(host_valid), .write(host_write), .address(host_address),
+      .data_in(host_data), .ready(host_ready), .data_out(bus_result), .error(bus_error));
+  runtime_store store (.clk(clk), .clear(!rst_n || ui_in[7]),
+      .valid(cpu_valid || host_valid), .host(!cpu_valid), .debug_registers(debug_registers),
+      .write(cpu_valid ? cpu_write : host_write),
+      .address(cpu_valid ? cpu_address : host_address),
+      .data_in(cpu_valid ? cpu_data : host_data), .data_out(bus_result), .error(bus_error));
 
   protocol_core core (
       .clk          (clk),
@@ -32,16 +47,22 @@ module tt_um_protocol_emulator (
       .pin_out      (uio_out),
       .pin_oe       (uio_oe),
       .debug_data   (debug_data),
+      .debug_registers(debug_registers),
       .loader_status(loader_status),
+      .bus_valid    (cpu_valid),
+      .bus_write    (cpu_write),
+      .bus_address  (cpu_address),
+      .bus_data     (cpu_data),
+      .bus_result   (bus_result),
+      .bus_error    (bus_error),
       .halted       (halted)
   );
 
-  // During configuration this reports {word address, chunk number}. During
-  // execution ui_in[1:0] selects one of the four register values to inspect.
-  assign uo_out = ui_in[7] ? loader_status : debug_data;
+  // Configuration keeps the legacy status; execution reports runtime tokens.
+  assign uo_out = ui_in[7] ? loader_status : runtime_response;
 
   // Halt remains visible in simulation and can be assigned to a pin later.
-  wire _unused = &{halted, ui_in[5:2], 1'b0};
+  wire _unused = &{halted, debug_data, 1'b0};
 
 endmodule
 

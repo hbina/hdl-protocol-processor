@@ -7,7 +7,7 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v protocol_core.v
+PROJECT_SOURCES = project.v protocol_core.v runtime_fifo.v runtime_store.v runtime_bridge.v
 
 # Verilator 5 requires an explicit timing mode for testbench delays.
 ifeq ($(SIM),verilator)

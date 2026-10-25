@@ -1,7 +1,20 @@
-# Sample testbench for a Tiny Tapeout project
+# Protocol and runtime verification
 
-This is a sample testbench for a Tiny Tapeout project. It uses [cocotb](https://docs.cocotb.org/en/stable/) to drive the DUT and check the outputs.
-See below to get started or for more information, check the [website](https://tinytapeout.com/hdl/testing/).
+Five baseline cocotb tests exercise the real loader/runtime pins: legacy protocols,
+ECHO/XOR requests, transport boundaries, ISA/timing, and malformed records/reset
+recovery. All tests work against RTL and the mapped netlist without relying on
+internal hierarchical signals. The pin controller uses the same ABI library
+as a board adapter: [tools/runtime.py](../tools/runtime.py).
+
+Assembler, storage/FIFO, and controller recovery unit tests run separately:
+
+```sh
+uv run pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py
+```
+
+Storage tests include simultaneous FIFO operations at depths 1/3/4/64 and
+record/output publication/ownership boundaries. See [runtime.md](../docs/runtime.md)
+for the implemented interface and limitations.
 
 ## Setting up
 
@@ -17,41 +30,8 @@ To run the RTL simulation:
 uv run make -B -C test
 ```
 
-Run the command from the repository root. Add `SIM=verilator` to use
-Verilator instead of Icarus Verilog.
+The default suite runs the five baseline integration groups.
 
-To run gate-level simulation, first harden your project using the
-[physical-flow guide](../docs/physical_flow.md), then copy the final netlist
-from the repository root:
+Study evidence below is historical unless explicitly described as a fresh check; matching saved XML/generated model artifacts are required for provenance audits.
 
-```sh
-cp runs/wokwi/final/nl/tt_um_protocol_emulator.nl.v test/gate_level_netlist.v
-```
-
-With `PDK_ROOT` set as described in that guide, run:
-
-```sh
-uv run make -B -C test GATES=yes
-```
-
-If you wish to save the waveform in VCD format instead of FST format, edit tb.v to use `$dumpfile("tb.vcd");` and then run:
-
-```sh
-make -B FST=
-```
-
-This will generate `tb.vcd` instead of `tb.fst`.
-
-## How to view the waveform file
-
-Using GTKWave
-
-```sh
-gtkwave tb.fst tb.gtkw
-```
-
-Using Surfer
-
-```sh
-surfer tb.fst
-```
+See each linked study for exact commands, filters and expected-negative comparisons. Production results and expanded-model results are separate.

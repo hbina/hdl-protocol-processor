@@ -42,3 +42,29 @@ def test_labels_and_core_encodings() -> None:
 def test_invalid_programs_are_rejected(source: str) -> None:
     with pytest.raises(AssemblyError):
         assemble(source)
+
+
+@pytest.mark.parametrize(
+    "mnemonic,base",
+    [
+        ("LOAD", 0x2400),
+        ("STORE", 0x3400),
+        ("PREAD", 0x2800),
+        ("PWRITE", 0x3800),
+        ("CMPLT", 0x1800),
+    ],
+)
+def test_runtime_register_encodings(mnemonic, base):
+    assert assemble(f"{mnemonic} r2, r3") == [base | 0x203]
+
+
+def test_extended_branches_and_comparisons():
+    assert assemble(
+        "JMP 63\nJMP 64\nJMP 127\nJFAIL 63\nJFAIL 64\nJZ r2, 64\nDJNZ r3, 127\nCMPI r1, 255\nCMPLTI r2, 65"
+    ) == [0x803F, 0x8440, 0x847F, 0x883F, 0x8C40, 0x9640, 0xA77F, 0x15FF, 0x1E41]
+
+
+@pytest.mark.parametrize("source", ["JMP 128", "JFAIL -1", "NOP\n" * 129])
+def test_program_boundaries(source):
+    with pytest.raises(AssemblyError):
+        assemble(source)

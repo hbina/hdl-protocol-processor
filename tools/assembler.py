@@ -8,7 +8,7 @@ import pathlib
 import re
 from collections.abc import Iterable
 
-PROGRAM_WORDS = 64
+PROGRAM_WORDS = 128
 
 
 class AssemblyError(ValueError):
@@ -88,12 +88,13 @@ def assemble(source: str) -> list[int]:
             if mnemonic == "NOP":
                 _expect(args, 0, mnemonic, line_number)
                 word = 0x0000
-            elif mnemonic in {"LDI", "ADDI", "ANDI", "ORI", "XORI"}:
+            elif mnemonic in {"LDI", "CMPI", "CMPLTI", "ADDI", "ANDI", "ORI", "XORI"}:
                 _expect(args, 2, mnemonic, line_number)
                 rd = _register(args[0])
                 imm = _bounded(args[1], labels, 0xFF, "immediate")
-                if mnemonic == "LDI":
-                    word = 0x1000 | (rd << 8) | imm
+                if mnemonic in {"LDI", "CMPI", "CMPLTI"}:
+                    base = {"LDI": 0x1000, "CMPI": 0x1400, "CMPLTI": 0x1C00}[mnemonic]
+                    word = base | (rd << 8) | imm
                 else:
                     subop = {"ADDI": 0, "ANDI": 1, "ORI": 2, "XORI": 3}[mnemonic]
                     word = 0xC000 | ((subop << 2 | rd) << 8) | imm
@@ -107,15 +108,23 @@ def assemble(source: str) -> list[int]:
                 imm = _bounded(args[0], labels, 0xFF, "immediate")
                 opcode = {"SETO": 0x5, "SETOE": 0x6, "WAIT": 0x7}[mnemonic]
                 word = opcode << 12 | imm
-            elif mnemonic == "JMP":
+            elif mnemonic in {"LOAD", "STORE", "PREAD", "PWRITE", "CMPLT"}:
+                _expect(args, 2, mnemonic, line_number)
+                rd, ra = _register(args[0]), _register(args[1])
+                base = {"LOAD": 0x2400, "STORE": 0x3400, "PREAD": 0x2800,
+                        "PWRITE": 0x3800, "CMPLT": 0x1800}[mnemonic]
+                word = base | (rd << 8) | ra
+            elif mnemonic in {"JMP", "JFAIL"}:
                 _expect(args, 1, mnemonic, line_number)
-                word = 0x8000 | _bounded(args[0], labels, 0x3F, "address")
+                address = _bounded(args[0], labels, PROGRAM_WORDS - 1, "address")
+                word = (0x8000 | (0x800 if mnemonic == "JFAIL" else 0)
+                        | (0x400 if address > 63 else 0) | address)
             elif mnemonic in {"JZ", "DJNZ"}:
                 _expect(args, 2, mnemonic, line_number)
                 rd = _register(args[0])
-                address = _bounded(args[1], labels, 0x3F, "address")
+                address = _bounded(args[1], labels, PROGRAM_WORDS - 1, "address")
                 opcode = 0x9 if mnemonic == "JZ" else 0xA
-                word = opcode << 12 | rd << 8 | address
+                word = opcode << 12 | rd << 8 | (0x400 if address > 63 else 0) | address
             elif mnemonic in {"MOV", "XOR", "OR", "AND"}:
                 _expect(args, 2, mnemonic, line_number)
                 rd = _register(args[0])

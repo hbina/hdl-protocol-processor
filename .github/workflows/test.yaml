@@ -25,7 +25,7 @@ jobs:
 
       - name: Run tests
         run: |
-          uv run pytest test/test_assembler.py
+          uv run pytest test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py
           cd test
           uv run make clean
           uv run make
@@ -35,7 +35,8 @@ jobs:
       - name: Test Summary
         uses: test-summary/action@v2.4
         with:
-          paths: "test/results.xml"
+          paths: |
+            test/results.xml
         if: always()
 
       - name: upload waveform and test results

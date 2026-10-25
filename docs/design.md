@@ -1,4 +1,8 @@
-# Protocol Emulator v0.1 Design Report
+# Protocol Emulator v0.1 Baseline Design Report
+
+This report records the original baseline. The current v0.2 runtime
+architecture and programmer interface are specified in [runtime.md](runtime.md).
+The root [README](../README.md) records current verification and physical results.
 
 ## 1. Objective and implementation status
 

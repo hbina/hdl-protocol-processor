@@ -48,4 +48,6 @@ USB live TX, vendor controls, reset/deferred address and selected enumeration pa
 
 UART software deadlines/request validation and JTAG envelope rejection/recovery have model evidence. Their 251-/198-word images exceed production capacity. See [UART runtime](../docs/uart_runtime_study.md) and [JTAG runtime](../docs/jtag_runtime_study.md).
 
+CAN model follow-ups record ACK-error retry, arbitration-winner reception, bounded phase correction and selected persistent error-state/bus-off recovery. Full synchronization/confinement and production fit remain open. See [ACK recovery](../docs/can_ack_recovery_study.md), [winner retry](../docs/can_winner_study.md), [resynchronization](../docs/can_resync_study.md), and [fault state](../docs/can_fault_state_study.md).
+
 See each linked study for exact commands, filters and expected-negative comparisons. Production results and expanded-model results are separate.

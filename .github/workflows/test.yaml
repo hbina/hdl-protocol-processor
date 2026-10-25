@@ -104,6 +104,26 @@ jobs:
           uv run --locked pytest -q test/test_jtag_runtime_units.py
           uv run --locked python study/protocol_exploration/run_jtag_runtime.py jtag_runtime --expanded-model
 
+      - name: CAN ACK error flags and bounded retry (isolated generic model)
+        run: |
+          uv run --locked pytest -q test/test_can_recovery_units.py
+          uv run --locked python study/protocol_exploration/run_can_recovery.py can_recovery --expanded-model
+
+      - name: CAN winner reception and retransmission (isolated generic model)
+        run: |
+          uv run --locked pytest -q test/test_can_winner_units.py
+          uv run --locked python study/protocol_exploration/run_can_winner.py can_winner --expanded-model
+
+      - name: CAN bounded receive phase correction (isolated generic model)
+        run: |
+          uv run --locked pytest -q test/test_can_resync_units.py
+          uv run --locked python study/protocol_exploration/run_can_resync.py can_resync --expanded-model
+
+      - name: CAN persistent error state and recovery (isolated generic call model)
+        run: |
+          uv run --locked pytest -q test/test_can_fault_units.py test/test_can_fault_equal_units.py
+          uv run --locked python study/protocol_exploration/run_can_fault_equal.py can_fault_equal --expanded-model
+
       - name: Test Summary
         uses: test-summary/action@v2.4
         with:
@@ -131,6 +151,10 @@ jobs:
             test/sim_build/usb_enum_carry_frontier1024/results.xml
             test/sim_build/uart_runtime_frontier1024/results.xml
             test/sim_build/jtag_runtime_capacity256/results.xml
+            test/sim_build/can_recovery_frontier1024/results.xml
+            test/sim_build/can_winner_frontier1024/results.xml
+            test/sim_build/can_resync_frontier1024/results.xml
+            test/sim_build/can_fault_equal_call_frontier1024/results.xml
         if: always()
 
       - name: upload waveform and test results
@@ -212,4 +236,18 @@ jobs:
             test/sim_build/uart_runtime_frontier1024/false_start_timings.json
             test/sim_build/jtag_runtime_capacity256/results.xml
             test/sim_build/jtag_runtime_capacity256/evidence.json
+            test/sim_build/can_recovery_frontier1024/results.xml
+            test/sim_build/can_recovery_frontier1024/evidence.json
+            test/sim_build/can_recovery_frontier1024/retry_timings.json
+            test/sim_build/can_winner_frontier1024/results.xml
+            test/sim_build/can_winner_frontier1024/evidence.json
+            test/sim_build/can_winner_frontier1024/winner_timings.json
+            test/sim_build/can_resync_frontier1024/results.xml
+            test/sim_build/can_resync_frontier1024/evidence.json
+            test/sim_build/can_resync_frontier1024/drift_timings.json
+            test/sim_build/can_resync_frontier1024/phase_timings.json
+            test/sim_build/can_fault_equal_call_frontier1024/results.xml
+            test/sim_build/can_fault_equal_call_frontier1024/evidence.json
+            test/sim_build/can_fault_equal_call_frontier1024/passive_timings.json
+            test/sim_build/can_fault_equal_call_frontier1024/bus_off_timings.json
             test/output/*

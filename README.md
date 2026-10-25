@@ -20,6 +20,8 @@ Recorded runtime physical flow: 79.15% utilization, positive setup/hold slack at
 
 Production UART/SPI/JTAG valid-request probes exchange arbitrary payloads without firmware reload; images use 107/72/125 words. Recorded Icarus suite: ten passing tests. See [contracts and results](docs/protocol_probe_results.md).
 
+I2C/SWD/PS2/Ethernet model experiments record 5/2/2/6 passing groups. Their 249/230/188/280-word images exceed production capacity. See [I2C](docs/i2c_capacity_study.md), [SWD/PS2](docs/wave_b_results.md), and [Ethernet](docs/ethernet_capacity_study.md).
+
 Saved study records retain their original hashes and outcomes. Source formatting has changed since some recorded runs; historical evidence is not a fresh provenance check of this checkout. The production physical-source hashes remain unchanged.
 
 ### Challenge protocol coverage
@@ -30,11 +32,11 @@ All listed support is partial; no full protocol or board interoperability claim 
 |---|---|---|
 | UART | Partial | Production valid-request TX/RX probe; mapped fixed-byte baseline only |
 | SPI | Partial | Production valid-request TX/RX probe; mapped fixed-byte baseline only |
-| I2C | Partial | Address write/ACK/stretch example |
+| I2C | Partial | Production address example; TX/RX on larger model only |
 | JTAG | Partial | Valid-request TAP/IR/DR probe |
-| SWD | Not started | Pending |
-| PS/2 | Not started | Pending |
-| 10 Mbit Ethernet | Not started | Pending |
+| SWD | Partial | Larger model only |
+| PS/2 | Partial | Larger model only |
+| 10 Mbit Ethernet | Partial | Buffered minimum-frame model only |
 | CAN bus | Not started | Pending |
 | Low-speed USB | Not started | Pending |
 
@@ -43,7 +45,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 - [x] Add bounded runtime transport and memory interface.
 - [x] Harden runtime design across three process corners.
 - [x] Add runtime UART SPI and JTAG probes.
-- [ ] Measure I2C SWD PS2 and Ethernet capacity limits.
+- [x] Measure I2C SWD PS2 and Ethernet capacity limits.
 - [ ] Add CAN receive transmit and generic frontier models.
 - [ ] Develop USB packet reception and transmission.
 - [ ] Add USB control transfers and enumeration.

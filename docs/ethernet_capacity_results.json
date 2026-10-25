@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-25",
+  "executed_at_utc": "2026-10-24T16:18:39.278798+00:00",
+  "protocol": "ethernet",
+  "model": "counterfactual512_with_generic_9bit_long_branches",
+  "actual_asic_capacity_words": 128,
+  "candidate_words": 280,
+  "command": "uv run --locked python study/protocol_exploration/run_wave_c.py ethernet --expanded-model",
+  "passed": 6,
+  "skipped": 0,
+  "cases": [
+    "test_wave_c_generic_addressing",
+    "test_ethernet_candidate_tx_rx",
+    "test_ethernet_candidate_bad_frames",
+    "test_ethernet_candidate_clock_phase",
+    "test_ethernet_candidate_missing_rx_clock",
+    "test_ethernet_candidate_tx_duty_setup"
+  ],
+  "source_sha256": {
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "test/sim_build/ethernet_capacity512/protocol_core_capacity512.v": "69b12d5f835182589092950b0d25576d5a4a9d4a02bf4be3070442001170d9a7",
+    "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "study/protocol_exploration/ethernet_candidate.asm": "9a1187070b73db862cf69da34ce412213d66770c373c7a7ec812d310e3f0eb82",
+    "study/protocol_exploration/ethernet_peer.py": "c8d4dc2efb7a4b68a6de7583cba082e44c9a4493b7521d30327af742b87ee75c",
+    "study/protocol_exploration/run_wave_c.py": "7ce4f397c29c6051c24f50c8eab44f12b67becbd96e3a73af0717d319f078cae",
+    "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+    "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+    "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+  },
+  "results_xml_sha256": "1992d77594115aeb8b2f19c52f7100069b772d868fb271ea58af1d58157f52cd",
+  "production_rtl_changed": false,
+  "physical_fit_verified": false,
+  "actual_capacity_failure": {
+    "command": "uv run --locked python study/protocol_exploration/run_wave_c.py ethernet",
+    "exit_code": 1,
+    "stderr": "Actual ASIC capacity: program contains 280 words; maximum is 128"
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py",
+    "passed": 25
+  },
+  "coverage": {
+    "frame_body_bytes": 60,
+    "rx_frame_bytes": 64,
+    "wire_bytes_with_prefix": 72,
+    "line_rate_mbps": 10,
+    "rx_phase_ps": [
+      1,
+      5000,
+      10000,
+      15000,
+      19999
+    ],
+    "rx_relative_frequency_ppm": [
+      -100,
+      0,
+      100
+    ],
+    "tx_phase_ps": [
+      1,
+      5000,
+      10000,
+      15000,
+      19999
+    ],
+    "tx_clock_high_ps": [
+      20000,
+      25000,
+      30000
+    ],
+    "tx_setup_requirement_ps": 25000
+  },
+  "limitations": [
+    "Cannot load on production128-word core",
+    "No512-word physical flow or mapped/hardware proof",
+    "Minimum frames only; no streaming or continuous RX",
+    "TX clock loss can block initial WAITPIN",
+    "RX duty/skew and real PHY carrier timing unverified",
+    "Valid host request shapes only; no full envelope validation",
+    "CAN and USB experiments still outstanding"
+  ],
+  "resolved_failures": [
+    {
+      "issue": "TX clock alignment under asymmetric PHY duty",
+      "observed_tx_enable_setup_ps": 3,
+      "intermediate_tx_data_setup_ps": 20003,
+      "fix": "Preload first bit, align from synchronized rising clock and delay before enabling; checked across phase/duty matrix"
+    }
+  ],
+  "physical_source_sha256_unchanged_from_baseline": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "environment": {
+    "python": "3.12.4",
+    "cocotb": "2.0.1",
+    "simulator": "Icarus12.0 (12.0-2build2)",
+    "UV_CACHE_DIR": "/tmp/asic-uv-cache",
+    "PATH_prefix": "/tmp/asic-sim-packages/bin:/tmp/asic-sim-packages/iverilog/usr/bin"
+  }
+}

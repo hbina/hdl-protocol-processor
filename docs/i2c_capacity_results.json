@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-24",
+  "model": "counterfactual_256_word_instruction_store",
+  "actual_asic_capacity_words": 128,
+  "candidate_words": 249,
+  "command": "uv run --locked python study/protocol_exploration/run_i2c.py --expanded-model",
+  "passed": 5,
+  "skipped": 0,
+  "cases": [
+    "test_i2c_candidate_write_read",
+    "test_i2c_candidate_stretch_nack_recovery",
+    "test_i2c_candidate_timeout_phases",
+    "test_i2c_candidate_permanent_clock_fault",
+    "test_i2c_candidate_busy_bus"
+  ],
+  "source_sha256": {
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "test/sim_build/i2c_capacity256/protocol_core_capacity256.v": "9c0f6a733ded376ebf3cbd74a67f28d64333abfcfdd3e104e4225901596dba15",
+    "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "study/protocol_exploration/i2c_candidate.asm": "eeee567f6b8b951af296d5634825c4435929246ae93ba85406d6f60643b44d9f",
+    "study/protocol_exploration/i2c_peer.py": "e8c3505478e05183f73a8537793d49fad9a6dfba1ece28b947863890bc00f20e",
+    "study/protocol_exploration/run_i2c.py": "b9baea9db30543135cdc0b6ccd85922c5d9a3e8bd2d9636a707724a56f76f5bd",
+    "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+    "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+    "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+  },
+  "results_xml_sha256": "d87904cad1a697b73d60a349211e3f79a62400ecaa84331062dd35dc7221c98b",
+  "production_rtl_changed": false,
+  "physical_fit_verified": false,
+  "note": "Runtime-store capabilities intentionally remain the unmodified 128-word ABI; do not use this model as a board image.",
+  "actual_capacity_failure": {
+    "command": "uv run --locked python study/protocol_exploration/run_i2c.py",
+    "exit_code": 1,
+    "stderr": "Actual ASIC capacity: program contains 249 words; maximum is 128"
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py",
+    "passed": 25
+  },
+  "environment": {
+    "simulator": "Icarus 12.0 (12.0-2build2)",
+    "cocotb": "2.0.1",
+    "python": "3.12.4",
+    "UV_CACHE_DIR": "/tmp/asic-uv-cache",
+    "PATH_prefix": "/tmp/asic-sim-packages/bin:/tmp/asic-sim-packages/iverilog/usr/bin"
+  },
+  "physical_sources_unchanged_from_baseline": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "next_step": "Explore remaining protocols; evaluate generic code density/control flow/storage before any production capacity change."
+}

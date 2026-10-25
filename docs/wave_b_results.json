@@ -1,0 +1,210 @@
+{
+  "date": "2026-10-24",
+  "status": "wave_b_initial_experiments_passed_or_capacity_blocked",
+  "full_nine_protocol_goal_complete": false,
+  "unit": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py",
+    "passed": 25
+  },
+  "production_rtl": {
+    "command": "uv run --locked make -B -C test",
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0,
+    "cases": [
+      {
+        "module": "test",
+        "name": "test_protocol_firmware",
+        "sim_time_ns": 36838.0
+      },
+      {
+        "module": "test",
+        "name": "test_runtime_requests",
+        "sim_time_ns": 1145891.0
+      },
+      {
+        "module": "test",
+        "name": "test_runtime_transport_and_boundaries",
+        "sim_time_ns": 88667.0
+      },
+      {
+        "module": "test",
+        "name": "test_runtime_isa_and_gpio_timing",
+        "sim_time_ns": 97460.0
+      },
+      {
+        "module": "test",
+        "name": "test_runtime_malformed_records_and_retirement",
+        "sim_time_ns": 395914.0
+      },
+      {
+        "module": "test_uart_probe",
+        "name": "test_uart_probe_arbitrary_tx_rx",
+        "sim_time_ns": 36266319.0
+      },
+      {
+        "module": "test_uart_probe",
+        "name": "test_uart_probe_phase_and_clock_mismatch",
+        "sim_time_ns": 6060278.0
+      },
+      {
+        "module": "test_uart_probe",
+        "name": "test_uart_probe_line_errors_and_recovery",
+        "sim_time_ns": 11376378.0
+      },
+      {
+        "module": "test_spi_probe",
+        "name": "test_spi_probe_arbitrary_transactions",
+        "sim_time_ns": 17314387.0
+      },
+      {
+        "module": "test_jtag_probe",
+        "name": "test_jtag_probe_scans_and_readback",
+        "sim_time_ns": 14803669.0
+      }
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "firmware/uart_probe.asm": "4b2d7a3b3920b047ec06d7b186e9424b28a799217997c1e3340af5f8643a6209",
+      "firmware/spi_probe.asm": "18de8782dd6fee142c73eb4fe9a97e2d6e8ee727ded0ddbc16233a9abb7fe783",
+      "firmware/jtag_probe.asm": "9b93d43622db454e62c3b162cfa5e39a8dfdfca423313183d933e17aa209470d",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "test/test_uart_probe.py": "79a54bf739aeb7c7ba88aad930c4dacbd55f228123c2f833324e9d7ec88a2b39",
+      "test/test_spi_probe.py": "1ed8cae626df8ae6a36feff8de9b76283100458a2ba761db079abe17e924b730",
+      "test/test_jtag_probe.py": "8a3d0eb2f164e5852f9b0cf8f43df20c9a7bfa7a6540f5f3499b430a57cc55fb",
+      "test/Makefile": "39e61273349dc0f471a1d59d1164481ff7a83e47f59535046458f8e45c2898d8",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd"
+    },
+    "results_xml_sha256": "a1074cc92734bfeeb7df7c025163abc7d734c6f8c82ef35a35cfb5b4d5268d5f"
+  },
+  "jtag": {
+    "firmware": "firmware/jtag_probe.asm",
+    "words": 125,
+    "capacity_words": 128,
+    "scratch_bytes": 17,
+    "scan_bits_tested": [
+      1,
+      5,
+      7,
+      8,
+      9,
+      31,
+      32,
+      33,
+      511,
+      512
+    ],
+    "mapped_verified": false
+  },
+  "capacity_models": {
+    "swd": {
+      "date": "2026-10-24",
+      "protocol": "swd",
+      "model": "counterfactual_256_word_instruction_store",
+      "actual_asic_capacity_words": 128,
+      "candidate_words": 230,
+      "command": "uv run --locked python study/protocol_exploration/run_wave_b.py swd --expanded-model",
+      "passed": 2,
+      "skipped": 0,
+      "cases": [
+        "test_swd_candidate_register_transfers",
+        "test_swd_candidate_wait_fault_parity"
+      ],
+      "source_sha256": {
+        "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+        "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+        "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+        "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+        "test/sim_build/swd_capacity256/protocol_core_capacity256.v": "9c0f6a733ded376ebf3cbd74a67f28d64333abfcfdd3e104e4225901596dba15",
+        "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+        "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+        "study/protocol_exploration/swd_candidate.asm": "f9725228e011161177e3e6ef9f7557cdbfe39c22d1d6f63c3e67aa3f201100c5",
+        "study/protocol_exploration/swd_peer.py": "c604b4513274998803bdf5815632e921904ea90752dda647b7452ffcf5c439e8",
+        "study/protocol_exploration/run_wave_b.py": "442a0e66b9a7f4d2f70d91b991c016c388fdd359d63ec2d425a42c58b8fe1ee5",
+        "study/protocol_exploration/run_i2c.py": "b9baea9db30543135cdc0b6ccd85922c5d9a3e8bd2d9636a707724a56f76f5bd",
+        "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+        "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+        "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+      },
+      "results_xml_sha256": "89971507059fdc602fe13bb50cfec5bf6e1f7c6f447c1b44ff0d41778cbc5233",
+      "production_rtl_changed": false,
+      "physical_fit_verified": false,
+      "actual_capacity_failure": {
+        "command": "uv run --locked python study/protocol_exploration/run_wave_b.py swd",
+        "exit_code": 1,
+        "stderr": "Actual ASIC capacity: program contains 230 words; maximum is 128"
+      }
+    },
+    "ps2": {
+      "date": "2026-10-24",
+      "protocol": "ps2",
+      "model": "counterfactual_256_word_instruction_store",
+      "actual_asic_capacity_words": 128,
+      "candidate_words": 188,
+      "command": "uv run --locked python study/protocol_exploration/run_wave_b.py ps2 --expanded-model",
+      "passed": 2,
+      "skipped": 0,
+      "cases": [
+        "test_ps2_candidate_commands_and_receive",
+        "test_ps2_candidate_errors_and_recovery"
+      ],
+      "source_sha256": {
+        "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+        "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+        "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+        "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+        "test/sim_build/ps2_capacity256/protocol_core_capacity256.v": "9c0f6a733ded376ebf3cbd74a67f28d64333abfcfdd3e104e4225901596dba15",
+        "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+        "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+        "study/protocol_exploration/ps2_candidate.asm": "121ee4c7483c84cc23cb024db74143f91ef1963bd6dfb7a685e6c3867c616695",
+        "study/protocol_exploration/ps2_peer.py": "db386cd338ad01af5e689a6439249eee69a9a5d3420c3d06b85fc519e01d4bd5",
+        "study/protocol_exploration/run_wave_b.py": "442a0e66b9a7f4d2f70d91b991c016c388fdd359d63ec2d425a42c58b8fe1ee5",
+        "study/protocol_exploration/run_i2c.py": "b9baea9db30543135cdc0b6ccd85922c5d9a3e8bd2d9636a707724a56f76f5bd",
+        "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+        "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+        "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+      },
+      "results_xml_sha256": "fbd95b99c6616d818816210643b04633f3fd6a3e23d5ed6ce561d7f09f9a3b80",
+      "production_rtl_changed": false,
+      "physical_fit_verified": false,
+      "actual_capacity_failure": {
+        "command": "uv run --locked python study/protocol_exploration/run_wave_b.py ps2",
+        "exit_code": 1,
+        "stderr": "Actual ASIC capacity: program contains 188 words; maximum is 128"
+      }
+    }
+  },
+  "physical_source_sha256_unchanged": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "environment": {
+    "python": "3.12.4",
+    "cocotb": "2.0.1",
+    "simulator": "Icarus12.0 (12.0-2build2)",
+    "UV_CACHE_DIR": "/tmp/asic-uv-cache",
+    "PATH_prefix": "/tmp/asic-sim-packages/bin:/tmp/asic-sim-packages/iverilog/usr/bin"
+  },
+  "next_experiments": [
+    "Classical CAN",
+    "Low-speed USB",
+    "10 Mbit Ethernet"
+  ],
+  "remaining": [
+    "Protocol request validation",
+    "Production capacity decisions",
+    "Remaining acceptance cases and target modes",
+    "Mapped/hardware verification",
+    "Existing physical signoff caveats"
+  ]
+}

@@ -32,11 +32,26 @@ jobs:
           # make will return success even if the test fails, so check for failure in the results.xml
           ! grep failure results.xml
 
+      - name: I2C capacity experiment (256-word model only)
+        run: uv run --locked python study/protocol_exploration/run_i2c.py --expanded-model
+
+      - name: SWD and PS2 capacity experiments (256-word models only)
+        run: |
+          uv run --locked python study/protocol_exploration/run_wave_b.py swd --expanded-model
+          uv run --locked python study/protocol_exploration/run_wave_b.py ps2 --expanded-model
+
+      - name: Ethernet capacity experiment (512-word generic model only)
+        run: uv run --locked python study/protocol_exploration/run_wave_c.py ethernet --expanded-model
+
       - name: Test Summary
         uses: test-summary/action@v2.4
         with:
           paths: |
             test/results.xml
+            test/sim_build/i2c_capacity256/results.xml
+            test/sim_build/swd_capacity256/results.xml
+            test/sim_build/ps2_capacity256/results.xml
+            test/sim_build/ethernet_capacity512/results.xml
         if: always()
 
       - name: upload waveform and test results
@@ -47,4 +62,12 @@ jobs:
           path: |
             test/tb.fst
             test/results.xml
+            test/sim_build/i2c_capacity256/results.xml
+            test/sim_build/i2c_capacity256/evidence.json
+            test/sim_build/swd_capacity256/results.xml
+            test/sim_build/swd_capacity256/evidence.json
+            test/sim_build/ps2_capacity256/results.xml
+            test/sim_build/ps2_capacity256/evidence.json
+            test/sim_build/ethernet_capacity512/results.xml
+            test/sim_build/ethernet_capacity512/evidence.json
             test/output/*

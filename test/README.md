@@ -38,4 +38,6 @@ Recorded runtime physical flow: 79.15% utilization, positive setup/hold slack at
 
 Production UART/SPI/JTAG valid-request probes exchange arbitrary payloads without firmware reload; images use 107/72/125 words. Recorded Icarus suite: ten passing tests. See [contracts and results](../docs/protocol_probe_results.md).
 
+I2C/SWD/PS2/Ethernet model experiments record 5/2/2/6 passing groups. Their 249/230/188/280-word images exceed production capacity. See [I2C](../docs/i2c_capacity_study.md), [SWD/PS2](../docs/wave_b_results.md), and [Ethernet](../docs/ethernet_capacity_study.md).
+
 See each linked study for exact commands, filters and expected-negative comparisons. Production results and expanded-model results are separate.

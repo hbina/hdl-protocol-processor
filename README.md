@@ -412,6 +412,8 @@ See [the baseline design report](docs/design.md) for historical results and
 
 ## Environment
 
+Ruff is included in the locked development dependencies for Python linting.
+
 Python 3.12 and all Python dependencies are managed by
 [uv](https://docs.astral.sh/uv/). Install either Icarus Verilog or Verilator as
 the RTL simulator, then initialize the locked environment:

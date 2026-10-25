@@ -1,0 +1,602 @@
+{
+  "date": "2026-10-25",
+  "scope": "isolated_generic_carry_and_addressed_usb_out_setup",
+  "full_goal_complete": false,
+  "usb_enumeration_or_control_transfers_verified": false,
+  "production_rtl_changed": false,
+  "physical_fit_verified": false,
+  "production_capacity_words": 128,
+  "compact_words": 310,
+  "addressed_words": 403,
+  "generic_carry_bits": 1,
+  "compact_model": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T01:07:34.952913+00:00",
+    "protocol": "usb_dense",
+    "model": "counterfactual1024x18_eight_registers_leaf_call_carry",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "candidate_words": 310,
+    "command": "uv run --locked python study/protocol_exploration/run_usb_dense.py usb_dense --expanded-model",
+    "passed": 6,
+    "skipped": 0,
+    "cases": [
+      "test_live_usb_data_and_deadline",
+      "test_live_usb_malformed_and_recovery",
+      "test_live_usb_phase_frequency_deadline",
+      "test_live_usb_timeout_recovery",
+      "test_generic_call_return_banks",
+      "test_generic_carry_shift_branch_and_reload"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/usb_dense_carry_frontier1024/protocol_core_frontier1024.v": "af18bae3da5a585e25a680588cd7f5282a827ba3b0cbc9faeb92fd27eee513bb",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/usb_dense_candidate.asm": "0c98bf227466f44e60f444dcc12278237dfad723ab12e3f9ead594de821e0735",
+      "study/protocol_exploration/usb_dense_peer.py": "4f1ab13675d5db7bd53196557bb7684e5e1cb5fe9a9c0972025908302e66c06d",
+      "study/protocol_exploration/generic_carry_frontier.py": "590a02349e0564157e0c9d0c29e5ad26521642696d0e01163adc0c0cf765f50d",
+      "study/protocol_exploration/build_usb_dense.py": "b2cfa3135872b98f46a9a8535db2f7bb0b65678dcdb5a7512c6258172df4f27f",
+      "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+      "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+      "study/protocol_exploration/generic_call_frontier.py": "bf219e8bee8d14bc020f745d496413dbdc4bb138c2ba386bdeeaf46a94b9335e",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_usb_live.py": "556b7814a43648fd90467e9a6f2a1d8aff7c535954a0e6e1b5ef90b19926211b",
+      "study/protocol_exploration/usb_live_constants.json": "28b26ed509cf12b53713d9038dea7d1f460ee541fa84ccf51b0f8594cfd3665c",
+      "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_usb_dense.py": "b9ff3efacd30aae9a41145b6e446e16aabd04118152c20c4dde024e1c871eabb",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    },
+    "results_xml_sha256": "0a87b63baaf5d58880a11351debc8b0e1160080c9d1d640aa5787444c3fba7e0",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "addressed_model": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T01:08:02.572662+00:00",
+    "protocol": "usb_out",
+    "model": "counterfactual1024x18_eight_registers_leaf_call_carry",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "candidate_words": 403,
+    "command": "uv run --locked python study/protocol_exploration/run_usb_out.py usb_out --expanded-model",
+    "passed": 4,
+    "skipped": 0,
+    "cases": [
+      "test_addressed_out_setup",
+      "test_token_filter_crc5_and_orphan_data",
+      "test_transaction_phase_frequency",
+      "test_transaction_error_timeout_recovery"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/usb_out_carry_frontier1024/protocol_core_frontier1024.v": "af18bae3da5a585e25a680588cd7f5282a827ba3b0cbc9faeb92fd27eee513bb",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/usb_out_candidate.asm": "9b5c112fd3f59d57af255286ecd7a92611b0955691706a8d539ab9588da557e3",
+      "study/protocol_exploration/usb_out_peer.py": "ed9448ceea14ab654de97157eb15b318add69a71b9fe340a719aa1deff580280",
+      "study/protocol_exploration/build_usb_out.py": "6f4751e0f67c1210b9fc1cb0d6b45068bd23570759a790fb1f161b2d29d7ae8b",
+      "study/protocol_exploration/generic_carry_frontier.py": "590a02349e0564157e0c9d0c29e5ad26521642696d0e01163adc0c0cf765f50d",
+      "study/protocol_exploration/build_usb_dense.py": "b2cfa3135872b98f46a9a8535db2f7bb0b65678dcdb5a7512c6258172df4f27f",
+      "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+      "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+      "study/protocol_exploration/generic_call_frontier.py": "bf219e8bee8d14bc020f745d496413dbdc4bb138c2ba386bdeeaf46a94b9335e",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_usb_live.py": "556b7814a43648fd90467e9a6f2a1d8aff7c535954a0e6e1b5ef90b19926211b",
+      "study/protocol_exploration/usb_live_constants.json": "28b26ed509cf12b53713d9038dea7d1f460ee541fa84ccf51b0f8594cfd3665c",
+      "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_usb_out.py": "3683c993d3eaa997be21259eac48105096da36cbad5d198b9d40eef48fc34625",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    },
+    "results_xml_sha256": "42eb788582b5ce2e60450a3264b6516adbd8a5a998e0db1586d67713a8a8529c",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "carry_legacy_regression": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T01:08:53.223518+00:00",
+    "protocol": "can_duplex",
+    "model": "counterfactual1024x18_eight_registers_leaf_call_carry",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "comparison_candidate_words": 622,
+    "scope": "legacy_regression",
+    "command": "uv run --locked python study/protocol_exploration/run_carry_legacy.py can_duplex --expanded-model",
+    "passed": 10,
+    "skipped": 0,
+    "cases": [
+      "test_protocol_firmware",
+      "test_runtime_requests",
+      "test_runtime_transport_and_boundaries",
+      "test_runtime_isa_and_gpio_timing",
+      "test_runtime_malformed_records_and_retirement",
+      "test_uart_probe_arbitrary_tx_rx",
+      "test_uart_probe_phase_and_clock_mismatch",
+      "test_uart_probe_line_errors_and_recovery",
+      "test_spi_probe_arbitrary_transactions",
+      "test_jtag_probe_scans_and_readback"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/carry_frontier1024_legacy/protocol_core_frontier1024.v": "af18bae3da5a585e25a680588cd7f5282a827ba3b0cbc9faeb92fd27eee513bb",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/can_frontier_candidate.asm": "9c8cab7d4ff6b8d8a9346c9d95d5f0079e1fe6422789829d2512d9b292bf197f",
+      "study/protocol_exploration/frontier_peer.py": "32e54297f07d6c0f8f637bf1e7bc108f25ea9eff8aed26b5d1774755e3facdc1",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/generic_carry_frontier.py": "590a02349e0564157e0c9d0c29e5ad26521642696d0e01163adc0c0cf765f50d",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_carry_legacy.py": "cf4f21ee9e3280ddfaedbdb1b4069fb7238d2a60e5c7f36a0dc7455aaf68482e",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca",
+      "test/test_uart_probe.py": "79a54bf739aeb7c7ba88aad930c4dacbd55f228123c2f833324e9d7ec88a2b39",
+      "test/test_spi_probe.py": "1ed8cae626df8ae6a36feff8de9b76283100458a2ba761db079abe17e924b730",
+      "test/test_jtag_probe.py": "8a3d0eb2f164e5852f9b0cf8f43df20c9a7bfa7a6540f5f3499b430a57cc55fb",
+      "firmware/spi_mode0.asm": "618652dee83b23bbc9c6e211aa5d5d7001eef8b7db2b7b1edc355c691e8d56fd",
+      "firmware/uart_probe.asm": "4b2d7a3b3920b047ec06d7b186e9424b28a799217997c1e3340af5f8643a6209",
+      "firmware/jtag_probe.asm": "9b93d43622db454e62c3b162cfa5e39a8dfdfca423313183d933e17aa209470d",
+      "firmware/runtime.asm": "de0818ecc932884f985ce6f24e3fc94cb662c48c794b05f002c521b61968278a",
+      "firmware/spi_probe.asm": "18de8782dd6fee142c73eb4fe9a97e2d6e8ee727ded0ddbc16233a9abb7fe783",
+      "firmware/i2c_write.asm": "e55caabd1ff0b2778a99ed0f2f10df06ab3f6382e294ca87b7e8d85e3f9a5861",
+      "firmware/uart_tx.asm": "925f556572eb428c51c8ea150ea3cba1f00b182b0eb11e5651c2ea27f0b64144"
+    },
+    "results_xml_sha256": "01fbb3e7896341f715d7ca02225a6c9899d463e4119a3a1521fd1e91440b110f",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "timing": {
+    "compact_sweep": {
+      "cases": [
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 1,
+          "host_relative_ppm": -1000,
+          "ack_latency_ps": 2469265.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 1,
+          "host_relative_ppm": 0,
+          "ack_latency_ps": 2514632.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 1,
+          "host_relative_ppm": 1000,
+          "ack_latency_ps": 2629898.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 5000,
+          "host_relative_ppm": -1000,
+          "ack_latency_ps": 2459266.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 5000,
+          "host_relative_ppm": 0,
+          "ack_latency_ps": 2520633.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 5000,
+          "host_relative_ppm": 1000,
+          "ack_latency_ps": 2633899.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 10000,
+          "host_relative_ppm": -1000,
+          "ack_latency_ps": 2495266.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 10000,
+          "host_relative_ppm": 0,
+          "ack_latency_ps": 2556633.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 10000,
+          "host_relative_ppm": 1000,
+          "ack_latency_ps": 2619899.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 15000,
+          "host_relative_ppm": -1000,
+          "ack_latency_ps": 2435266.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 15000,
+          "host_relative_ppm": 0,
+          "ack_latency_ps": 2541633.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 15000,
+          "host_relative_ppm": 1000,
+          "ack_latency_ps": 2583899.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 19999,
+          "host_relative_ppm": -1000,
+          "ack_latency_ps": 2467267.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 19999,
+          "host_relative_ppm": 0,
+          "ack_latency_ps": 2513634.0
+        },
+        {
+          "pid": 75,
+          "payload_bytes": 8,
+          "host_phase_ps": 19999,
+          "host_relative_ppm": 1000,
+          "ack_latency_ps": 2585900.0
+        }
+      ],
+      "minimum_ack_latency_ps": 2435266.0,
+      "maximum_ack_latency_ps": 2633899.0
+    },
+    "addressed_sweep": {
+      "cases": [
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 1,
+          "ack_latency_ps": 2792240.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 2883619.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 1,
+          "ack_latency_ps": 2935861.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 1,
+          "ack_latency_ps": 3007864.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 5000,
+          "ack_latency_ps": 2863242.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 5000,
+          "ack_latency_ps": 2924621.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 5000,
+          "ack_latency_ps": 2962863.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 5000,
+          "ack_latency_ps": 3002866.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 10000,
+          "ack_latency_ps": 2827242.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 10000,
+          "ack_latency_ps": 2868621.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 10000,
+          "ack_latency_ps": 2951863.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 10000,
+          "ack_latency_ps": 3076866.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 15000,
+          "ack_latency_ps": 2846242.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 15000,
+          "ack_latency_ps": 2930621.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 15000,
+          "ack_latency_ps": 2943863.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 15000,
+          "ack_latency_ps": 3041866.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 19999,
+          "ack_latency_ps": 2828244.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 19999,
+          "ack_latency_ps": 2911623.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 19999,
+          "ack_latency_ps": 2989865.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 19999,
+          "ack_latency_ps": 3058868.0
+        }
+      ],
+      "minimum_ack_latency_ps": 2792240.0,
+      "maximum_ack_latency_ps": 3076866.0
+    }
+  },
+  "core_only_synthesis": {
+    "scope": "unmapped_core_only_noabc",
+    "technology_area_or_timing_verified": false,
+    "variants": {
+      "baseline": {
+        "source": "src/protocol_core.v",
+        "source_sha256": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/venv/bin/yowasp-yosys",
+          "-Q",
+          "-T",
+          "-q",
+          "-l",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/carry_frontier_synth/baseline.log",
+          "-s",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/carry_frontier_synth/baseline.ys"
+        ],
+        "creator": "Yosys 0.55 (git sha1 60f126cd0, ccache clang 18.1.3 -O3 -flto -flto)",
+        "generic_cells": 5647,
+        "cells_by_type": {
+          "$_AND_": 565,
+          "$_DFFE_PP_": 2048,
+          "$_MUX_": 2434,
+          "$_NOT_": 104,
+          "$_OR_": 296,
+          "$_SDFFCE_PN0P_": 32,
+          "$_SDFFE_PP0P_": 74,
+          "$_SDFF_PN0_": 17,
+          "$_SDFF_PP0_": 9,
+          "$_XOR_": 68
+        },
+        "stats_sha256": "edc15d7b8c882bf35e71d351d54a746666566432474a9c1a3e6e5be3b298fd8d"
+      },
+      "frontier": {
+        "source": "test/sim_build/carry_frontier_synth/protocol_core_frontier1024.v",
+        "source_sha256": "af18bae3da5a585e25a680588cd7f5282a827ba3b0cbc9faeb92fd27eee513bb",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/venv/bin/yowasp-yosys",
+          "-Q",
+          "-T",
+          "-q",
+          "-l",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/carry_frontier_synth/frontier.log",
+          "-s",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/carry_frontier_synth/frontier.ys"
+        ],
+        "creator": "Yosys 0.55 (git sha1 60f126cd0, ccache clang 18.1.3 -O3 -flto -flto)",
+        "generic_cells": 40545,
+        "cells_by_type": {
+          "$_AND_": 2474,
+          "$_DFFE_PP_": 18432,
+          "$_MUX_": 18941,
+          "$_NOT_": 110,
+          "$_OR_": 329,
+          "$_SDFFCE_PN0P_": 64,
+          "$_SDFFE_PP0P_": 92,
+          "$_SDFF_PN0_": 17,
+          "$_SDFF_PP0_": 12,
+          "$_XOR_": 74
+        },
+        "stats_sha256": "7f4c82d13eeb1260d9f8dcf859d290837a7eca0331c316df821d836588f0d5fb"
+      }
+    }
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py test/test_frontier_assembler.py test/test_usb_live_units.py test/test_carry_frontier.py",
+    "passed": 35,
+    "new_carry_units": 3
+  },
+  "limitations": [
+    "OUT/SETUP receive and ACK only; no arbitrary IN transmitter or host-ACK/retry handling",
+    "No USB reset/endpoint/data-toggle/duplicate state or enumeration/control transfer execution",
+    "Minimum-gap and limited phase/rate simulation only; no full jitter or within-packet recovery proof",
+    "Valid runtime envelopes only; 15 processed packets/request then 16th SOP times out",
+    "Model only; production encoding/storage, mapped timing, electrical interoperability and tile fit unresolved"
+  ]
+}

@@ -1,0 +1,854 @@
+{
+  "date": "2026-10-25",
+  "scope": "isolated_combined_usb_in_out_setup_packet_firmware",
+  "full_goal_complete": false,
+  "enumeration_verified": false,
+  "production_rtl_changed": false,
+  "physical_fit_verified": false,
+  "program_words": 629,
+  "generic_rtl_or_isa_added_in_this_followup": false,
+  "model": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T01:16:46.817195+00:00",
+    "protocol": "usb_in",
+    "model": "counterfactual1024x18_eight_registers_leaf_call_carry",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "candidate_words": 629,
+    "command": "uv run --locked python study/protocol_exploration/run_usb_in.py usb_in --expanded-model",
+    "passed": 6,
+    "skipped": 0,
+    "cases": [
+      "test_addressed_out_setup",
+      "test_token_filter_crc5_and_orphan_data",
+      "test_transaction_phase_frequency",
+      "test_transaction_error_timeout_recovery",
+      "test_in_arbitrary_payload_and_retry",
+      "test_in_filter_phase_frequency_and_recovery"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/usb_in_carry_frontier1024/protocol_core_frontier1024.v": "af18bae3da5a585e25a680588cd7f5282a827ba3b0cbc9faeb92fd27eee513bb",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/usb_in_candidate.asm": "482ec8b36335ef425cac939b969caa1737a29cee5838cd59072006a0d77e9462",
+      "study/protocol_exploration/usb_in_peer.py": "94a8a68821c567ff17da05c5cf0e079ba8b5037f93089916dd0d13597e5bbe58",
+      "study/protocol_exploration/build_usb_in.py": "5c84e9b0c5dd31d3a87a40932e5db37d9771670d5ceb24143d205472e9e4099b",
+      "study/protocol_exploration/build_usb_out.py": "6f4751e0f67c1210b9fc1cb0d6b45068bd23570759a790fb1f161b2d29d7ae8b",
+      "study/protocol_exploration/generic_carry_frontier.py": "590a02349e0564157e0c9d0c29e5ad26521642696d0e01163adc0c0cf765f50d",
+      "study/protocol_exploration/build_usb_dense.py": "b2cfa3135872b98f46a9a8535db2f7bb0b65678dcdb5a7512c6258172df4f27f",
+      "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+      "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+      "study/protocol_exploration/generic_call_frontier.py": "bf219e8bee8d14bc020f745d496413dbdc4bb138c2ba386bdeeaf46a94b9335e",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_usb_live.py": "556b7814a43648fd90467e9a6f2a1d8aff7c535954a0e6e1b5ef90b19926211b",
+      "study/protocol_exploration/usb_live_constants.json": "28b26ed509cf12b53713d9038dea7d1f460ee541fa84ccf51b0f8594cfd3665c",
+      "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_usb_in.py": "56500c5fc1e09efe163eb02ec5eaeda4e9e5e83842bf02f6dc7cfd6c77bd6303",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    },
+    "results_xml_sha256": "d56c0c51b7f9576d72fec2af6e92c5d5439bc18f8c7d71235c8db3e73cbacf51",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "timing": {
+    "in_timings": {
+      "records": [
+        {
+          "direction": "IN",
+          "payload_bytes": 0,
+          "pid": 75,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1966321.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 1,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1990647.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 2,
+          "pid": 75,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1958314.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 3,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1950981.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 4,
+          "pid": 75,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1968647.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 5,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1959314.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 6,
+          "pid": 75,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1964981.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 7,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1967647.0,
+          "stuffed_bits": 1
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 75,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 2001647.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1938981.0,
+          "stuffed_bits": 12
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 1,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1986654.0,
+          "stuffed_bits": 12
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 2,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1986654.0,
+          "stuffed_bits": 12
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 75,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1991981.0,
+          "stuffed_bits": 1
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 1,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 2020314.0,
+          "stuffed_bits": 1
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 1,
+          "pid": 75,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1948647.0,
+          "stuffed_bits": 1
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 1,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 2017647.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 1,
+          "pid": 195,
+          "attempt": 1,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1939978.0,
+          "stuffed_bits": 0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 2,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 2985629.0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 1,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1932314.0,
+          "stuffed_bits": 0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3101946.0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 2,
+          "pid": 75,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 2009314.0,
+          "stuffed_bits": 3
+        }
+      ],
+      "direction_specific_count": 19,
+      "minimum_latency_ps": 1932314.0,
+      "maximum_latency_ps": 2020314.0,
+      "artifact_sha256": "0aab5f8fc324ef5ea676cbc7837336250795a66dd8594bd727e0648691190afc"
+    },
+    "in_phase_timings": {
+      "records": [
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": -1000,
+          "response_latency_ps": 1919309.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1947641.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 1000,
+          "response_latency_ps": 2033624.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 5000,
+          "relative_ppm": -1000,
+          "response_latency_ps": 1968624.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 5000,
+          "relative_ppm": 0,
+          "response_latency_ps": 2033643.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 5000,
+          "relative_ppm": 1000,
+          "response_latency_ps": 2038626.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 10000,
+          "relative_ppm": -1000,
+          "response_latency_ps": 1915625.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 10000,
+          "relative_ppm": 0,
+          "response_latency_ps": 2032643.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 10000,
+          "relative_ppm": 1000,
+          "response_latency_ps": 2022626.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 15000,
+          "relative_ppm": -1000,
+          "response_latency_ps": 1980625.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 15000,
+          "relative_ppm": 0,
+          "response_latency_ps": 2026643.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 15000,
+          "relative_ppm": 1000,
+          "response_latency_ps": 2045626.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 19999,
+          "relative_ppm": -1000,
+          "response_latency_ps": 2002626.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 19999,
+          "relative_ppm": 0,
+          "response_latency_ps": 1978645.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 8,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 19999,
+          "relative_ppm": 1000,
+          "response_latency_ps": 2050628.0,
+          "stuffed_bits": 3
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 1,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1930924.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 1,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 1959314.0,
+          "stuffed_bits": 0
+        },
+        {
+          "direction": "IN",
+          "payload_bytes": 1,
+          "pid": 195,
+          "attempt": 0,
+          "phase_ps": 1,
+          "relative_ppm": 0,
+          "response_latency_ps": 2016988.0,
+          "stuffed_bits": 0
+        }
+      ],
+      "direction_specific_count": 18,
+      "minimum_latency_ps": 1915625.0,
+      "maximum_latency_ps": 2050628.0,
+      "artifact_sha256": "aa3839acb6a990e23a6fe26f594d0d8744fe8089c92f5497b93a6905d5be16b3"
+    },
+    "out_timings": {
+      "records": [
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 225,
+          "data_pid": 75,
+          "payload_bytes": 0,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3026308.0
+        },
+        {
+          "address": 1,
+          "endpoint": 1,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 1,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 2965972.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 75,
+          "payload_bytes": 2,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3014636.0
+        },
+        {
+          "address": 127,
+          "endpoint": 15,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 3,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3010299.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 225,
+          "data_pid": 75,
+          "payload_bytes": 4,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3016964.0
+        },
+        {
+          "address": 1,
+          "endpoint": 1,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 5,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3056628.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 75,
+          "payload_bytes": 6,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3081292.0
+        },
+        {
+          "address": 127,
+          "endpoint": 15,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 7,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3024955.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 225,
+          "data_pid": 75,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3021620.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 3121620.0
+        }
+      ],
+      "direction_specific_count": 10,
+      "minimum_latency_ps": 2965972.0,
+      "maximum_latency_ps": 3121620.0,
+      "artifact_sha256": "c71595bc9b868053720b42f0290db8dda1ba67c71e622eb5f034b31e3721239d"
+    },
+    "out_phase_timings": {
+      "records": [
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 1,
+          "ack_latency_ps": 2988240.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 1,
+          "ack_latency_ps": 2961619.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 1,
+          "ack_latency_ps": 3031861.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 1,
+          "ack_latency_ps": 3180864.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 5000,
+          "ack_latency_ps": 2986242.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 5000,
+          "ack_latency_ps": 2966621.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 5000,
+          "ack_latency_ps": 3041863.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 5000,
+          "ack_latency_ps": 3166866.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 10000,
+          "ack_latency_ps": 2960242.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 10000,
+          "ack_latency_ps": 3054621.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 10000,
+          "ack_latency_ps": 3043863.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 10000,
+          "ack_latency_ps": 3197866.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 15000,
+          "ack_latency_ps": 2918242.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 15000,
+          "ack_latency_ps": 3045621.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 15000,
+          "ack_latency_ps": 3110863.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 15000,
+          "ack_latency_ps": 3139866.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": -1000,
+          "phase_ps": 19999,
+          "ack_latency_ps": 2945244.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 0,
+          "phase_ps": 19999,
+          "ack_latency_ps": 3039623.0
+        },
+        {
+          "address": 37,
+          "endpoint": 7,
+          "token_pid": 225,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 19999,
+          "ack_latency_ps": 3035865.0
+        },
+        {
+          "address": 0,
+          "endpoint": 0,
+          "token_pid": 45,
+          "data_pid": 195,
+          "payload_bytes": 8,
+          "gap_bits": 2,
+          "relative_ppm": 1000,
+          "phase_ps": 19999,
+          "ack_latency_ps": 3128868.0
+        }
+      ],
+      "direction_specific_count": 20,
+      "minimum_latency_ps": 2918242.0,
+      "maximum_latency_ps": 3197866.0,
+      "artifact_sha256": "c80bf055a44441569ff738f54a8d7c410e7a2cb521e7ff073c90393e3711c2cf"
+    }
+  },
+  "runtime": {
+    "arguments_length": 41,
+    "maximum_input_bytes": 8,
+    "maximum_output_bytes": 11,
+    "host_preparation_interval_us": 200,
+    "packed_waveform_bytes_bound": 29
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py test/test_frontier_assembler.py test/test_usb_live_units.py test/test_carry_frontier.py test/test_usb_in_units.py",
+    "passed": 37,
+    "new_units": 2,
+    "new_unit_source_sha256": "c3839ff034b62d09f402e7a1f887d6b3b1009da0f3efcf2f4b6c04a2d371dfe1"
+  },
+  "unchanged_physical_source_sha256": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "limitations": [
+    "No enumeration, persistent endpoint-zero sequencing, reset recognition or address/configuration requests",
+    "No autonomous endpoint service; host allows200us preparation before IN tokens",
+    "No persistent data-toggle state or duplicate OUT suppression; runtime chooses IN PID",
+    "No full jitter/clock-recovery proof or physical/transceiver interoperability",
+    "629 words/eight registers/carry/call model only; actual128-word core cannot run it",
+    "Valid request envelopes only; invalid queued payload draining not implemented"
+  ]
+}

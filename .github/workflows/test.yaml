@@ -49,11 +49,34 @@ jobs:
       - name: CAN transmit capacity experiment (512-word generic model only)
         run: uv run --locked python study/protocol_exploration/run_can_tx.py can_tx --expanded-model
 
+      - name: USB packet experiments (512-word models; response deadline unresolved)
+        run: |
+          uv run --locked python study/protocol_exploration/run_usb_rx.py usb_rx --expanded-model
+          uv run --locked python study/protocol_exploration/run_usb_rx_compact.py usb_rx_compact --expanded-model
+
       - name: Generic frontier model (1024x18 and eight registers; no ASIC fit proof)
         run: |
           uv run --locked pytest -q test/test_frontier_assembler.py
           uv run --locked python study/protocol_exploration/run_frontier.py can_duplex --expanded-model
           uv run --locked python study/protocol_exploration/run_frontier_legacy.py can_duplex --expanded-model
+
+      - name: Live USB and generic leaf calls (isolated model; enumeration pending)
+        run: |
+          uv run --locked pytest -q test/test_usb_live_units.py
+          uv run --locked python study/protocol_exploration/run_usb_live.py usb_live --expanded-model
+          uv run --locked python study/protocol_exploration/run_call_legacy.py can_duplex --expanded-model
+
+      - name: USB addressed OUT and generic carry (isolated model; IN/enumeration pending)
+        run: |
+          uv run --locked pytest -q test/test_carry_frontier.py
+          uv run --locked python study/protocol_exploration/run_usb_dense.py usb_dense --expanded-model
+          uv run --locked python study/protocol_exploration/run_usb_out.py usb_out --expanded-model
+          uv run --locked python study/protocol_exploration/run_carry_legacy.py can_duplex --expanded-model
+
+      - name: Bidirectional USB packets (isolated model; enumeration pending)
+        run: |
+          uv run --locked pytest -q test/test_usb_in_units.py
+          uv run --locked python study/protocol_exploration/run_usb_in.py usb_in --expanded-model
 
       - name: Test Summary
         uses: test-summary/action@v2.4
@@ -66,10 +89,16 @@ jobs:
             test/sim_build/ethernet_capacity512/results.xml
             test/sim_build/can_capacity512/results.xml
             test/sim_build/can_tx_capacity512/results.xml
+            test/sim_build/usb_rx_capacity512/results.xml
+            test/sim_build/usb_rx_compact_capacity512/results.xml
             test/sim_build/can_duplex_frontier1024/results.xml
             test/sim_build/frontier1024_legacy/results.xml
+            test/sim_build/usb_live_call_frontier1024/results.xml
             test/sim_build/call_frontier1024_legacy/results.xml
+            test/sim_build/usb_dense_carry_frontier1024/results.xml
+            test/sim_build/usb_out_carry_frontier1024/results.xml
             test/sim_build/carry_frontier1024_legacy/results.xml
+            test/sim_build/usb_in_carry_frontier1024/results.xml
             test/sim_build/uart_runtime_frontier1024/results.xml
             test/sim_build/jtag_runtime_capacity256/results.xml
         if: always()
@@ -94,14 +123,38 @@ jobs:
             test/sim_build/can_capacity512/evidence.json
             test/sim_build/can_tx_capacity512/results.xml
             test/sim_build/can_tx_capacity512/evidence.json
+            test/sim_build/usb_rx_capacity512/results.xml
+            test/sim_build/usb_rx_capacity512/evidence.json
+            test/sim_build/usb_rx_capacity512/ack_timings.json
+            test/sim_build/usb_rx_compact_capacity512/results.xml
+            test/sim_build/usb_rx_compact_capacity512/evidence.json
+            test/sim_build/usb_rx_compact_capacity512/ack_timings.json
             test/sim_build/can_duplex_frontier1024/results.xml
             test/sim_build/can_duplex_frontier1024/evidence.json
             test/sim_build/frontier1024_legacy/results.xml
             test/sim_build/frontier1024_legacy/evidence.json
+            test/sim_build/usb_live_call_frontier1024/results.xml
+            test/sim_build/usb_live_call_frontier1024/evidence.json
+            test/sim_build/usb_live_call_frontier1024/live_timings.json
+            test/sim_build/usb_live_call_frontier1024/live_phase_timings.json
             test/sim_build/call_frontier1024_legacy/results.xml
             test/sim_build/call_frontier1024_legacy/evidence.json
+            test/sim_build/usb_dense_carry_frontier1024/results.xml
+            test/sim_build/usb_dense_carry_frontier1024/evidence.json
+            test/sim_build/usb_dense_carry_frontier1024/live_timings.json
+            test/sim_build/usb_dense_carry_frontier1024/live_phase_timings.json
+            test/sim_build/usb_out_carry_frontier1024/results.xml
+            test/sim_build/usb_out_carry_frontier1024/evidence.json
+            test/sim_build/usb_out_carry_frontier1024/out_timings.json
+            test/sim_build/usb_out_carry_frontier1024/out_phase_timings.json
             test/sim_build/carry_frontier1024_legacy/results.xml
             test/sim_build/carry_frontier1024_legacy/evidence.json
+            test/sim_build/usb_in_carry_frontier1024/results.xml
+            test/sim_build/usb_in_carry_frontier1024/evidence.json
+            test/sim_build/usb_in_carry_frontier1024/out_timings.json
+            test/sim_build/usb_in_carry_frontier1024/out_phase_timings.json
+            test/sim_build/usb_in_carry_frontier1024/in_timings.json
+            test/sim_build/usb_in_carry_frontier1024/in_phase_timings.json
             test/sim_build/uart_runtime_frontier1024/results.xml
             test/sim_build/uart_runtime_frontier1024/evidence.json
             test/sim_build/uart_runtime_frontier1024/deadline_timings.json

@@ -24,6 +24,8 @@ I2C/SWD/PS2/Ethernet model experiments record 5/2/2/6 passing groups. Their 249/
 
 Separate CAN RX/TX model studies record four groups each; combined TX/RX runs on an isolated 1024x18/eight-register model. Generic leaf-call/carry extensions and synthesis comparisons remain model-only. See [CAN RX](docs/can_receive_study.md), [CAN TX](docs/can_transmit_study.md), and [frontier results](docs/generic_frontier_study.md).
 
+USB studies preserve buffered-RX turnaround failures and record live RX, addressed OUT and bidirectional IN/OUT packet tests on generic models. Production capacity and interoperability remain open. See [buffered RX](docs/usb_receive_study.md), [live RX](docs/usb_live_study.md), [OUT](docs/usb_out_study.md), and [IN](docs/usb_in_study.md).
+
 Saved study records retain their original hashes and outcomes. Source formatting has changed since some recorded runs; historical evidence is not a fresh provenance check of this checkout. The production physical-source hashes remain unchanged.
 
 ### Challenge protocol coverage
@@ -40,7 +42,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 | PS/2 | Partial | Larger model only |
 | 10 Mbit Ethernet | Partial | Buffered minimum-frame model only |
 | CAN bus | Partial | Larger generic models only |
-| Low-speed USB | Not started | Pending |
+| Low-speed USB | Partial | Larger generic models only |
 
 ### Roadmap
 
@@ -49,7 +51,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 - [x] Add runtime UART SPI and JTAG probes.
 - [x] Measure I2C SWD PS2 and Ethernet capacity limits.
 - [x] Add CAN receive transmit and generic frontier models.
-- [ ] Develop USB packet reception and transmission.
+- [x] Develop USB packet reception and transmission.
 - [ ] Add USB control transfers and enumeration.
 - [ ] Validate UART and JTAG runtime requests.
 - [ ] Add CAN retry synchronization and fault confinement.

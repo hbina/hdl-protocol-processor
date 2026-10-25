@@ -42,4 +42,6 @@ I2C/SWD/PS2/Ethernet model experiments record 5/2/2/6 passing groups. Their 249/
 
 Separate CAN RX/TX model studies record four groups each; combined TX/RX runs on an isolated 1024x18/eight-register model. Generic leaf-call/carry extensions and synthesis comparisons remain model-only. See [CAN RX](../docs/can_receive_study.md), [CAN TX](../docs/can_transmit_study.md), and [frontier results](../docs/generic_frontier_study.md).
 
+USB studies preserve buffered-RX turnaround failures and record live RX, addressed OUT and bidirectional IN/OUT packet tests on generic models. Production capacity and interoperability remain open. See [buffered RX](../docs/usb_receive_study.md), [live RX](../docs/usb_live_study.md), [OUT](../docs/usb_out_study.md), and [IN](../docs/usb_in_study.md).
+
 See each linked study for exact commands, filters and expected-negative comparisons. Production results and expanded-model results are separate.

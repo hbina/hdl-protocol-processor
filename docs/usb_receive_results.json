@@ -1,0 +1,332 @@
+{
+  "date": "2026-10-25",
+  "scope": "isolated_data_packet_reception_and_diagnostic_ack",
+  "usb_bidirectional_goal_complete": false,
+  "full_nine_protocol_goal_complete": false,
+  "production_rtl_changed": false,
+  "physical_fit_verified": false,
+  "device_response_detachable_max_ps": 4333333.333333333,
+  "device_response_captive_max_ps": 5000000.0,
+  "variants": {
+    "usb_rx": {
+      "functional": {
+        "date": "2026-10-25",
+        "executed_at_utc": "2026-10-24T23:45:26.132789+00:00",
+        "protocol": "usb_rx",
+        "model": "counterfactual512_with_generic_9bit_long_branches",
+        "actual_asic_capacity_words": 128,
+        "candidate_words": 400,
+        "command": "uv run --locked python study/protocol_exploration/run_usb_rx.py usb_rx --expanded-model",
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "cases": [
+          "test_usb_packet_receive",
+          "test_usb_packet_errors_recovery",
+          "test_usb_packet_phase_frequency",
+          "test_usb_packet_diagnostic_ack",
+          "test_usb_packet_timeout"
+        ],
+        "source_sha256": {
+          "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+          "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+          "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+          "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+          "test/sim_build/usb_rx_capacity512/protocol_core_capacity512.v": "69b12d5f835182589092950b0d25576d5a4a9d4a02bf4be3070442001170d9a7",
+          "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+          "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+          "study/protocol_exploration/usb_rx_candidate.asm": "86ec79cf112d48602eaa617a1a098841d9a3f9a02bcbec11792ae8982488ab4a",
+          "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+          "study/protocol_exploration/usb_rx_deadline_peer.py": "f26a65f8f88f7824fd018d09111e708b4f433f12005cdfbade353056964c91e4",
+          "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+          "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+          "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+          "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+          "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+          "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+        },
+        "results_xml_sha256": "746649ccb9bcc9b09aebf5d91b403077cadc078cf1c3bbdcdbc9413a2ce041bc",
+        "production_rtl_changed": false,
+        "physical_fit_verified": false,
+        "deadline_check": false,
+        "ack_timings": [
+          {
+            "payload_bytes": 0,
+            "eop_j_ps": 7818848720.0,
+            "ack_start_ps": 7853330041.0,
+            "ack_latency_ps": 34481321.0,
+            "decode_start_ps": 7819380041.0,
+            "crc_start_ps": 7846460041.0,
+            "crc_finish_ps": 7853160041.0,
+            "decode_elapsed_ps": 27080000.0,
+            "crc_elapsed_ps": 6700000.0
+          },
+          {
+            "payload_bytes": 1,
+            "eop_j_ps": 7939447056.0,
+            "ack_start_ps": 7986210041.0,
+            "ack_latency_ps": 46762985.0,
+            "decode_start_ps": 7940000041.0,
+            "crc_start_ps": 7976040041.0,
+            "crc_finish_ps": 7986040041.0,
+            "decode_elapsed_ps": 36040000.0,
+            "crc_elapsed_ps": 10000000.0
+          },
+          {
+            "payload_bytes": 8,
+            "eop_j_ps": 8119977412.0,
+            "ack_start_ps": 8259590041.0,
+            "ack_latency_ps": 139612629.0,
+            "decode_start_ps": 8120480041.0,
+            "crc_start_ps": 8226600041.0,
+            "crc_finish_ps": 8259420041.0,
+            "decode_elapsed_ps": 106120000.0,
+            "crc_elapsed_ps": 32820000.0
+          }
+        ],
+        "ack_timings_sha256": "d66f3320cdd9faeadfac7cc5623c84d7ca482343dc425ce998394f5ae3aa3058"
+      },
+      "deadline_requirement": {
+        "date": "2026-10-25",
+        "executed_at_utc": "2026-10-24T23:44:50.394456+00:00",
+        "protocol": "usb_rx",
+        "model": "counterfactual512_with_generic_9bit_long_branches",
+        "actual_asic_capacity_words": 128,
+        "candidate_words": 400,
+        "command": "uv run --locked python study/protocol_exploration/run_usb_rx.py usb_rx --expanded-model --deadline-check",
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "cases": [
+          "test_usb_ack_turnaround_requirement"
+        ],
+        "source_sha256": {
+          "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+          "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+          "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+          "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+          "test/sim_build/usb_rx_deadline512/protocol_core_capacity512.v": "69b12d5f835182589092950b0d25576d5a4a9d4a02bf4be3070442001170d9a7",
+          "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+          "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+          "study/protocol_exploration/usb_rx_candidate.asm": "86ec79cf112d48602eaa617a1a098841d9a3f9a02bcbec11792ae8982488ab4a",
+          "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+          "study/protocol_exploration/usb_rx_deadline_peer.py": "f26a65f8f88f7824fd018d09111e708b4f433f12005cdfbade353056964c91e4",
+          "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+          "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+          "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+          "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+          "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+          "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+        },
+        "results_xml_sha256": "9aaf8b64308cef1b468e964fd0c2f99de53bba332309403212ad1f9474f33f12",
+        "production_rtl_changed": false,
+        "physical_fit_verified": false,
+        "deadline_check": true,
+        "assertion_message": "ACK latency 139.635 us exceeds detachable-device maximum 4.333 us\nassert 139634629.0 <= 4333333.333333333",
+        "exit_code": 1
+      },
+      "actual_capacity_failure": {
+        "command": "uv run --locked python study/protocol_exploration/run_usb_rx.py usb_rx",
+        "exit_code": 1,
+        "stderr": "Actual ASIC capacity: program contains 400 words; maximum is 128"
+      }
+    },
+    "usb_rx_compact": {
+      "functional": {
+        "date": "2026-10-25",
+        "executed_at_utc": "2026-10-24T23:45:25.784104+00:00",
+        "protocol": "usb_rx_compact",
+        "model": "counterfactual512_with_generic_9bit_long_branches",
+        "actual_asic_capacity_words": 128,
+        "candidate_words": 391,
+        "command": "uv run --locked python study/protocol_exploration/run_usb_rx_compact.py usb_rx_compact --expanded-model",
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "cases": [
+          "test_usb_packet_receive",
+          "test_usb_packet_errors_recovery",
+          "test_usb_packet_phase_frequency",
+          "test_usb_packet_diagnostic_ack",
+          "test_usb_packet_timeout"
+        ],
+        "source_sha256": {
+          "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+          "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+          "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+          "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+          "test/sim_build/usb_rx_compact_capacity512/protocol_core_capacity512.v": "69b12d5f835182589092950b0d25576d5a4a9d4a02bf4be3070442001170d9a7",
+          "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+          "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+          "study/protocol_exploration/usb_rx_compact_candidate.asm": "6468a7cb77926cc28ab50497695717b8e3fa6ea74fb46b22ce7501ed0b8a37e8",
+          "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+          "study/protocol_exploration/usb_rx_deadline_peer.py": "f26a65f8f88f7824fd018d09111e708b4f433f12005cdfbade353056964c91e4",
+          "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+          "study/protocol_exploration/build_usb_rx_compact.py": "a30b1acffb544528fb63fe3798fa8302267a7a6e34ae566fb7c7e2369aca5aa2",
+          "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+          "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+          "study/protocol_exploration/run_usb_rx_compact.py": "12e0f59c05208b278efb0bfed3c9d52dbac9ef80e4086ee6401e9317ecfab717",
+          "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+          "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+          "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+        },
+        "results_xml_sha256": "563f1ef21d7052ec41f3a66428d5801366af1d3a87176940893375e3ac4e1430",
+        "production_rtl_changed": false,
+        "physical_fit_verified": false,
+        "deadline_check": false,
+        "ack_timings": [
+          {
+            "payload_bytes": 0,
+            "eop_j_ps": 7426916720.0,
+            "ack_start_ps": 7457318041.0,
+            "ack_latency_ps": 30401321.0,
+            "decode_start_ps": 7427448041.0,
+            "crc_start_ps": 7450448041.0,
+            "crc_finish_ps": 7457148041.0,
+            "decode_elapsed_ps": 23000000.0,
+            "crc_elapsed_ps": 6700000.0
+          },
+          {
+            "payload_bytes": 1,
+            "eop_j_ps": 7543800056.0,
+            "ack_start_ps": 7585098041.0,
+            "ack_latency_ps": 41297985.0,
+            "decode_start_ps": 7544308041.0,
+            "crc_start_ps": 7574928041.0,
+            "crc_finish_ps": 7584928041.0,
+            "decode_elapsed_ps": 30620000.0,
+            "crc_elapsed_ps": 10000000.0
+          },
+          {
+            "payload_bytes": 8,
+            "eop_j_ps": 7718782412.0,
+            "ack_start_ps": 7844558041.0,
+            "ack_latency_ps": 125775629.0,
+            "decode_start_ps": 7719288041.0,
+            "crc_start_ps": 7811568041.0,
+            "crc_finish_ps": 7844388041.0,
+            "decode_elapsed_ps": 92280000.0,
+            "crc_elapsed_ps": 32820000.0
+          }
+        ],
+        "ack_timings_sha256": "fc00aba8dfccaa7ef4ef74af917fac093b6e919d51b62ebf31426f9fad235c49"
+      },
+      "deadline_requirement": {
+        "date": "2026-10-25",
+        "executed_at_utc": "2026-10-24T23:44:50.336461+00:00",
+        "protocol": "usb_rx_compact",
+        "model": "counterfactual512_with_generic_9bit_long_branches",
+        "actual_asic_capacity_words": 128,
+        "candidate_words": 391,
+        "command": "uv run --locked python study/protocol_exploration/run_usb_rx_compact.py usb_rx_compact --expanded-model --deadline-check",
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0,
+        "cases": [
+          "test_usb_ack_turnaround_requirement"
+        ],
+        "source_sha256": {
+          "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+          "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+          "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+          "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+          "test/sim_build/usb_rx_compact_deadline512/protocol_core_capacity512.v": "69b12d5f835182589092950b0d25576d5a4a9d4a02bf4be3070442001170d9a7",
+          "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+          "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+          "study/protocol_exploration/usb_rx_compact_candidate.asm": "6468a7cb77926cc28ab50497695717b8e3fa6ea74fb46b22ce7501ed0b8a37e8",
+          "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+          "study/protocol_exploration/usb_rx_deadline_peer.py": "f26a65f8f88f7824fd018d09111e708b4f433f12005cdfbade353056964c91e4",
+          "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+          "study/protocol_exploration/build_usb_rx_compact.py": "a30b1acffb544528fb63fe3798fa8302267a7a6e34ae566fb7c7e2369aca5aa2",
+          "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+          "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+          "study/protocol_exploration/run_usb_rx_compact.py": "12e0f59c05208b278efb0bfed3c9d52dbac9ef80e4086ee6401e9317ecfab717",
+          "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+          "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+          "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+        },
+        "results_xml_sha256": "d545e022d5fec49081a8027aff2d71e6d44a666ff8eb4fc188b67ba195b5a3c9",
+        "production_rtl_changed": false,
+        "physical_fit_verified": false,
+        "deadline_check": true,
+        "assertion_message": "ACK latency 125.795 us exceeds detachable-device maximum 4.333 us\nassert 125794629.0 <= 4333333.333333333",
+        "exit_code": 1
+      },
+      "actual_capacity_failure": {
+        "command": "uv run --locked python study/protocol_exploration/run_usb_rx_compact.py usb_rx_compact",
+        "exit_code": 1,
+        "stderr": "Actual ASIC capacity: program contains 391 words; maximum is 128"
+      }
+    }
+  },
+  "coverage": {
+    "data_pids": [
+      "DATA0",
+      "DATA1"
+    ],
+    "payload_lengths_bytes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "host_phase_ps": [
+      1,
+      5000,
+      10000,
+      15000,
+      19999
+    ],
+    "host_relative_frequency_ppm": [
+      -1000,
+      0,
+      1000
+    ],
+    "capture_intervals_ns": [
+      680,
+      660,
+      660
+    ],
+    "line_rate_bps": 1500000,
+    "crc_initial": "0xffff",
+    "crc_reflected_poly": "0xa001",
+    "crc_reflected_residue": "0xb001"
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py",
+    "passed": 25
+  },
+  "lint": {
+    "command": "uv run --locked ruff check study/protocol_exploration/build_usb_rx*.py study/protocol_exploration/run_usb_rx*.py study/protocol_exploration/usb_rx*peer.py",
+    "passed": true
+  },
+  "limitations": [
+    "No token CRC5/address/endpoint matching or USB enumeration/control transfers",
+    "Diagnostic ACK is not a transaction-aware response and violates turnaround timing",
+    "Capture has no within-packet resynchronization or full jitter-tolerance proof",
+    "No reset, suspend, retry/duplicate/toggle handling or arbitrary USB IN data generation",
+    "Valid request envelopes only; images exceed actual128-word capacity",
+    "No mapped, expanded-model physical, pad/transceiver or hardware validation"
+  ],
+  "physical_source_sha256_unchanged_from_baseline": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "environment": {
+    "python": "3.12.4",
+    "cocotb": "2.0.1",
+    "simulator": "Icarus12.0 (12.0-2build2)",
+    "UV_CACHE_DIR": "/tmp/asic-uv-cache",
+    "PATH_prefix": "/tmp/asic-sim-packages/bin:/tmp/asic-sim-packages/iverilog/usr/bin"
+  }
+}

@@ -1,0 +1,546 @@
+{
+  "date": "2026-10-25",
+  "scope": "isolated_usb_data_packets_and_diagnostic_ack_timing",
+  "usb_packet_deadline_passed_in_model": true,
+  "usb_enumeration_or_control_transfers_verified": false,
+  "full_goal_complete": false,
+  "production_rtl_changed": false,
+  "physical_fit_verified": false,
+  "production_capacity_words": 128,
+  "program_words": 947,
+  "inline_words": 1221,
+  "call_link_bits": 10,
+  "nested_calls_supported": false,
+  "live_model": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T00:39:32.445941+00:00",
+    "protocol": "usb_live",
+    "model": "counterfactual1024x18_eight_registers_one_level_call",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "candidate_words": 947,
+    "command": "uv run --locked python study/protocol_exploration/run_usb_live.py usb_live --expanded-model",
+    "passed": 5,
+    "skipped": 0,
+    "cases": [
+      "test_live_usb_data_and_deadline",
+      "test_live_usb_malformed_and_recovery",
+      "test_live_usb_phase_frequency_deadline",
+      "test_live_usb_timeout_recovery",
+      "test_generic_call_return_banks"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/usb_live_call_frontier1024/protocol_core_frontier1024.v": "5d20369ebc61009e282f2686ebd1fc4f7aa6db09408ed381b8218ebf5db9daff",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/usb_live_candidate.asm": "072a1feb0979f1d8207b7b0a5a19e1da4afb6f2e4b5030c92145c14f2f0320b0",
+      "study/protocol_exploration/usb_live_peer.py": "8d0e3248a8c612d28886790a5042b7b88b9d13d7be5441c8f146ea57811d4406",
+      "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+      "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+      "study/protocol_exploration/generic_call_frontier.py": "bf219e8bee8d14bc020f745d496413dbdc4bb138c2ba386bdeeaf46a94b9335e",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_usb_live.py": "556b7814a43648fd90467e9a6f2a1d8aff7c535954a0e6e1b5ef90b19926211b",
+      "study/protocol_exploration/usb_live_constants.json": "28b26ed509cf12b53713d9038dea7d1f460ee541fa84ccf51b0f8594cfd3665c",
+      "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_usb_live.py": "4a948247a8cd8117f1962c113ab6abab074f5238e05c15dff4646d83a1cd91c8",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    },
+    "results_xml_sha256": "e5c23bfa8177cd898300a16eda9d7f04fc2ffbace8a1b6f5ad164115980241ff",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "legacy_regression": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T00:35:08.633098+00:00",
+    "protocol": "can_duplex",
+    "model": "counterfactual1024x18_eight_registers_one_level_call",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "comparison_candidate_words": 622,
+    "scope": "legacy_regression",
+    "command": "uv run --locked python study/protocol_exploration/run_call_legacy.py can_duplex --expanded-model",
+    "passed": 10,
+    "skipped": 0,
+    "cases": [
+      "test_protocol_firmware",
+      "test_runtime_requests",
+      "test_runtime_transport_and_boundaries",
+      "test_runtime_isa_and_gpio_timing",
+      "test_runtime_malformed_records_and_retirement",
+      "test_uart_probe_arbitrary_tx_rx",
+      "test_uart_probe_phase_and_clock_mismatch",
+      "test_uart_probe_line_errors_and_recovery",
+      "test_spi_probe_arbitrary_transactions",
+      "test_jtag_probe_scans_and_readback"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/call_frontier1024_legacy/protocol_core_frontier1024.v": "5d20369ebc61009e282f2686ebd1fc4f7aa6db09408ed381b8218ebf5db9daff",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/can_frontier_candidate.asm": "9c8cab7d4ff6b8d8a9346c9d95d5f0079e1fe6422789829d2512d9b292bf197f",
+      "study/protocol_exploration/frontier_peer.py": "32e54297f07d6c0f8f637bf1e7bc108f25ea9eff8aed26b5d1774755e3facdc1",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/generic_call_frontier.py": "bf219e8bee8d14bc020f745d496413dbdc4bb138c2ba386bdeeaf46a94b9335e",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_call_legacy.py": "aeb6a0974f76c71561b9105caea134597ded24d01663101f36acb1c57709bd8d",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca",
+      "test/test_uart_probe.py": "79a54bf739aeb7c7ba88aad930c4dacbd55f228123c2f833324e9d7ec88a2b39",
+      "test/test_spi_probe.py": "1ed8cae626df8ae6a36feff8de9b76283100458a2ba761db079abe17e924b730",
+      "test/test_jtag_probe.py": "8a3d0eb2f164e5852f9b0cf8f43df20c9a7bfa7a6540f5f3499b430a57cc55fb",
+      "firmware/spi_mode0.asm": "618652dee83b23bbc9c6e211aa5d5d7001eef8b7db2b7b1edc355c691e8d56fd",
+      "firmware/uart_probe.asm": "4b2d7a3b3920b047ec06d7b186e9424b28a799217997c1e3340af5f8643a6209",
+      "firmware/jtag_probe.asm": "9b93d43622db454e62c3b162cfa5e39a8dfdfca423313183d933e17aa209470d",
+      "firmware/runtime.asm": "de0818ecc932884f985ce6f24e3fc94cb662c48c794b05f002c521b61968278a",
+      "firmware/spi_probe.asm": "18de8782dd6fee142c73eb4fe9a97e2d6e8ee727ded0ddbc16233a9abb7fe783",
+      "firmware/i2c_write.asm": "e55caabd1ff0b2778a99ed0f2f10df06ab3f6382e294ca87b7e8d85e3f9a5861",
+      "firmware/uart_tx.asm": "925f556572eb428c51c8ea150ea3cba1f00b182b0eb11e5651c2ea27f0b64144"
+    },
+    "results_xml_sha256": "8e63399c7232171bc24b326439551db761f2025e89177c5795066d3f5014f3ba",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "live_timings": {
+    "sha256": "def5aaf9ddfcda6c32c63d8190b026f9bc01a311cee374353cc072d77e666bcd",
+    "samples": [
+      {
+        "pid": 195,
+        "payload_bytes": 0,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2483321.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 0,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2541321.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 1,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2486985.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 1,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2540985.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 2,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2489982.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 2,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2570649.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 3,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2516646.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 3,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2522646.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 4,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2514977.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 4,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2562977.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 5,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2461307.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 5,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2530307.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 6,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2476305.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 6,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2547305.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 7,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2478969.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 7,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2558969.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 8,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2514633.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2560633.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 8,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2518966.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 8,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2498629.0
+      },
+      {
+        "pid": 195,
+        "payload_bytes": 1,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2516318.0
+      }
+    ],
+    "minimum_ps": 2461307.0,
+    "maximum_ps": 2570649.0
+  },
+  "live_phase_timings": {
+    "sha256": "4001b699910f8a404936c8b3f32cb6c2b376992b54e31b6c69b26b1a1a67d147",
+    "samples": [
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 1,
+        "host_relative_ppm": -1000,
+        "ack_latency_ps": 2469265.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2514632.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 1,
+        "host_relative_ppm": 1000,
+        "ack_latency_ps": 2629898.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 5000,
+        "host_relative_ppm": -1000,
+        "ack_latency_ps": 2459266.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 5000,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2520633.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 5000,
+        "host_relative_ppm": 1000,
+        "ack_latency_ps": 2633899.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 10000,
+        "host_relative_ppm": -1000,
+        "ack_latency_ps": 2495266.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 10000,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2556633.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 10000,
+        "host_relative_ppm": 1000,
+        "ack_latency_ps": 2619899.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 15000,
+        "host_relative_ppm": -1000,
+        "ack_latency_ps": 2435266.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 15000,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2541633.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 15000,
+        "host_relative_ppm": 1000,
+        "ack_latency_ps": 2583899.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 19999,
+        "host_relative_ppm": -1000,
+        "ack_latency_ps": 2467267.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 19999,
+        "host_relative_ppm": 0,
+        "ack_latency_ps": 2513634.0
+      },
+      {
+        "pid": 75,
+        "payload_bytes": 8,
+        "host_phase_ps": 19999,
+        "host_relative_ppm": 1000,
+        "ack_latency_ps": 2585900.0
+      }
+    ],
+    "minimum_ps": 2435266.0,
+    "maximum_ps": 2633899.0
+  },
+  "inline_capacity_failure": {
+    "message": "program contains 1221 words; maximum is 1024",
+    "reproducer": "uv run --locked pytest -q test/test_usb_live_units.py::test_generated_program_and_capacity_boundary",
+    "expected_exception": true
+  },
+  "production_capacity_failure": {
+    "command": "uv run --locked python study/protocol_exploration/run_usb_live.py usb_live",
+    "exit_code": 1,
+    "stderr": "Actual ASIC capacity: program contains 947 words; maximum is 128"
+  },
+  "synthesis": {
+    "scope": "unmapped_core_only_noabc",
+    "technology_area_or_timing_verified": false,
+    "variants": {
+      "baseline": {
+        "source": "src/protocol_core.v",
+        "source_sha256": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/venv/bin/yowasp-yosys",
+          "-Q",
+          "-T",
+          "-q",
+          "-l",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/call_frontier_synth/baseline.log",
+          "-s",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/call_frontier_synth/baseline.ys"
+        ],
+        "creator": "Yosys 0.55 (git sha1 60f126cd0, ccache clang 18.1.3 -O3 -flto -flto)",
+        "generic_cells": 5647,
+        "cells_by_type": {
+          "$_AND_": 565,
+          "$_DFFE_PP_": 2048,
+          "$_MUX_": 2434,
+          "$_NOT_": 104,
+          "$_OR_": 296,
+          "$_SDFFCE_PN0P_": 32,
+          "$_SDFFE_PP0P_": 74,
+          "$_SDFF_PN0_": 17,
+          "$_SDFF_PP0_": 9,
+          "$_XOR_": 68
+        },
+        "stats_sha256": "edc15d7b8c882bf35e71d351d54a746666566432474a9c1a3e6e5be3b298fd8d"
+      },
+      "frontier": {
+        "source": "test/sim_build/usb_live_call_frontier1024/protocol_core_frontier1024.v",
+        "source_sha256": "5d20369ebc61009e282f2686ebd1fc4f7aa6db09408ed381b8218ebf5db9daff",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/venv/bin/yowasp-yosys",
+          "-Q",
+          "-T",
+          "-q",
+          "-l",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/call_frontier_synth/frontier.log",
+          "-s",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/call_frontier_synth/frontier.ys"
+        ],
+        "creator": "Yosys 0.55 (git sha1 60f126cd0, ccache clang 18.1.3 -O3 -flto -flto)",
+        "generic_cells": 40510,
+        "cells_by_type": {
+          "$_AND_": 2464,
+          "$_DFFE_PP_": 18432,
+          "$_MUX_": 18924,
+          "$_NOT_": 108,
+          "$_OR_": 324,
+          "$_SDFFCE_PN0P_": 64,
+          "$_SDFFE_PP0P_": 91,
+          "$_SDFF_PN0_": 17,
+          "$_SDFF_PP0_": 12,
+          "$_XOR_": 74
+        },
+        "stats_sha256": "e8923b0927051f409f9fd13c839660fba4b09bc922d620d2a2522ef1fc738c06"
+      }
+    }
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py test/test_frontier_assembler.py test/test_usb_live_units.py",
+    "passed": 32,
+    "baseline": 25,
+    "frontier": 3,
+    "call_crc_capacity": 4
+  },
+  "additional_source_sha256": {
+    "test/test_usb_live_units.py": "77f7d7206b3b84ac9bd83698614c36ca051387f4ced06d4aa41b987c369a231f",
+    "study/protocol_exploration/synth_call_frontier.py": "f90a323ba8d22679cbd49f589a545e101f6b7566799821da0e9445fe6d063e97",
+    "study/protocol_exploration/usb_live_inline_candidate.asm": "f1a403122bb1087a6c0c2bb6894d8642621e2cf885e073b0595509481488d80a"
+  },
+  "physical_source_sha256_unchanged_from_baseline": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "environment": {
+    "python": "3.12.4",
+    "cocotb": "2.0.1",
+    "simulator": "Icarus12.0 (12.0-2build2)",
+    "UV_CACHE_DIR": "/tmp/asic-uv-cache",
+    "PATH_prefix": "/tmp/asic-sim-packages/bin:/tmp/asic-sim-packages/iverilog/usr/bin"
+  },
+  "coverage": {
+    "data_pids": [
+      "DATA0",
+      "DATA1"
+    ],
+    "payload_lengths_bytes": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "phase_ps": [
+      1,
+      5000,
+      10000,
+      15000,
+      19999
+    ],
+    "relative_frequency_ppm": [
+      -1000,
+      0,
+      1000
+    ],
+    "minimum_response_ps": 1333333.3333333333,
+    "maximum_response_ps": 4333333.333333333,
+    "sample_intervals_ns": [
+      660,
+      660,
+      680
+    ],
+    "constant_syndrome_bytes": 36,
+    "mandatory_final_stuff_bit_tested": true,
+    "reject_missing_final_stuff_bit": true
+  },
+  "limitations": [
+    "Packet timing only; ACK is not preceded by addressed token matching",
+    "No token CRC5/reset/enumeration/endpoint state/control transfers or arbitrary IN payload generation",
+    "No full jitter/clock recovery or physical pad/transceiver/connector proof",
+    "Leaf calls only; nested calls overwrite link; valid request envelopes only",
+    "947-word program exceeds production128-word capacity; no SRAM/mapped/timing/tile-fit result",
+    "Production memory/fetch changes would need a fresh cycle budget"
+  ]
+}

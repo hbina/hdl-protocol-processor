@@ -124,6 +124,23 @@ jobs:
           uv run --locked pytest -q test/test_can_fault_units.py test/test_can_fault_equal_units.py
           uv run --locked python study/protocol_exploration/run_can_fault_equal.py can_fault_equal --expanded-model
 
+      - name: CAN receive error flags and firmware compaction (isolated call model)
+        run: |
+          uv run --locked pytest -q test/test_can_rx_flags_units.py
+          uv run --locked python study/protocol_exploration/run_can_rx_flags.py can_rx_flags --expanded-model
+
+      - name: CAN post-flag dominant counters (isolated generic call model)
+        run: |
+          uv run --locked pytest -q test/test_can_postflag_units.py test/test_can_flag_bit_units.py
+          uv run --locked python study/protocol_exploration/run_can_postflag.py can_postflag --expanded-model
+
+      - name: CAN active-flag bit errors and compact firmware regressions (isolated call model)
+        run: |
+          uv run --locked pytest -q test/test_can_flag_compact_units.py
+          uv run --locked python study/protocol_exploration/run_can_flag_restart.py can_flag_restart --expanded-model
+          uv run --locked python study/protocol_exploration/run_can_flag_compact.py can_flag_compact --expanded-model --suite postflag
+          uv run --locked python study/protocol_exploration/run_can_flag_restart.py can_flag_restart --expanded-model --suite rx_flags --test-filter 'test_receiver_error_flags|test_compact_pack_unpack_and_phase'
+
       - name: Test Summary
         uses: test-summary/action@v2.4
         with:
@@ -155,6 +172,11 @@ jobs:
             test/sim_build/can_winner_frontier1024/results.xml
             test/sim_build/can_resync_frontier1024/results.xml
             test/sim_build/can_fault_equal_call_frontier1024/results.xml
+            test/sim_build/can_rx_flags_call_frontier1024/results.xml
+            test/sim_build/can_postflag_call_frontier1024/results.xml
+            test/sim_build/can_flag_restart_rx_flags_call_frontier1024/results.xml
+            test/sim_build/can_flag_compact_postflag_call_frontier1024/results.xml
+            test/sim_build/can_flag_restart_call_frontier1024/results.xml
         if: always()
 
       - name: upload waveform and test results
@@ -250,4 +272,26 @@ jobs:
             test/sim_build/can_fault_equal_call_frontier1024/evidence.json
             test/sim_build/can_fault_equal_call_frontier1024/passive_timings.json
             test/sim_build/can_fault_equal_call_frontier1024/bus_off_timings.json
+            test/sim_build/can_rx_flags_call_frontier1024/results.xml
+            test/sim_build/can_rx_flags_call_frontier1024/evidence.json
+            test/sim_build/can_rx_flags_call_frontier1024/rx_error_timings.json
+            test/sim_build/can_rx_flags_call_frontier1024/compact_phase_timings.json
+            test/sim_build/can_postflag_call_frontier1024/results.xml
+            test/sim_build/can_flag_restart_rx_flags_call_frontier1024/results.xml
+            test/sim_build/can_flag_compact_postflag_call_frontier1024/results.xml
+            test/sim_build/can_flag_restart_call_frontier1024/results.xml
+            test/sim_build/can_postflag_call_frontier1024/evidence.json
+            test/sim_build/can_flag_restart_call_frontier1024/evidence.json
+            test/sim_build/can_flag_restart_call_frontier1024/receiver_flag_bit_timings.json
+            test/sim_build/can_flag_restart_call_frontier1024/transmitter_flag_bit_timings.json
+            test/sim_build/can_flag_restart_call_frontier1024/receiver_flag_restart_timings.json
+            test/sim_build/can_flag_restart_call_frontier1024/transmitter_flag_restart_timings.json
+            test/sim_build/can_flag_compact_postflag_call_frontier1024/evidence.json
+            test/sim_build/can_flag_compact_postflag_call_frontier1024/receiver_postflag_timings.json
+            test/sim_build/can_flag_compact_postflag_call_frontier1024/transmitter_postflag_timings.json
+            test/sim_build/can_flag_restart_rx_flags_call_frontier1024/evidence.json
+            test/sim_build/can_flag_restart_rx_flags_call_frontier1024/rx_error_timings.json
+            test/sim_build/can_flag_restart_rx_flags_call_frontier1024/compact_phase_timings.json
+            test/sim_build/can_postflag_call_frontier1024/receiver_postflag_timings.json
+            test/sim_build/can_postflag_call_frontier1024/transmitter_postflag_timings.json
             test/output/*

@@ -50,4 +50,6 @@ UART software deadlines/request validation and JTAG envelope rejection/recovery 
 
 CAN model follow-ups record ACK-error retry, arbitration-winner reception, bounded phase correction and selected persistent error-state/bus-off recovery. Full synchronization/confinement and production fit remain open. See [ACK recovery](../docs/can_ack_recovery_study.md), [winner retry](../docs/can_winner_study.md), [resynchronization](../docs/can_resync_study.md), and [fault state](../docs/can_fault_state_study.md).
 
+CAN firmware compaction adds selected RX error flags, post-flag counters and active-flag bit-error restarts within 1024 model words. Oversized drafts and negative comparisons remain preserved. See [RX flags](../docs/can_receive_flags_study.md), [post-flag counters](../docs/can_postflag_study.md), and [flag compaction](../docs/can_flag_compact_study.md).
+
 See each linked study for exact commands, filters and expected-negative comparisons. Production results and expanded-model results are separate.

@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-25",
+  "scope": "reproduced_active_error_flag_bit_error_counter_gap_and_unverified_firmware_capacity_attempt",
+  "full_goal_complete": false,
+  "draft_behavior_verified": false,
+  "production_rtl_changed": false,
+  "new_rtl_or_isa_added": false,
+  "physical_fit_verified": false,
+  "prior_monitor_negative": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T11:22:18.381135+00:00",
+    "protocol": "can_flag_bit",
+    "model": "counterfactual1024x18_eight_registers_leaf_call",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "candidate_words": 1023,
+    "command": "uv run --locked python study/protocol_exploration/run_can_flag_bit.py can_flag_bit --expanded-model --prior-monitor",
+    "passed": 1,
+    "failed": 2,
+    "skipped": 0,
+    "cases": [
+      "test_receiver_active_flag_bit_errors",
+      "test_transmitter_active_flag_bit_errors",
+      "test_passive_flag_dominance_is_not_bit_error"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/can_flag_bit_fixed_call_frontier1024/protocol_core_frontier1024.v": "5d20369ebc61009e282f2686ebd1fc4f7aa6db09408ed381b8218ebf5db9daff",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/can_postflag_candidate.asm": "e1275320d7847bfdc3b0ab738d2b5840acee6e1390ab1c747c8739e20f06b56c",
+      "study/protocol_exploration/can_flag_bit_peer.py": "ac11d48ff94ded93b07af0512e9683d12584c21e4e56a0bed122045c64244932",
+      "study/protocol_exploration/frontier_peer.py": "32e54297f07d6c0f8f637bf1e7bc108f25ea9eff8aed26b5d1774755e3facdc1",
+      "study/protocol_exploration/build_can_flag_bit.py": "99e64b63eae17beb191958f6f49437d5b6ba33368271fa71abfd07fac8327cfe",
+      "study/protocol_exploration/build_can_postflag.py": "1beef09f67096ec8f22000a840636e884ade7b2139b0a0f38c107dd85bbd5e81",
+      "study/protocol_exploration/can_postflag_peer.py": "26528bc207b3ab0f9c74a1dba301cf98d4f731d5682a415e0bd357fff8f5cc44",
+      "study/protocol_exploration/build_can_rx_flags.py": "8db3159ce83bb3a7ca009fd038bbe67cb84e39947f0c8dfc2f47ca3a436330e2",
+      "study/protocol_exploration/build_can_rx_flags_compact.py": "e15766672824fbe4ef0ccc158bd2feb2e3baec40db9b2abbf4cc794ef418799f",
+      "study/protocol_exploration/can_rx_flags_peer.py": "16caf784212441d9d142b4fc686cb172cf26c9b5bd9c1b6442ee86e971a0e178",
+      "study/protocol_exploration/build_can_fault_equal.py": "40dc37a400a0c4fe1a805c5434f94ba73856d92c5150a5a8556ac3e5072b0703",
+      "study/protocol_exploration/can_fault_equal_peer.py": "56fb46ac726f320308af2b0d48e897393c1bd1ad67c69620e5e93249ebc76951",
+      "study/protocol_exploration/can_resync_peer.py": "e277c33e1e15ccae6d7bac542b2f933fa43d885af1f81bd6d51e6bb8a28c528e",
+      "study/protocol_exploration/build_can_fault.py": "9e419862b76b82c581691d601248a37472987bc444fae8b0b4bc1878129dd983",
+      "study/protocol_exploration/build_can_resync.py": "b26cb5d6e6cc68483bf8de1002139dd2c7d94cb91ebc9ec3470ad73d73bfa6ac",
+      "study/protocol_exploration/build_can_winner.py": "0b3440b26c6b3854569a18d379d24c4c13238cec43468818af19c48fbbfde8ba",
+      "study/protocol_exploration/can_winner_peer.py": "b5ae49f14b0ee79b307354707c087d9c79173dc37b89841bb241aa761879295e",
+      "study/protocol_exploration/generic_call_frontier.py": "bf219e8bee8d14bc020f745d496413dbdc4bb138c2ba386bdeeaf46a94b9335e",
+      "study/protocol_exploration/build_can_recovery.py": "f194ad383bddbcd9bbe56175d0956b6e4790d3536174a06c18addc3b19c28212",
+      "study/protocol_exploration/can_recovery_peer.py": "55f8808299e7df3ab4e6c59baee83cb4eabdc2066e3f01cca4c38838154a88ea",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_can_flag_bit.py": "5b05dee258e735ce72557837ee23ee230c2c844d144d9798aa7bb09f235ac57b",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    },
+    "results_xml_sha256": "5b7af8826be128c8f7a5c70a0183cc6fa186385da9fba165a201053bed3eeb1a",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "counter_failures": [
+    {
+      "case": "test_receiver_active_flag_bit_errors",
+      "error_type": "AssertionError",
+      "error_msg": "{'actual_counters': (0, 1), 'commanded_edges_ns': [(684170.0, 0), (740170.0, 1)], 'expected_counters': (0, 9), 'fault_cell': 0, ...}\nassert (0, 1) == (0, 9)"
+    },
+    {
+      "case": "test_transmitter_active_flag_bit_errors",
+      "error_type": "AssertionError",
+      "error_msg": "{'actual_counters': (8, 0), 'commanded_edges_ns': [(1369210.001, 0), (1425210.001, 1)], 'expected_counters': (16, 0), 'fault_cell': 0, ...}\nassert (8, 0) == (16, 0)"
+    }
+  ],
+  "draft_words": 1076,
+  "model_limit_words": 1024,
+  "minimum_words_to_recover": 52,
+  "capacity_failures": [
+    {
+      "command": "uv run --locked python study/protocol_exploration/run_can_flag_bit.py can_flag_bit",
+      "exit_code": 1,
+      "limit_words": 128,
+      "stderr": "Actual ASIC capacity: program contains 1076 words; maximum is 128"
+    },
+    {
+      "command": "uv run --locked python study/protocol_exploration/run_can_flag_bit.py can_flag_bit --expanded-model",
+      "exit_code": 1,
+      "limit_words": 1024,
+      "stderr": "Traceback (most recent call last):\n  File \"/mnt/extra_pool/tmp/jane_street_design_asic/study/protocol_exploration/run_can_flag_bit.py\", line 91, in <module>\n    main()\n  File \"/mnt/extra_pool/tmp/jane_street_design_asic/study/protocol_exploration/run_can_flag_bit.py\", line 40, in main\n    frontier_assemble(candidate.read_text())\n  File \"/mnt/extra_pool/tmp/jane_street_design_asic/study/protocol_exploration/generic_call_frontier.py\", line 13, in assemble\n    parsed, labels = parser._parse_lines(source)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frontier_assembler>\", line 67, in _parse_lines\nfrontier_assembler.AssemblyError: program contains 1076 words; maximum is 1024"
+    }
+  ],
+  "draft_source_sha256": {
+    "study/protocol_exploration/build_can_flag_bit.py": "99e64b63eae17beb191958f6f49437d5b6ba33368271fa71abfd07fac8327cfe",
+    "study/protocol_exploration/can_flag_bit_candidate.asm": "4d57f3cdc43093ccb8672d46bbab12be4b434e7e04a6137f510cc8d41171eef7"
+  },
+  "physical_source_sha256_unchanged": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "generic_call_core_sha256_unchanged": "5d20369ebc61009e282f2686ebd1fc4f7aa6db09408ed381b8218ebf5db9daff",
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_can_flag_bit_units.py",
+    "passed": 1,
+    "source_sha256": "bc07665273b307bbef2a9de4c8d141102c57e82662081f9cdce089a794620f8f"
+  },
+  "project_unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py test/test_frontier_assembler.py test/test_usb_live_units.py test/test_carry_frontier.py test/test_usb_in_units.py test/test_usb_control_units.py test/test_usb_address_units.py test/test_usb_enum_units.py test/test_uart_runtime_units.py test/test_jtag_runtime_units.py test/test_can_recovery_units.py test/test_can_winner_units.py test/test_can_resync_units.py test/test_can_fault_units.py test/test_can_fault_equal_units.py test/test_can_rx_flags_units.py test/test_can_postflag_units.py test/test_can_flag_bit_units.py",
+    "passed": 54,
+    "failed": 0
+  },
+  "tools": {
+    "python": "3.12.4",
+    "cocotb": "2.0.1",
+    "iverilog": "12.0",
+    "pytest": "8.4.2"
+  },
+  "limitations": [
+    "Only first intended position reached in each failing active test; six-position sweep/recovery not yet proven",
+    "Draft does not execute: timing/counter thresholds/restarts/scratch lifetime/previous regressions remain unverified",
+    "Overload flag generation and other full CAN acceptance gaps remain open",
+    "No production capacity, mapped timing/area or hardware interoperability proof"
+  ]
+}

@@ -94,6 +94,16 @@ jobs:
           uv run --locked pytest -q test/test_usb_enum_units.py
           uv run --locked python study/protocol_exploration/run_usb_enum.py usb_enum --expanded-model
 
+      - name: Validated UART runtime and software deadlines (isolated generic model)
+        run: |
+          uv run --locked pytest -q test/test_uart_runtime_units.py
+          uv run --locked python study/protocol_exploration/run_uart_runtime.py --expanded-model
+
+      - name: Validated JTAG requests (256-word generic model only)
+        run: |
+          uv run --locked pytest -q test/test_jtag_runtime_units.py
+          uv run --locked python study/protocol_exploration/run_jtag_runtime.py jtag_runtime --expanded-model
+
       - name: Test Summary
         uses: test-summary/action@v2.4
         with:

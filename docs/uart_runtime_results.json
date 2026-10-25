@@ -1,0 +1,164 @@
+{
+  "date": "2026-10-25",
+  "scope": "uart_runtime_abi_validation_and_instruction_clock_deadlines_on_generic_model",
+  "full_goal_complete": false,
+  "uart_contract_model_tests_passed": true,
+  "production_rtl_changed": false,
+  "generic_rtl_or_isa_added_in_this_followup": false,
+  "physical_fit_verified": false,
+  "candidate_words": 251,
+  "named_production_firmware_installed": false,
+  "production_capacity_failure": {
+    "command": "uv run --locked python study/protocol_exploration/run_uart_runtime.py",
+    "exit_code": 1,
+    "stderr": "Actual ASIC capacity: program contains 251 words; maximum is 128"
+  },
+  "model": {
+    "executed_at_utc": "2026-10-25T02:16:46.584836+00:00",
+    "model": "counterfactual1024x18_eight_registers",
+    "candidate_words": 251,
+    "production_capacity_words": 128,
+    "production_rtl_changed": false,
+    "physical_fit_verified": false,
+    "passed": 6,
+    "skipped": 0,
+    "cases": [
+      "test_uart_runtime_arbitrary_requests",
+      "test_uart_runtime_quiet_clock_deadline",
+      "test_uart_runtime_phase_rate_and_partial_failures",
+      "test_uart_runtime_false_start_storm_and_low_line",
+      "test_uart_runtime_rejects_malformed_requests",
+      "test_uart_runtime_reset_during_tx_and_rx"
+    ],
+    "command": "uv run --locked python study/protocol_exploration/run_uart_runtime.py --expanded-model",
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/uart_runtime_frontier1024/protocol_core_frontier1024.v": "d87a80938c8b316a02abbd465c67a1e70b4ed419769668d92affb0909072c411",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "test/test_uart_probe.py": "79a54bf739aeb7c7ba88aad930c4dacbd55f228123c2f833324e9d7ec88a2b39",
+      "test/test_uart_runtime.py": "5edb42ada9c2af1652bd2ad72e9842b36edfb1bf2cdea605837880f9f1dc6a89",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_uart_runtime.py": "ec2a32346bbfb77e448e4188e713ecce1f933a93946d368865843bf5f3430da2",
+      "study/protocol_exploration/uart_runtime_candidate.asm": "058229ed62f2e701e84031bebf16a9362d5a2bbeb1b1cdc8f1c3936fa25740f5",
+      "study/protocol_exploration/run_uart_runtime.py": "c39049204bc15487e6fb1cfb35952a66d492fc8763cae05bbe04e08bd93b54d5"
+    },
+    "results_xml_sha256": "7879df0aa1b0d216365bd7f3f1aec26d6d65ea04e52e2431110c485e03875109"
+  },
+  "deadline_measurements": {
+    "deadline_timings": {
+      "trace": [
+        {
+          "start_ps": 47424596002,
+          "poll_timeout_ps": 48735316002
+        },
+        {
+          "start_ps": 48773656002,
+          "poll_timeout_ps": 51395096002
+        },
+        {
+          "start_ps": 51433756002,
+          "poll_timeout_ps": 55365916002
+        },
+        {
+          "start_ps": 55403856002,
+          "qualified_ps": 55426116002
+        }
+      ],
+      "expiry_measurements": [
+        {
+          "path": "poll_timeout_ps",
+          "clocks": 65536
+        },
+        {
+          "path": "poll_timeout_ps",
+          "clocks": 131072
+        },
+        {
+          "path": "poll_timeout_ps",
+          "clocks": 196608
+        }
+      ],
+      "artifact_sha256": "118907dffe67319ffa4ceea5bb62ff2e7d129b55cb65ab3157fa951679fc9a93"
+    },
+    "false_start_timings": {
+      "trace": [
+        {
+          "start_ps": 69143239004,
+          "poll_timeout_ps": 70453959004
+        },
+        {
+          "start_ps": 70491019004,
+          "qualified_ps": 70513279004
+        },
+        {
+          "start_ps": 70631739004,
+          "qualified_ps": 70653999004
+        },
+        {
+          "start_ps": 70768539004,
+          "poll_timeout_ps": 72079259004
+        },
+        {
+          "start_ps": 72117199004,
+          "qualified_ps": 72139459004
+        }
+      ],
+      "expiry_measurements": [
+        {
+          "path": "poll_timeout_ps",
+          "clocks": 65536
+        },
+        {
+          "path": "poll_timeout_ps",
+          "clocks": 65536
+        }
+      ],
+      "artifact_sha256": "633406e2d9381593a9971e0fe56d4138366aa27dc31b9d23cef75c32a04f9966"
+    }
+  },
+  "clock_budget": {
+    "normal_search_path_clocks": 32,
+    "false_start_path_clocks": 256,
+    "derived_max_rejected_candidate_deadline_overshoot_clocks": 224,
+    "full_quiet_timeout_windows_tested": [
+      1,
+      2,
+      3
+    ],
+    "successful_data_windows_tested": [
+      1,
+      255
+    ],
+    "max_window_quiet_timeout_measured": false
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py test/test_frontier_assembler.py test/test_usb_live_units.py test/test_carry_frontier.py test/test_usb_in_units.py test/test_usb_control_units.py test/test_usb_address_units.py test/test_usb_enum_units.py test/test_uart_runtime_units.py",
+    "passed": 45,
+    "new_units": 2,
+    "new_unit_source_sha256": "32ee6bb26ac49cbed1c8be19201ab55a08d5125a99aec35cf8f530ba585c9894"
+  },
+  "physical_source_sha256_unchanged": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "limitations": [
+    "251-word eight-register candidate cannot run on production128-word/four-register core; firmware/uart_runtime.asm remains blocked",
+    "Only Icarus generic-model verification; mapped/Verilator/board interoperability unverified",
+    "Exact quiet windows1..3 measured; windows255 full timeout is derived, not simulated",
+    "Future instruction fetch latency changes require fresh cycle accounting",
+    "Project reviewable commits and other protocol acceptance gaps remain open"
+  ]
+}

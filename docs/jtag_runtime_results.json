@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-25",
+  "scope": "validated_jtag_requests_lengths_and_inactive_rejection",
+  "full_goal_complete": false,
+  "production_rtl_changed": false,
+  "physical_fit_verified": false,
+  "generic_rtl_or_isa_added_in_this_followup": false,
+  "candidate_words": 198,
+  "model": {
+    "date": "2026-10-25",
+    "protocol": "jtag_runtime",
+    "model": "counterfactual_256_word_instruction_store",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 4,
+    "model_instruction_bits": 16,
+    "candidate_words": 198,
+    "command": "uv run --locked python study/protocol_exploration/run_jtag_runtime.py jtag_runtime --expanded-model",
+    "passed": 2,
+    "skipped": 0,
+    "cases": [
+      "test_jtag_runtime_scans_and_readback",
+      "test_jtag_runtime_rejects_and_preserves_tap"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/jtag_runtime_capacity256/protocol_core_capacity256.v": "9c0f6a733ded376ebf3cbd74a67f28d64333abfcfdd3e104e4225901596dba15",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/jtag_runtime_candidate.asm": "77e110f69dfd1a0112ebc83be779cd302658682c4d7700763d522f3ec49af1f2",
+      "test/test_jtag_runtime.py": "2a06583c48794955f66d9d53b138a63d928f36e87207ef897f61bd3854e54375",
+      "study/protocol_exploration/build_jtag_runtime.py": "79c2777c6e88fe0cffd7ec9c6db34563e458c3b5cd62e770298e72f16f0c6cfd",
+      "firmware/jtag_probe.asm": "9b93d43622db454e62c3b162cfa5e39a8dfdfca423313183d933e17aa209470d",
+      "firmware/runtime.asm": "de0818ecc932884f985ce6f24e3fc94cb662c48c794b05f002c521b61968278a",
+      "test/test_jtag_probe.py": "8a3d0eb2f164e5852f9b0cf8f43df20c9a7bfa7a6540f5f3499b430a57cc55fb",
+      "study/protocol_exploration/run_jtag_runtime.py": "b54e804d2f03908410dca9be6c275176e7ec0bd98dcf02246adaae4eb5c75f76",
+      "study/protocol_exploration/run_i2c.py": "b9baea9db30543135cdc0b6ccd85922c5d9a3e8bd2d9636a707724a56f76f5bd",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    },
+    "results_xml_sha256": "965fe17feebd33c61fd88db322663027a1c55775a21bcee25c5c0395b9ebcb71",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "rejection_cases": 30,
+  "subsequent_valid_scan_after_each_table_rejection": true,
+  "physical_source_sha256_unchanged": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "production_capacity_failure": {
+    "command": "uv run --locked python study/protocol_exploration/run_jtag_runtime.py jtag_runtime",
+    "exit_code": 1,
+    "stderr": "Actual ASIC capacity: program contains 198 words; maximum is 128"
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_jtag_runtime_units.py",
+    "new_units": 1,
+    "total_project_units_passed": 46,
+    "new_unit_source_sha256": "8b71f6b2c6bdad794fd46d0b41cf542b10e74782295a34c8c1ca8f04fba4e8fa"
+  },
+  "limitations": [
+    "198-word candidate exceeds production128; isolated256-word four-register/16-bit model only",
+    "No mapped/board proof or configurable clock/multi-TAP/per-request TAP reset",
+    "Reset during scan not tested; initial boot TAP reset is separate from rejection windows",
+    "CAN node-recovery attempts and full project goal remain open"
+  ]
+}

@@ -46,4 +46,6 @@ USB studies preserve buffered-RX turnaround failures and record live RX, address
 
 USB live TX, vendor controls, reset/deferred address and selected enumeration pass recorded model tests. The enumeration image needs 1012 words; full requests, jitter coverage, physical fit and host interoperability remain open. See [controls](../docs/usb_control_study.md), [address handling](../docs/usb_address_study.md), and [enumeration](../docs/usb_enumeration_study.md).
 
+UART software deadlines/request validation and JTAG envelope rejection/recovery have model evidence. Their 251-/198-word images exceed production capacity. See [UART runtime](../docs/uart_runtime_study.md) and [JTAG runtime](../docs/jtag_runtime_study.md).
+
 See each linked study for exact commands, filters and expected-negative comparisons. Production results and expanded-model results are separate.

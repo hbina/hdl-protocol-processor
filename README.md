@@ -28,6 +28,8 @@ USB studies preserve buffered-RX turnaround failures and record live RX, address
 
 USB live TX, vendor controls, reset/deferred address and selected enumeration pass recorded model tests. The enumeration image needs 1012 words; full requests, jitter coverage, physical fit and host interoperability remain open. See [controls](docs/usb_control_study.md), [address handling](docs/usb_address_study.md), and [enumeration](docs/usb_enumeration_study.md).
 
+UART software deadlines/request validation and JTAG envelope rejection/recovery have model evidence. Their 251-/198-word images exceed production capacity. See [UART runtime](docs/uart_runtime_study.md) and [JTAG runtime](docs/jtag_runtime_study.md).
+
 Saved study records retain their original hashes and outcomes. Source formatting has changed since some recorded runs; historical evidence is not a fresh provenance check of this checkout. The production physical-source hashes remain unchanged.
 
 ### Challenge protocol coverage
@@ -55,7 +57,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 - [x] Add CAN receive transmit and generic frontier models.
 - [x] Develop USB packet reception and transmission.
 - [x] Add USB control transfers and enumeration.
-- [ ] Validate UART and JTAG runtime requests.
+- [x] Validate UART and JTAG runtime requests.
 - [ ] Add CAN retry synchronization and fault confinement.
 - [ ] Extend CAN error flags counters and firmware compaction.
 - [ ] Compact CAN receive tails and preserve overload comparisons.

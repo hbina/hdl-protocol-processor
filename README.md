@@ -22,6 +22,8 @@ Production UART/SPI/JTAG valid-request probes exchange arbitrary payloads withou
 
 I2C/SWD/PS2/Ethernet model experiments record 5/2/2/6 passing groups. Their 249/230/188/280-word images exceed production capacity. See [I2C](docs/i2c_capacity_study.md), [SWD/PS2](docs/wave_b_results.md), and [Ethernet](docs/ethernet_capacity_study.md).
 
+Separate CAN RX/TX model studies record four groups each; combined TX/RX runs on an isolated 1024x18/eight-register model. Generic leaf-call/carry extensions and synthesis comparisons remain model-only. See [CAN RX](docs/can_receive_study.md), [CAN TX](docs/can_transmit_study.md), and [frontier results](docs/generic_frontier_study.md).
+
 Saved study records retain their original hashes and outcomes. Source formatting has changed since some recorded runs; historical evidence is not a fresh provenance check of this checkout. The production physical-source hashes remain unchanged.
 
 ### Challenge protocol coverage
@@ -37,7 +39,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 | SWD | Partial | Larger model only |
 | PS/2 | Partial | Larger model only |
 | 10 Mbit Ethernet | Partial | Buffered minimum-frame model only |
-| CAN bus | Not started | Pending |
+| CAN bus | Partial | Larger generic models only |
 | Low-speed USB | Not started | Pending |
 
 ### Roadmap
@@ -46,7 +48,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 - [x] Harden runtime design across three process corners.
 - [x] Add runtime UART SPI and JTAG probes.
 - [x] Measure I2C SWD PS2 and Ethernet capacity limits.
-- [ ] Add CAN receive transmit and generic frontier models.
+- [x] Add CAN receive transmit and generic frontier models.
 - [ ] Develop USB packet reception and transmission.
 - [ ] Add USB control transfers and enumeration.
 - [ ] Validate UART and JTAG runtime requests.

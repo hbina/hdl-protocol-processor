@@ -40,4 +40,6 @@ Production UART/SPI/JTAG valid-request probes exchange arbitrary payloads withou
 
 I2C/SWD/PS2/Ethernet model experiments record 5/2/2/6 passing groups. Their 249/230/188/280-word images exceed production capacity. See [I2C](../docs/i2c_capacity_study.md), [SWD/PS2](../docs/wave_b_results.md), and [Ethernet](../docs/ethernet_capacity_study.md).
 
+Separate CAN RX/TX model studies record four groups each; combined TX/RX runs on an isolated 1024x18/eight-register model. Generic leaf-call/carry extensions and synthesis comparisons remain model-only. See [CAN RX](../docs/can_receive_study.md), [CAN TX](../docs/can_transmit_study.md), and [frontier results](../docs/generic_frontier_study.md).
+
 See each linked study for exact commands, filters and expected-negative comparisons. Production results and expanded-model results are separate.

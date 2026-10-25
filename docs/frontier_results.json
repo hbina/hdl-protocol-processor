@@ -1,0 +1,219 @@
+{
+  "date": "2026-10-25",
+  "model": "counterfactual1024x18_eight_registers",
+  "production_rtl_changed": false,
+  "production_capacity_words": 128,
+  "physical_fit_verified": false,
+  "usb_deadline_resolved": false,
+  "full_goal_complete": false,
+  "focused_model": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T00:15:57.617190+00:00",
+    "protocol": "can_duplex",
+    "model": "counterfactual1024x18_eight_registers",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "candidate_words": 622,
+    "command": "uv run --locked python study/protocol_exploration/run_frontier.py can_duplex --expanded-model",
+    "passed": 3,
+    "skipped": 0,
+    "cases": [
+      "test_frontier_registers_loader_banks",
+      "test_frontier_can_alternating_tx_rx",
+      "test_frontier_can_cross_mode_recovery"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/can_duplex_frontier1024/protocol_core_frontier1024.v": "d87a80938c8b316a02abbd465c67a1e70b4ed419769668d92affb0909072c411",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/can_frontier_candidate.asm": "9c8cab7d4ff6b8d8a9346c9d95d5f0079e1fe6422789829d2512d9b292bf197f",
+      "study/protocol_exploration/frontier_peer.py": "32e54297f07d6c0f8f637bf1e7bc108f25ea9eff8aed26b5d1774755e3facdc1",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_frontier.py": "a5710d5f936d1afce1b6c31176d31fa06c7c06b400da6fc759e518de68edfb2a",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    },
+    "results_xml_sha256": "0dab8f524cc2871b18afcb935a44b08964978833cb9b58e486825c9089fba392",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "legacy_regression": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T00:18:57.348319+00:00",
+    "protocol": "can_duplex",
+    "model": "counterfactual1024x18_eight_registers",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "comparison_candidate_words": 622,
+    "scope": "legacy_regression",
+    "command": "uv run --locked python study/protocol_exploration/run_frontier_legacy.py can_duplex --expanded-model",
+    "passed": 10,
+    "skipped": 0,
+    "cases": [
+      "test_protocol_firmware",
+      "test_runtime_requests",
+      "test_runtime_transport_and_boundaries",
+      "test_runtime_isa_and_gpio_timing",
+      "test_runtime_malformed_records_and_retirement",
+      "test_uart_probe_arbitrary_tx_rx",
+      "test_uart_probe_phase_and_clock_mismatch",
+      "test_uart_probe_line_errors_and_recovery",
+      "test_spi_probe_arbitrary_transactions",
+      "test_jtag_probe_scans_and_readback"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/frontier1024_legacy/protocol_core_frontier1024.v": "d87a80938c8b316a02abbd465c67a1e70b4ed419769668d92affb0909072c411",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/can_frontier_candidate.asm": "9c8cab7d4ff6b8d8a9346c9d95d5f0079e1fe6422789829d2512d9b292bf197f",
+      "study/protocol_exploration/frontier_peer.py": "32e54297f07d6c0f8f637bf1e7bc108f25ea9eff8aed26b5d1774755e3facdc1",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_frontier_legacy.py": "d28c9d12be9c6edac3b7437f87af319c7d11ad442dc1bf0c2f67b2bd8bb0bcb6",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca",
+      "test/test_uart_probe.py": "79a54bf739aeb7c7ba88aad930c4dacbd55f228123c2f833324e9d7ec88a2b39",
+      "test/test_spi_probe.py": "1ed8cae626df8ae6a36feff8de9b76283100458a2ba761db079abe17e924b730",
+      "test/test_jtag_probe.py": "8a3d0eb2f164e5852f9b0cf8f43df20c9a7bfa7a6540f5f3499b430a57cc55fb",
+      "firmware/spi_mode0.asm": "618652dee83b23bbc9c6e211aa5d5d7001eef8b7db2b7b1edc355c691e8d56fd",
+      "firmware/uart_probe.asm": "4b2d7a3b3920b047ec06d7b186e9424b28a799217997c1e3340af5f8643a6209",
+      "firmware/jtag_probe.asm": "9b93d43622db454e62c3b162cfa5e39a8dfdfca423313183d933e17aa209470d",
+      "firmware/runtime.asm": "de0818ecc932884f985ce6f24e3fc94cb662c48c794b05f002c521b61968278a",
+      "firmware/spi_probe.asm": "18de8782dd6fee142c73eb4fe9a97e2d6e8ee727ded0ddbc16233a9abb7fe783",
+      "firmware/i2c_write.asm": "e55caabd1ff0b2778a99ed0f2f10df06ab3f6382e294ca87b7e8d85e3f9a5861",
+      "firmware/uart_tx.asm": "925f556572eb428c51c8ea150ea3cba1f00b182b0eb11e5651c2ea27f0b64144"
+    },
+    "results_xml_sha256": "042cd0a67dd5d0a3b58d15cc5ccb7a85e972a6db50cec5ac3a3c7d12cbe95817",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "synthesis": {
+    "scope": "unmapped_core_only_noabc",
+    "technology_area_or_timing_verified": false,
+    "variants": {
+      "baseline": {
+        "source": "src/protocol_core.v",
+        "source_sha256": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/venv/bin/yowasp-yosys",
+          "-Q",
+          "-T",
+          "-q",
+          "-l",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/frontier_synth/baseline.log",
+          "-s",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/frontier_synth/baseline.ys"
+        ],
+        "creator": "Yosys 0.55 (git sha1 60f126cd0, ccache clang 18.1.3 -O3 -flto -flto)",
+        "generic_cells": 5647,
+        "cells_by_type": {
+          "$_AND_": 565,
+          "$_DFFE_PP_": 2048,
+          "$_MUX_": 2434,
+          "$_NOT_": 104,
+          "$_OR_": 296,
+          "$_SDFFCE_PN0P_": 32,
+          "$_SDFFE_PP0P_": 74,
+          "$_SDFF_PN0_": 17,
+          "$_SDFF_PP0_": 9,
+          "$_XOR_": 68
+        },
+        "stats_sha256": "edc15d7b8c882bf35e71d351d54a746666566432474a9c1a3e6e5be3b298fd8d"
+      },
+      "frontier": {
+        "source": "test/sim_build/can_duplex_frontier1024/protocol_core_frontier1024.v",
+        "source_sha256": "d87a80938c8b316a02abbd465c67a1e70b4ed419769668d92affb0909072c411",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/venv/bin/yowasp-yosys",
+          "-Q",
+          "-T",
+          "-q",
+          "-l",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/frontier_synth/frontier.log",
+          "-s",
+          "/mnt/extra_pool/tmp/jane_street_design_asic/test/sim_build/frontier_synth/frontier.ys"
+        ],
+        "creator": "Yosys 0.55 (git sha1 60f126cd0, ccache clang 18.1.3 -O3 -flto -flto)",
+        "generic_cells": 40452,
+        "cells_by_type": {
+          "$_AND_": 2449,
+          "$_DFFE_PP_": 18432,
+          "$_MUX_": 18904,
+          "$_NOT_": 108,
+          "$_OR_": 311,
+          "$_SDFFCE_PN0P_": 64,
+          "$_SDFFE_PP0P_": 81,
+          "$_SDFF_PN0_": 17,
+          "$_SDFF_PP0_": 12,
+          "$_XOR_": 74
+        },
+        "stats_sha256": "51f34cb9d47bcada30351882ef02832ea197f875c9fa96c2b5d09f92655225cb"
+      }
+    }
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py test/test_frontier_assembler.py",
+    "passed": 28,
+    "baseline_tests": 25,
+    "frontier_tests": 3
+  },
+  "additional_source_sha256": {
+    "test/test_frontier_assembler.py": "cd985623c8ccaaf5b7dccd86a9d5e295cba3c3fb71664de6c1597b3d16a549e0",
+    "study/protocol_exploration/synth_frontier.py": "2b4d5271cda92bccec0e174d2fe5c2b5922ba149a6b194732dc34378d64e53b1"
+  },
+  "physical_source_sha256_unchanged_from_baseline": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "environment": {
+    "python": "3.12.4",
+    "cocotb": "2.0.1",
+    "simulator": "Icarus12.0 (12.0-2build2)",
+    "UV_CACHE_DIR": "/tmp/asic-uv-cache",
+    "PATH_prefix": "/tmp/asic-sim-packages/bin:/tmp/asic-sim-packages/iverilog/usr/bin"
+  },
+  "actual_capacity_failure": {
+    "command": "uv run --locked python study/protocol_exploration/run_frontier.py can_duplex",
+    "exit_code": 1,
+    "stderr": "Actual ASIC capacity: program contains 622 words; maximum is 128"
+  },
+  "limitations": [
+    "New core and18-bit encoding exist only as an isolated model",
+    "Unmapped core synthesis only; no PDK mapping, PnR, timing, power or tile-fit proof",
+    "Flop-based program store uses9x storage bits; production storage implementation unresolved",
+    "CAN winner reception/retries/resynchronization/error frames and validation remain incomplete",
+    "USB live decode/CRC schedule and enumeration/control OUT/IN remain unimplemented"
+  ]
+}

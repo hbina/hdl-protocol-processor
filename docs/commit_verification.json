@@ -1,0 +1,59 @@
+{
+  "executed_at_utc": "2026-10-25T13:44:37.763894+00:00",
+  "scope": "pre_commit_checks_of_project_sources",
+  "full_protocol_acceptance_proven": false,
+  "environment": {
+    "PATH_prefix": "/tmp/asic-sim-packages/bin:/tmp/asic-sim-packages/iverilog/usr/bin",
+    "UV_CACHE_DIR": "/tmp/asic-commit-uv"
+  },
+  "project_units": {
+    "command": "uv run --locked pytest -q test",
+    "passed": 57,
+    "failed": 0
+  },
+  "production_rtl": {
+    "command": "uv run --locked make -B -C test",
+    "passed": 10,
+    "failed": 0,
+    "cases": [
+      "test_protocol_firmware",
+      "test_runtime_requests",
+      "test_runtime_transport_and_boundaries",
+      "test_runtime_isa_and_gpio_timing",
+      "test_runtime_malformed_records_and_retirement",
+      "test_uart_probe_arbitrary_tx_rx",
+      "test_uart_probe_phase_and_clock_mismatch",
+      "test_uart_probe_line_errors_and_recovery",
+      "test_spi_probe_arbitrary_transactions",
+      "test_jtag_probe_scans_and_readback"
+    ],
+    "results_xml_sha256": "b384b6eec5b23dda1f2a2e0c9a07202da6fbf9ec2b9f1f9287e2968a1966ea81"
+  },
+  "compact_can_tail": {
+    "command": "uv run --locked python study/protocol_exploration/run_can_tail_compact.py can_tail_compact --expanded-model",
+    "passed": 7,
+    "failed": 0,
+    "evidence": "docs/can_tail_compact_results.json"
+  },
+  "aggregate_historical_audit": {
+    "command": "uv run --locked python tools/audit_exploration.py",
+    "exit_code": 1,
+    "diagnostic": "ValueError: production_probes: source hash mismatch: test/test.py",
+    "note": "Historical sources/XML have changed; original results are preserved and not rehashed to imply reruns."
+  },
+  "source_sha256": {
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+    "tools/runtime.py": "42b451e5c759549d7cfc3a18f7a45d731d26ba7421afb9f1b91d1376d387f145",
+    "test/test.py": "0e28d13d41b9c7feb3b56b7270af52ebd9c31d83fbe463329585d695404d3be8"
+  },
+  "limitations": [
+    "Broad pytest discovery also collects downloaded tt support-tool tests; those require additional klayout and yaml dependencies. Project checks use pytest test.",
+    "Icarus requires the recorded local PATH prefix in this environment.",
+    "No new physical implementation, mapped tests or hardware tests were run."
+  ]
+}

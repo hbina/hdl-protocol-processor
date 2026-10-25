@@ -16,6 +16,8 @@ other protocol-specific engines.
 
 128-word production core; 256-byte data store; one outstanding request; 64-entry input/output queues; ECHO/XOR firmware and host ABI. Baseline verification: 16 assembler, 5 storage/FIFO and 4 controller units; five RTL integration groups. See [runtime specification](docs/runtime.md).
 
+Recorded runtime physical flow: 79.15% utilization, positive setup/hold slack at 50 MHz in three corners, zero routing/Magic DRC and LVS errors, and five mapped integration tests. See [source-bound runtime results](docs/runtime_results.json) and [physical flow](docs/physical_flow.md). These are historical 2026-10-07 results.
+
 Saved study records retain their original hashes and outcomes. Source formatting has changed since some recorded runs; historical evidence is not a fresh provenance check of this checkout. The production physical-source hashes remain unchanged.
 
 ### Challenge protocol coverage
@@ -37,7 +39,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 ### Roadmap
 
 - [x] Add bounded runtime transport and memory interface.
-- [ ] Harden runtime design across three process corners.
+- [x] Harden runtime design across three process corners.
 - [ ] Add runtime UART SPI and JTAG probes.
 - [ ] Measure I2C SWD PS2 and Ethernet capacity limits.
 - [ ] Add CAN receive transmit and generic frontier models.
@@ -58,7 +60,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 - Runtime permits one fully buffered request with at most 64 input/output entries; streaming, cancellation and concurrency are absent.
 - No FPGA or fabricated-silicon interoperability tests have been performed.
 - KLayout DRC, layout XOR and EQY equivalence remain disabled. Power/IR-drop results lack realistic activity and explicit voltage-source locations.
-- Runtime physical validation is pending in this revision. Historical v0.1 metrics do not establish runtime fit; fallback SDC and 68 fanout violations were baseline limitations.
+- Runtime physical results retain 438 maximum-fanout violations; board CDC/MTBF and board-specific timing remain open. Passing setup/hold and slew does not close these risks.
 - The development container still targets the older ihp-sg13g2 template; use the documented pinned local CMOS5L flow.
 
 ## Environment

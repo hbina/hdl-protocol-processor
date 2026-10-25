@@ -16,6 +16,19 @@ Keep local and CI runs on these versions unless the
 | IHP Open PDK | commit `2bbec755dc67ca3db0261c3d6163e15735d66710` |
 | LibreLane PDK name | `ihp-sg13cmos5l` |
 
+The project sets `OPENROAD_THREADS=8` explicitly. In the pinned version, an
+omitted thread count is stringified as `None`, which OpenROAD rejects; the
+explicit setting prevents that slow fallback. Runtime builds also supply
+`src/runtime.sdc` for PnR and signoff, with a selective request-synchronizer
+exception and conservative held-data timing.
+`PNR_CORNERS` explicitly enables fast, slow, and typical CMOS5L corners during
+physical optimization; the pinned tool defaults to the typical corner alone
+when this setting is omitted.
+Intermediate STA uses only the first corner returned by the tool (fast in this
+pinned installation), regardless of the configured list order. Acceptance uses
+final extracted reports for every separate corner; an intermediate scalar slack
+must not be treated as an all-corner result.
+
 The local files have this layout:
 
 ```text
@@ -140,7 +153,7 @@ RTL simulation does not establish physical fit; these reports do.
 Run the assembler and RTL regressions:
 
 ```sh
-uv run pytest -q test/test_assembler.py
+uv run pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py
 uv run make -B -C test SIM=verilator
 ```
 
@@ -148,7 +161,7 @@ After hardening, copy the final mapped netlist into the test location and run
 the functional gate-level regression:
 
 ```sh
-cp runs/wokwi/final/nl/tt_um_protocol_emulator.nl.v \
+cp runs/runtime_direct/final/nl/tt_um_protocol_emulator.nl.v \
   test/gate_level_netlist.v
 uv run make -B -C test GATES=yes
 ```
@@ -159,7 +172,56 @@ model's `delayed_*` DFF nets directly to their inputs because Icarus does not
 implement the timing checks that normally drive those nets. Static timing is
 still verified by LibreLane/OpenSTA; this shim affects simulation models only.
 
-## Latest verified result
+## Runtime foundation build
+
+Preserve the baseline run while hardening the expanded runtime design:
+
+```sh
+./tt/tt_tool.py --create-user-config --ihp
+mkdir -p runs/runtime_direct
+python -m librelane \
+  --pdk-root "$PDK_ROOT" \
+  --docker-no-tty --dockerized \
+  --pdk ihp-sg13cmos5l --manual-pdk \
+  --run-tag runtime_direct --force-run-dir runs/runtime_direct \
+  src/config_merged.json
+```
+
+The October 7, 2026 `runs/runtime_direct` build completed the configured
+LibreLane flow and produced final GDS. It passed extracted timing at 20 ns in
+all three corners:
+setup +0.521 ns (slow) and hold +0.105 ns (fast), with zero total negative slack,
+routing DRC, slew, antenna, disconnected-pin, and power-grid violations. It uses
+43,642 non-filler cells, 714,224 µm² of standard-cell area, and 79.15% utilization.
+All five post-route mapped tests pass against the exact final netlist. Routing
+DRC, Magic DRC, and LVS error counts are 0 / 0 / 0. Final metrics are in
+`runs/runtime_direct/final/metrics.json`; GDS is in
+`runs/runtime_direct/final/gds/tt_um_protocol_emulator.gds`. Test commands,
+metrics, and source/artifact hashes are saved in
+[runtime_results.json](runtime_results.json). The 438 fanout violations remain
+a signoff item; KLayout DRC/XOR, equivalence, board validation, and realistic
+power/IR analysis remain open.
+The final per-corner `checks.rpt` files identify 423 clock-buffer outputs and
+15 signal-buffer outputs above a library fanout limit of 8 (up to 18 clock
+loads and 14 signal loads). Slew and capacitance violation counts are zero;
+those results do not waive the fanout constraint. Review clock clustering and
+signal buffering before tapeout.
+`runs/runtime_v1` and `runs/runtime_v2` are superseded exploratory builds stopped
+during routing. `runs/runtime_final` routed with zero routing DRC errors but
+reported -6.5407 ns worst setup slack: the external `ena` signal fed a long
+combinational arbitration/write-enable path. The revised core gates instruction
+issue with enable and always drains an issued access on its second clock.
+`runs/runtime_timed` reduced the setup failure to -1.6939 ns but still had a
+configuration-to-arbiter path. The current source removes that redundant bus
+qualification: synchronous configuration clear cancels pending work and clears
+the backend. `runs/runtime_closed` enabled all three PnR corners but failed
+extracted slow-corner setup by -1.4498 ns on a CPU-grant-to-parameter-write path.
+The current source qualifies each resource's writes directly, separating side
+effects from the shared error-report decoder. `runs/runtime_direct` verifies that
+revision. Earlier candidates were stopped after routing when timing failed.
+None of these superseded runs establish acceptance of the current source.
+
+## Historical baseline result
 
 The October 2026 `runs/wokwi` build completed the configured LibreLane flow and
 produced final GDS. The saved run contains 72 numbered step directories; eight

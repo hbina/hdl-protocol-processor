@@ -2,6 +2,19 @@
 
 These instructions apply to the entire repository.
 
+## Python and dependency management
+
+Use `uv` to manage Python environments and dependencies for this project.
+Run Python scripts and tools with `uv run`, install the locked dependencies with
+`uv sync --locked`, and use `uv add` or `uv remove` to change dependencies.
+Keep `pyproject.toml` and `uv.lock` in sync when dependencies change.
+
+Use Ruff to format Python code. Run the formatter with:
+
+```sh
+uv run ruff format .
+```
+
 ## Keep the README status current
 
 After every material project change, update the root `README.md` in the same

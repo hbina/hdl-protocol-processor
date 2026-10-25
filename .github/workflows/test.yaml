@@ -78,6 +78,22 @@ jobs:
           uv run --locked pytest -q test/test_usb_in_units.py
           uv run --locked python study/protocol_exploration/run_usb_in.py usb_in --expanded-model
 
+      - name: Live USB TX and autonomous vendor control (isolated model)
+        run: |
+          uv run --locked pytest -q test/test_usb_control_units.py
+          uv run --locked python study/protocol_exploration/run_usb_stream.py usb_stream --expanded-model
+          uv run --locked python study/protocol_exploration/run_usb_control.py usb_control --expanded-model
+
+      - name: USB reset and deferred address (isolated model; descriptors pending)
+        run: |
+          uv run --locked pytest -q test/test_usb_address_units.py
+          uv run --locked python study/protocol_exploration/run_usb_address.py usb_address --expanded-model
+
+      - name: Minimal USB enumeration (isolated generic model)
+        run: |
+          uv run --locked pytest -q test/test_usb_enum_units.py
+          uv run --locked python study/protocol_exploration/run_usb_enum.py usb_enum --expanded-model
+
       - name: Test Summary
         uses: test-summary/action@v2.4
         with:
@@ -99,6 +115,10 @@ jobs:
             test/sim_build/usb_out_carry_frontier1024/results.xml
             test/sim_build/carry_frontier1024_legacy/results.xml
             test/sim_build/usb_in_carry_frontier1024/results.xml
+            test/sim_build/usb_stream_carry_frontier1024/results.xml
+            test/sim_build/usb_control_carry_frontier1024/results.xml
+            test/sim_build/usb_address_carry_frontier1024/results.xml
+            test/sim_build/usb_enum_carry_frontier1024/results.xml
             test/sim_build/uart_runtime_frontier1024/results.xml
             test/sim_build/jtag_runtime_capacity256/results.xml
         if: always()
@@ -155,6 +175,27 @@ jobs:
             test/sim_build/usb_in_carry_frontier1024/out_phase_timings.json
             test/sim_build/usb_in_carry_frontier1024/in_timings.json
             test/sim_build/usb_in_carry_frontier1024/in_phase_timings.json
+            test/sim_build/usb_stream_carry_frontier1024/results.xml
+            test/sim_build/usb_stream_carry_frontier1024/evidence.json
+            test/sim_build/usb_stream_carry_frontier1024/in_timings.json
+            test/sim_build/usb_stream_carry_frontier1024/in_phase_timings.json
+            test/sim_build/usb_stream_carry_frontier1024/out_timings.json
+            test/sim_build/usb_stream_carry_frontier1024/out_phase_timings.json
+            test/sim_build/usb_control_carry_frontier1024/results.xml
+            test/sim_build/usb_control_carry_frontier1024/evidence.json
+            test/sim_build/usb_control_carry_frontier1024/control_timings.json
+            test/sim_build/usb_control_carry_frontier1024/control_phase_timings.json
+            test/sim_build/usb_address_carry_frontier1024/results.xml
+            test/sim_build/usb_address_carry_frontier1024/evidence.json
+            test/sim_build/usb_address_carry_frontier1024/control_timings.json
+            test/sim_build/usb_address_carry_frontier1024/control_phase_timings.json
+            test/sim_build/usb_address_carry_frontier1024/address_timings.json
+            test/sim_build/usb_address_carry_frontier1024/address_phase_timings.json
+            test/sim_build/usb_enum_carry_frontier1024/results.xml
+            test/sim_build/usb_enum_carry_frontier1024/evidence.json
+            test/sim_build/usb_enum_carry_frontier1024/descriptor_timings.json
+            test/sim_build/usb_enum_carry_frontier1024/enumeration_timings.json
+            test/sim_build/usb_enum_carry_frontier1024/descriptor_phase_timings.json
             test/sim_build/uart_runtime_frontier1024/results.xml
             test/sim_build/uart_runtime_frontier1024/evidence.json
             test/sim_build/uart_runtime_frontier1024/deadline_timings.json

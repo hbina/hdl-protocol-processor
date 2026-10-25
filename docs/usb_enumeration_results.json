@@ -1,0 +1,2899 @@
+{
+  "date": "2026-10-25",
+  "scope": "selected_low_speed_usb_enumeration_and_arbitrary_vendor_control_traffic",
+  "full_goal_complete": false,
+  "selected_enumeration_sequence_verified": true,
+  "full_usb_compliance_verified": false,
+  "production_rtl_changed": false,
+  "generic_rtl_or_isa_added_in_this_followup": false,
+  "physical_fit_verified": false,
+  "candidate_words": 1012,
+  "remaining_model_words": 12,
+  "model": {
+    "date": "2026-10-25",
+    "executed_at_utc": "2026-10-25T01:56:04.441408+00:00",
+    "protocol": "usb_enum",
+    "model": "counterfactual1024x18_eight_registers_leaf_call_carry",
+    "actual_asic_capacity_words": 128,
+    "model_registers": 8,
+    "model_instruction_bits": 18,
+    "candidate_words": 1012,
+    "command": "uv run --locked python study/protocol_exploration/run_usb_enum.py usb_enum --expanded-model",
+    "passed": 10,
+    "skipped": 0,
+    "cases": [
+      "test_autonomous_control_write_read",
+      "test_autonomous_control_phase_rate",
+      "test_control_crc_error_and_runtime_recovery",
+      "test_set_address_deferred_commit_and_bus_reset",
+      "test_reset_aborts_pending_address_and_partial_packet",
+      "test_address_phase_rate_and_vendor_readback",
+      "test_descriptor_chunks_and_configuration",
+      "test_enumeration_and_vendor_transfer",
+      "test_descriptor_short_interpacket_gap",
+      "test_descriptor_phase_rate_and_configuration_commit"
+    ],
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/usb_enum_carry_frontier1024/protocol_core_frontier1024.v": "af18bae3da5a585e25a680588cd7f5282a827ba3b0cbc9faeb92fd27eee513bb",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/usb_enum_candidate.asm": "8a28fdffacdcc06a3b9c1e804b9ab1870611162651a9c1c2d45db51ff3504ab1",
+      "study/protocol_exploration/usb_enum_peer.py": "e8239ad2f44105729c7652a0c9fc8c466980aa9171d5a36253722117826ab0e9",
+      "study/protocol_exploration/build_usb_enum.py": "ca89b85cc4e072c2bd6e68d78bb4cea1b837b66b295e4712849e50dcd6519095",
+      "study/protocol_exploration/usb_enum_constants.json": "f6ed220d7c2db7a79a741fa1a8b622490c4dc076c947be692bd4ddc925d5ecd3",
+      "study/protocol_exploration/build_usb_address.py": "1396d0bfce79f8c59e5ded1c15af4de0f3acc7b11981e79850cc4a8a9cca9d4a",
+      "study/protocol_exploration/build_usb_control.py": "989ad9697c3e64fb2f1cafa39e58b2bef978876cf343a190b6ae758aa7b21cdf",
+      "study/protocol_exploration/build_usb_stream.py": "9350394f679db7117c94b931244e5bd404652f1cdfab2720f5914c6f6ba79115",
+      "study/protocol_exploration/usb_stream_peer.py": "48d6d5455d36e1fc5132c3aaefe78577da09c1916e023dbd21901b649e29e510",
+      "study/protocol_exploration/build_usb_in.py": "5c84e9b0c5dd31d3a87a40932e5db37d9771670d5ceb24143d205472e9e4099b",
+      "study/protocol_exploration/build_usb_out.py": "6f4751e0f67c1210b9fc1cb0d6b45068bd23570759a790fb1f161b2d29d7ae8b",
+      "study/protocol_exploration/generic_carry_frontier.py": "590a02349e0564157e0c9d0c29e5ad26521642696d0e01163adc0c0cf765f50d",
+      "study/protocol_exploration/build_usb_dense.py": "b2cfa3135872b98f46a9a8535db2f7bb0b65678dcdb5a7512c6258172df4f27f",
+      "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+      "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+      "study/protocol_exploration/generic_call_frontier.py": "bf219e8bee8d14bc020f745d496413dbdc4bb138c2ba386bdeeaf46a94b9335e",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_usb_live.py": "556b7814a43648fd90467e9a6f2a1d8aff7c535954a0e6e1b5ef90b19926211b",
+      "study/protocol_exploration/usb_live_constants.json": "28b26ed509cf12b53713d9038dea7d1f460ee541fa84ccf51b0f8594cfd3665c",
+      "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_usb_enum.py": "2a179a46907c9d7691353e8d617be4e46ef9be7cd326c6f4fa856faf6595ee35",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    },
+    "results_xml_sha256": "1c9523cfe3d98245a12c309de6732f7dd7617a4a1dfa39e863c5269cb886f1f3",
+    "production_rtl_changed": false,
+    "physical_fit_verified": false
+  },
+  "timing": {
+    "control_phase_timings": {
+      "records": [
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2665242.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3533839.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2089242.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2943828.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2169242.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2086538.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2769287.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3626619.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2857531.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3599260.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2137364.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3029244.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2217364.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2206642.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2641911.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 3513841.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2079243.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2913831.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2159243.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2176541.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2753289.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3606621.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2103322.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3016616.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2183322.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2116638.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2847533.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 3699262.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2127365.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2999247.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2207365.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2176645.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2660913.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3493843.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2069244.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2883834.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2149244.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2146544.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2713291.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 3586623.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2093323.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2986619.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2173323.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2206641.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2786535.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3679264.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2117366.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3089250.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2197366.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2146648.0
+        }
+      ],
+      "count": 54,
+      "minimum_latency_ps": 2069244.0,
+      "maximum_latency_ps": 3699262.0,
+      "artifact_sha256": "7a9e895ad5344578c8cd0e2492206da2409cb995eeb595dd7990d6cc7fd2f634"
+    },
+    "address_phase_timings": {
+      "records": [
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3725242.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2177297.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2691883.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3533839.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2089242.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2943828.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2169242.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2086538.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3809289.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2189976.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2763270.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3606621.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2103322.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3016616.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2183322.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2116638.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3877535.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2202621.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2834505.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3679264.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2117366.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3089250.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2197366.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2146648.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3761909.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2177297.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2691883.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3533839.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2089242.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2943828.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2169242.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2086538.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3853289.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2189976.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2763270.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3606621.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2103322.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3016616.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2183322.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2116638.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3927535.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2202621.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2834505.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3679264.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2117366.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3089250.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2197366.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2146648.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3873575.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2070630.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2704549.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3546505.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2101908.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2956494.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2181908.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2099204.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3906622.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2203309.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2776603.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3619954.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2116655.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3029949.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2196655.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2129971.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3960534.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2215954.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2848504.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3693263.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2131365.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2983249.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2211365.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2160647.0
+        }
+      ],
+      "count": 72,
+      "minimum_latency_ps": 2070630.0,
+      "maximum_latency_ps": 3960534.0,
+      "artifact_sha256": "4cbd06c1835345b374bc86d105889d53f63ac451c817023c7e2a551ec513e4c9"
+    },
+    "descriptor_timings": {
+      "records": [
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3214620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2179968.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3119953.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2206654.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2179981.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2219988.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153314.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2199988.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2173301.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3146620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2179981.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153314.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2173301.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2739953.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 1,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2166634.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3466620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2813279.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 1,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2166634.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3466620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2813279.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 1,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2166634.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2686620.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3626620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        }
+      ],
+      "count": 36,
+      "minimum_latency_ps": 2113321.0,
+      "maximum_latency_ps": 3626620.0,
+      "artifact_sha256": "d72d8fe2316fc6b3c909881656c612715e543d37542e8ac677b43d18ee727c55"
+    },
+    "enumeration_timings": {
+      "records": [
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3234620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2179968.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3786620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2199975.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113308.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3233267.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2206654.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2179981.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2219988.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153314.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2199988.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2173301.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3146620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 1,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2179981.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2173301.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3146620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2206654.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2179981.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2219988.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153314.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2199988.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2173301.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3466620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2813279.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 1,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2166634.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2686620.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3626619.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        }
+      ],
+      "count": 38,
+      "minimum_latency_ps": 2113308.0,
+      "maximum_latency_ps": 3786620.0,
+      "artifact_sha256": "e338a96287c6c611c0484f55a295430938acd6ed67ca69e0a922d1a6236ef9b4"
+    },
+    "descriptor_phase_timings": {
+      "records": [
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3105242.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2169242.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2183976.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2130563.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2197310.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2103896.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2177310.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2099871.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3175841.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2169242.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2130563.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2103896.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2099871.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2685219.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3187287.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2206654.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2166648.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2219988.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2139981.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2199988.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2159968.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3146620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2166648.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2139981.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2159968.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3466620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2799953.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 1,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2166634.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 3466620.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153321.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2153321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2813279.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 1,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2166634.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2799953.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 1,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2166634.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2686620.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3189531.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2217364.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2229298.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2202679.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2242632.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2176012.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2222632.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2219975.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 3237263.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2217364.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2202679.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2176012.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 1,
+          "response_latency_ps": 2219975.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2688019.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 3079911.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2159243.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2173977.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2230565.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2187311.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2203898.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2167311.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2189874.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 3155843.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2159243.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2230565.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2203898.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2189874.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2685219.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3199289.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2183322.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2196655.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2146650.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2209989.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2239983.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2189989.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2129971.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 3246622.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2183322.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2146650.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2239983.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 10000,
+          "response_latency_ps": 2129971.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2686620.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 3265533.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2207365.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2219299.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2182681.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2232633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2156014.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2212633.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2189978.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 3217265.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2207365.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2182681.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2156014.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 10000,
+          "response_latency_ps": 2189978.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2688019.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3073913.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2149244.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2163978.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2210567.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2177312.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2183900.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2157312.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2159877.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3135845.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2149244.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2210567.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2183900.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": -1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2159877.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2685219.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 3188291.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2173323.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2186656.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2246652.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2199990.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2219985.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2179990.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2219974.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 3226624.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2173323.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2246652.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2219985.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 19999,
+          "response_latency_ps": 2219974.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2686620.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3273535.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2197366.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2209300.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2282683.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2222634.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2256016.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2202634.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2159981.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 3317267.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2197366.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 8,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2282683.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 2,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2256016.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 1000,
+          "phase_ps": 19999,
+          "response_latency_ps": 2159981.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2688019.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926633.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2113321.0
+        },
+        {
+          "stage": "SETUP",
+          "bytes": 8,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2926613.0
+        },
+        {
+          "stage": "IN",
+          "bytes": 3,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2193321.0
+        },
+        {
+          "stage": "OUT",
+          "bytes": 0,
+          "ppm": 0,
+          "phase_ps": 1,
+          "response_latency_ps": 2146635.0
+        }
+      ],
+      "count": 185,
+      "minimum_latency_ps": 2099871.0,
+      "maximum_latency_ps": 3466620.0,
+      "artifact_sha256": "b2d6c84241c65cc79c8c44be67f1d4b7d1b51e5eb7666afdd9ce73718f877cd2"
+    }
+  },
+  "unoptimized_ack_regression": {
+    "command": "uv run --locked python study/protocol_exploration/run_usb_enum.py usb_enum --expanded-model --unoptimized-ack --test-filter test_descriptor_short_interpacket_gap",
+    "expected_exit_status": "nonzero",
+    "candidate_words": 991,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 9,
+    "cases": [
+      "test_descriptor_short_interpacket_gap"
+    ],
+    "failure": {
+      "error_type": "AssertionError",
+      "error_msg": "No IN data response"
+    },
+    "source_sha256": {
+      "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+      "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+      "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+      "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+      "test/sim_build/usb_enum_unoptimized_carry_frontier1024/protocol_core_frontier1024.v": "af18bae3da5a585e25a680588cd7f5282a827ba3b0cbc9faeb92fd27eee513bb",
+      "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+      "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+      "study/protocol_exploration/usb_enum_unoptimized_candidate.asm": "fb391d93aa04715ee65cfd011cc73e2b4ad9188abaa53d3303c21233a40ca8bc",
+      "study/protocol_exploration/usb_enum_peer.py": "e8239ad2f44105729c7652a0c9fc8c466980aa9171d5a36253722117826ab0e9",
+      "study/protocol_exploration/build_usb_enum.py": "ca89b85cc4e072c2bd6e68d78bb4cea1b837b66b295e4712849e50dcd6519095",
+      "study/protocol_exploration/usb_enum_constants.json": "f6ed220d7c2db7a79a741fa1a8b622490c4dc076c947be692bd4ddc925d5ecd3",
+      "study/protocol_exploration/build_usb_address.py": "1396d0bfce79f8c59e5ded1c15af4de0f3acc7b11981e79850cc4a8a9cca9d4a",
+      "study/protocol_exploration/build_usb_control.py": "989ad9697c3e64fb2f1cafa39e58b2bef978876cf343a190b6ae758aa7b21cdf",
+      "study/protocol_exploration/build_usb_stream.py": "9350394f679db7117c94b931244e5bd404652f1cdfab2720f5914c6f6ba79115",
+      "study/protocol_exploration/usb_stream_peer.py": "48d6d5455d36e1fc5132c3aaefe78577da09c1916e023dbd21901b649e29e510",
+      "study/protocol_exploration/build_usb_in.py": "5c84e9b0c5dd31d3a87a40932e5db37d9771670d5ceb24143d205472e9e4099b",
+      "study/protocol_exploration/build_usb_out.py": "6f4751e0f67c1210b9fc1cb0d6b45068bd23570759a790fb1f161b2d29d7ae8b",
+      "study/protocol_exploration/generic_carry_frontier.py": "590a02349e0564157e0c9d0c29e5ad26521642696d0e01163adc0c0cf765f50d",
+      "study/protocol_exploration/build_usb_dense.py": "b2cfa3135872b98f46a9a8535db2f7bb0b65678dcdb5a7512c6258172df4f27f",
+      "study/protocol_exploration/usb_rx_peer.py": "bb317138d955752cf9e9b480a8cfa01beafc436e01c6e2eec469cb3e7ed80159",
+      "study/protocol_exploration/run_usb_rx.py": "f3ee1ff21c07cb184c0841861d90d852303daa4618c807688f88c8e1342002a8",
+      "study/protocol_exploration/generic_call_frontier.py": "bf219e8bee8d14bc020f745d496413dbdc4bb138c2ba386bdeeaf46a94b9335e",
+      "study/protocol_exploration/generic_frontier.py": "eb52d1a74b97708a94d78ccf04a7c7b41ec9f2d66b9ae703ad938ea8c3fef2ca",
+      "study/protocol_exploration/build_usb_live.py": "556b7814a43648fd90467e9a6f2a1d8aff7c535954a0e6e1b5ef90b19926211b",
+      "study/protocol_exploration/usb_live_constants.json": "28b26ed509cf12b53713d9038dea7d1f460ee541fa84ccf51b0f8594cfd3665c",
+      "study/protocol_exploration/build_usb_rx.py": "ae5da48b1309e8b574b922c5dbafff529ac1c7ada60b4bf02a8dd0591b40f739",
+      "study/protocol_exploration/build_can_rx.py": "73f6211c6c044cd8d625d92ad25eea106fcc85e0c744acb36c9ef372d63c82e0",
+      "study/protocol_exploration/build_can_tx.py": "c442810c96954b270df13482cca963335e3c83b6c503dd381911a47c8fe50adc",
+      "study/protocol_exploration/build_can_duplex.py": "e2ff3c18efbd9674e3f5e37e37cd25d624fca5a2e870a4e9ab2ee8392203b0d1",
+      "study/protocol_exploration/build_can_frontier.py": "ad569b9a0556762d14c7a34aaddb706c5be181ff0a6b3965ee497ccaa5487ca6",
+      "study/protocol_exploration/can_peer.py": "95ebce24e218ac40a3e8848d494db14a908db5b89a6f22a4ce2a7d6399653eb3",
+      "study/protocol_exploration/can_tx_peer.py": "a0c4da507213e7d5e6497154333bb15c48cd3581087766a5c3aed6d011974111",
+      "study/protocol_exploration/run_can.py": "9105e442df923e0585f3077f88f6bcd45b0c31cfb4a8912854556b0d0ca5c0ba",
+      "study/protocol_exploration/run_can_tx.py": "600de5b7f3aae0e49fbd9e0f8a444f9dd2ab893a7bc23335b011bd18725bd3f6",
+      "study/protocol_exploration/run_usb_enum.py": "2a179a46907c9d7691353e8d617be4e46ef9be7cd326c6f4fa856faf6595ee35",
+      "test/test.py": "78296c303b4c35de410afd7b8d44c351a47ca094a6e1d4cda1afb839fbc97168",
+      "tools/assembler.py": "7473b4a35297cb227e7f6210212c9a6bad88da79371fec7b1fa6814044c2b7bd",
+      "tools/runtime.py": "a992bf994fc2657af5cd9157e4ec457e0ec4b6bc4410d0204b6fb78f196bb5ca"
+    },
+    "results_xml_sha256": "74491f3a999145a0b5b03368b5dd38e3f3badd693c5976701a1a5d17ca8a7adc"
+  },
+  "unit_tests": {
+    "command": "uv run --locked pytest -q test/test_assembler.py test/test_runtime_units.py test/test_runtime_driver.py test/test_frontier_assembler.py test/test_usb_live_units.py test/test_carry_frontier.py test/test_usb_in_units.py test/test_usb_control_units.py test/test_usb_address_units.py test/test_usb_enum_units.py",
+    "passed": 43,
+    "new_units": 2,
+    "new_unit_source_sha256": "15d58346c48088155da255d1c16beca84fad71f9adee6f1beaa17fd27376bebc"
+  },
+  "unchanged_physical_source_sha256": {
+    "src/protocol_core.v": "3e20034a75e7b72ac5ee190f8156ba108571d461dc87707a8b240024ca3feebf",
+    "src/runtime_bridge.v": "45cdf8b049c7d2899c5c3b94d49506cc497ef9f24fd2023f80860d4fa91f75b0",
+    "src/runtime_fifo.v": "263fb9ad6b6e6fcefd8473aa114ce3d769d0b20308fe5e4672b3eeba09121c63",
+    "src/project.v": "8490bf398ce0843207c582a8ac6406cb43f5c36663bff842ffa84c9947dbe468",
+    "src/runtime_store.v": "e88cf98c46390fbbb7661fb405b09edc15b3aaa5d5bcd36fc06d0023c127cd19",
+    "src/runtime.sdc": "7178f4e2cbc5d9faccbaf5def15d03772865fd8a092607a8f28e4b424a61289f",
+    "src/config_merged.json": "d618523ce38d4c52352311617532843a31dea0c01f41539042186b1bf19a15bb"
+  },
+  "limitations": [
+    "Selected request envelopes and fixed device/configuration descriptors; not complete Chapter9 or OS interoperability",
+    "Finite request service, no full final-status retry service after runtime publication or general STALL/NAK policy",
+    "No full jitter/clock recovery, reset-during-TX or electrical connector/transceiver compliance proof",
+    "1012 words on isolated1024x18/eight-register/CALL/carry model; production128-word core cannot run it",
+    "No mapped timing/area/tile-fit result for the model"
+  ],
+  "sources": {
+    "enumeration": "https://developerhelp.microchip.com/xwiki/bin/view/applications/usb/power-delivery/enumeration/",
+    "ep0_only_interface": "https://ieeemilestones.ethw.org/w/images/4/44/USB_1.0_Specification.pdf"
+  }
+}

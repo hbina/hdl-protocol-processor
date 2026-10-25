@@ -44,4 +44,6 @@ Separate CAN RX/TX model studies record four groups each; combined TX/RX runs on
 
 USB studies preserve buffered-RX turnaround failures and record live RX, addressed OUT and bidirectional IN/OUT packet tests on generic models. Production capacity and interoperability remain open. See [buffered RX](../docs/usb_receive_study.md), [live RX](../docs/usb_live_study.md), [OUT](../docs/usb_out_study.md), and [IN](../docs/usb_in_study.md).
 
+USB live TX, vendor controls, reset/deferred address and selected enumeration pass recorded model tests. The enumeration image needs 1012 words; full requests, jitter coverage, physical fit and host interoperability remain open. See [controls](../docs/usb_control_study.md), [address handling](../docs/usb_address_study.md), and [enumeration](../docs/usb_enumeration_study.md).
+
 See each linked study for exact commands, filters and expected-negative comparisons. Production results and expanded-model results are separate.

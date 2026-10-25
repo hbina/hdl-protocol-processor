@@ -136,10 +136,18 @@ jobs:
 
       - name: CAN active-flag bit errors and compact firmware regressions (isolated call model)
         run: |
-          uv run --locked pytest -q test/test_can_flag_compact_units.py
+          uv run --locked pytest -q test/test_can_flag_compact_units.py test/test_can_tail_units.py
           uv run --locked python study/protocol_exploration/run_can_flag_restart.py can_flag_restart --expanded-model
           uv run --locked python study/protocol_exploration/run_can_flag_compact.py can_flag_compact --expanded-model --suite postflag
           uv run --locked python study/protocol_exploration/run_can_flag_restart.py can_flag_restart --expanded-model --suite rx_flags --test-filter 'test_receiver_error_flags|test_compact_pack_unpack_and_phase'
+
+      - name: CAN compact receive tails (isolated generic call model)
+        run: |
+          uv run --locked pytest -q test/test_can_tail_units.py test/test_can_tail_compact_units.py
+          uv run --locked python study/protocol_exploration/run_can_tail_compact.py can_tail_compact --expanded-model
+          uv run --locked python study/protocol_exploration/run_can_tail_compact.py can_tail_compact --expanded-model --suite flag_errors
+          uv run --locked python study/protocol_exploration/run_can_tail_compact.py can_tail_compact --expanded-model --suite rx_flags --test-filter 'test_receiver_error_flags|test_compact_pack_unpack_and_phase'
+          uv run --locked python study/protocol_exploration/run_can_tail_compact.py can_tail_compact --expanded-model --suite postflag --test-filter 'test_receiver_postflag_dominance|test_postflag_threshold_and_saturation|test_transmitter_postflag_counts|test_postflag_bus_off_recovery'
 
       - name: Test Summary
         uses: test-summary/action@v2.4
@@ -177,6 +185,10 @@ jobs:
             test/sim_build/can_flag_restart_rx_flags_call_frontier1024/results.xml
             test/sim_build/can_flag_compact_postflag_call_frontier1024/results.xml
             test/sim_build/can_flag_restart_call_frontier1024/results.xml
+            test/sim_build/can_tail_compact_call_frontier1024/results.xml
+            test/sim_build/can_tail_compact_flag_errors_call_frontier1024/results.xml
+            test/sim_build/can_tail_compact_rx_flags_call_frontier1024/results.xml
+            test/sim_build/can_tail_compact_postflag_call_frontier1024/results.xml
         if: always()
 
       - name: upload waveform and test results
@@ -280,6 +292,10 @@ jobs:
             test/sim_build/can_flag_restart_rx_flags_call_frontier1024/results.xml
             test/sim_build/can_flag_compact_postflag_call_frontier1024/results.xml
             test/sim_build/can_flag_restart_call_frontier1024/results.xml
+            test/sim_build/can_tail_compact_call_frontier1024/results.xml
+            test/sim_build/can_tail_compact_flag_errors_call_frontier1024/results.xml
+            test/sim_build/can_tail_compact_rx_flags_call_frontier1024/results.xml
+            test/sim_build/can_tail_compact_postflag_call_frontier1024/results.xml
             test/sim_build/can_postflag_call_frontier1024/evidence.json
             test/sim_build/can_flag_restart_call_frontier1024/evidence.json
             test/sim_build/can_flag_restart_call_frontier1024/receiver_flag_bit_timings.json
@@ -294,4 +310,6 @@ jobs:
             test/sim_build/can_flag_restart_rx_flags_call_frontier1024/compact_phase_timings.json
             test/sim_build/can_postflag_call_frontier1024/receiver_postflag_timings.json
             test/sim_build/can_postflag_call_frontier1024/transmitter_postflag_timings.json
+            test/sim_build/can_tail_compact*/evidence.json
+            test/sim_build/can_tail_compact*/*timings.json
             test/output/*

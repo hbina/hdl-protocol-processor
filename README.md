@@ -34,6 +34,8 @@ CAN model follow-ups record ACK-error retry, arbitration-winner reception, bound
 
 CAN firmware compaction adds selected RX error flags, post-flag counters and active-flag bit-error restarts within 1024 model words. Oversized drafts and negative comparisons remain preserved. See [RX flags](docs/can_receive_flags_study.md), [post-flag counters](docs/can_postflag_study.md), and [flag compaction](docs/can_flag_compact_study.md).
 
+CAN tail investigation preserves three old-image wire failures and the oversized 1067-word draft. A separate compact candidate fits 1024 model words; fresh seven-group RX-tail regression passes. See [original gaps](docs/can_tail_study.md) and [compaction evidence](docs/can_tail_compact_study.md). TX tails, overload-fault accounting and production fit remain open.
+
 Saved study records retain their original hashes and outcomes. Source formatting has changed since some recorded runs; historical evidence is not a fresh provenance check of this checkout. The production physical-source hashes remain unchanged.
 
 ### Challenge protocol coverage
@@ -64,7 +66,7 @@ All listed support is partial; no full protocol or board interoperability claim 
 - [x] Validate UART and JTAG runtime requests.
 - [x] Add CAN retry synchronization and fault confinement.
 - [x] Extend CAN error flags counters and firmware compaction.
-- [ ] Compact CAN receive tails and preserve overload comparisons.
+- [x] Compact CAN receive tails and preserve overload comparisons.
 - [ ] Add protocol acceptance audit and exploration budgets.
 - [ ] Complete protocol contracts and production capacity/physical decisions.
 - [ ] Add randomized/reference-model and formal verification.

@@ -1,3 +1,6 @@
+> Historical architecture: superseded by [pin-v1](pin_processor.md).
+> Results and instructions below apply to the previous design only.
+
 # Protocol Emulator v0.1 Baseline Design Report
 
 This report records the original baseline. The current v0.2 runtime

@@ -3,8 +3,10 @@
 # Pin 5: SDA (open-drain; external pull-up required)
 # r3 bit zero contains the sampled ACK value: 0=ACK, 1=NACK.
 
-    SETO   0x00           # open-drain pins always drive zero
-    SETOE  0x00           # release both bus lines
+    LDI    r3, 0x00
+    OUT    r3, 0           # open-drain pins always drive zero
+    LDI    r3, 0x00
+    OE     r3, 0           # release both bus lines
     LDI    r0, 0xA0       # address byte
     LDI    r1, 8          # bit count
     LDI    r2, 1          # drive-enable constant
@@ -40,4 +42,7 @@ bit_loop:
 
     LDI    r2, 1
     OEBIT  r2, 4          # return SCL low
+    LDI    r0, 0
+    STORE  r3, r0
+    OUT    r3, 1
     HALT

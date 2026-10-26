@@ -1,3 +1,39 @@
+# Pin-v1 physical implementation
+
+The new design uses the same pinned CMOS5L toolchain, 6×4 allocation, 20 ns
+clock target, and three corners as the historical flow below. The active source
+list contains only project.v and protocol_core.v. The active timing file is
+src/pins.sdc: it cuts only paths from asynchronous inputs to the 15 first-stage
+synchronizer D pins and checks that all 15 are found. Stage-to-stage timing and
+board-clocked configuration paths remain constrained.
+
+Current blocker: LibreLane 3.1.0.dev3 and the pinned PDK are installed, but
+Docker/Podman is absent. The new-design flow exits with
+`No compatible container engine found.` No new physical results or mapped-test
+passes exist. Historical runs below describe the removed runtime design.
+
+After restoring the documented container environment:
+
+```sh
+uv run --no-project --python .asic-tools/venv/bin/python tt/tt_tool.py --create-user-config --ihp
+uv run --no-project --python .asic-tools/venv/bin/python -m librelane \
+  --docker-no-tty --dockerized --pdk-root "$PWD/.asic-tools/pdk" \
+  --pdk ihp-sg13cmos5l --manual-pdk --run-tag pin_direct \
+  --force-run-dir runs/pin_direct src/config_merged.json
+cp runs/pin_direct/final/nl/tt_um_protocol_emulator.nl.v test/gate_level_netlist.v
+PDK_ROOT="$PWD/.asic-tools/pdk" uv run --locked make -B -C test GATES=yes
+```
+
+Require all six new pin-only wrapper tests against that exact netlist, positive
+setup/hold timing in all configured corners, clean configured DRC/LVS checks,
+and fit in the 6×4 allocation. Do not reuse an old gate_level_netlist.v.
+Do not reduce the 256-word target to conceal a fit failure. Record area,
+utilization, timing, exact commands, and source/netlist hashes with new evidence.
+The input synchronizer constraints still require validation in the mapped flow;
+RTL checks cannot establish CDC/MTBF signoff.
+
+## Historical physical flow and results
+
 # Local CMOS5L physical-design flow
 
 This project uses the Tiny Tapeout IHP CMOS5L flow to turn the Verilog RTL

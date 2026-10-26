@@ -7,7 +7,7 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v protocol_core.v runtime_fifo.v runtime_store.v runtime_bridge.v
+PROJECT_SOURCES = project.v protocol_core.v
 
 # Verilator 5 requires an explicit timing mode for testbench delays.
 ifeq ($(SIM),verilator)
@@ -17,7 +17,7 @@ endif
 ifneq ($(GATES),yes)
 
 # RTL simulation:
-SIM_BUILD				= sim_build/rtl
+SIM_BUILD				= sim_build/rtl/$(SIM)
 VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,$(PROJECT_SOURCES))
 
 else
@@ -56,7 +56,7 @@ VERILOG_SOURCES += $(PWD)/tb.v
 TOPLEVEL = tb
 
 # List test modules to run, separated by commas and without the .py suffix:
-COCOTB_TEST_MODULES = test,test_uart_probe,test_spi_probe,test_jtag_probe
+COCOTB_TEST_MODULES = pin_examples
 
 # include cocotb's make rules to take care of the simulator setup
 include $(shell cocotb-config --makefiles)/Makefile.sim

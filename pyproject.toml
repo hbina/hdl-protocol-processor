@@ -14,15 +14,9 @@ dev = [
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
+testpaths = ["test/active"]
 
 [tool.pyright]
-include = [
-    "tools/isa.py",
-    "tools/program.py",
-    "tools/assembler.py",
-    "study/protocol_exploration/isa_variants.py",
-    "study/protocol_exploration/fragments.py",
-]
-extraPaths = [".", "study/protocol_exploration"]
+include = ["tools/isa.py", "tools/program.py", "tools/assembler.py", "tools/snapshot_isa.py", "tools/check_pin_synthesis.py"]
 pythonVersion = "3.12"
 typeCheckingMode = "strict"

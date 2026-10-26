@@ -6,8 +6,10 @@
     LDI    r2, 8          # data-bit count
     LDI    r3, 0x01       # constant one / stop bit
 
-    SETOE  0x01           # pin 0 is an output
-    SETO   0x01           # idle high
+    LDI    r3, 0x01
+    OE     r3, 0           # pin 0 is an output
+    LDI    r3, 0x01
+    OUT    r3, 0           # idle high
     WAIT   8              # visible idle interval
 
     OUTBIT r1, 0          # start bit

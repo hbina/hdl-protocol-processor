@@ -18,8 +18,8 @@ if __package__ in (None, ""):  # Run as a script: make the `tools` package impor
 
 from tools.isa import (
     BASE,
-    CONFIGS,
-    Call,
+    Bank,
+    BankOp,
     CondJump,
     CondJumpOp,
     Halt,
@@ -39,7 +39,6 @@ from tools.isa import (
     RegPin,
     RegReg,
     RegRegOp,
-    Ret,
     Target,
     Unary,
     UnaryOp,
@@ -144,8 +143,12 @@ class _Operands:
     def byte(self, token: str) -> int:
         return _bounded(token, self.labels, 0xFF, "immediate")
 
-    def pin(self, token: str) -> int:
-        return _bounded(token, self.labels, 7, "pin")
+    def pin(self, token: str) -> int | Reg:
+        return (
+            self.register(token)
+            if re.fullmatch(r"[rR][0-3]", token)
+            else _bounded(token, self.labels, 255, "pin")
+        )
 
     def target(self, token: str, maximum: int, kind: str = "address") -> Target:
         if token.strip() in self.objects:
@@ -153,34 +156,17 @@ class _Operands:
         return _bounded(token, self.labels, maximum, kind)
 
 
-def _extensions(cfg: IsaConfig) -> set[str]:
-    names: set[str] = set()
-    if cfg.call:
-        names |= {"CALL", "RET"}
-    if cfg.carry:
-        names |= {UnaryOp.SHRC.value, UnaryOp.RRC.value, JumpOp.JNC.value}
-    return names
-
-
-_OPTIONAL = {"CALL", "RET", UnaryOp.SHRC.value, UnaryOp.RRC.value, JumpOp.JNC.value}
-
-
 def _instruction(mnemonic: str, args: list[str], ops: _Operands) -> Instruction:
     cfg = ops.cfg
-    if mnemonic in _OPTIONAL and mnemonic not in _extensions(cfg):
-        raise AssemblyError(f"unknown instruction {mnemonic}")
     last = cfg.program_words - 1
 
     def shape(count: int) -> list[str]:
         _expect(args, count, mnemonic)
         return args
 
-    if mnemonic in ("NOP", "HALT", "RET"):
+    if mnemonic in ("NOP", "HALT"):
         shape(0)
-        return {"NOP": Nop(), "HALT": Halt(), "RET": Ret()}[mnemonic]
-    if mnemonic == "CALL":
-        (target,) = shape(1)
-        return Call(ops.target(target, 1023, "call target"))
+        return {"NOP": Nop(), "HALT": Halt()}[mnemonic]
     if mnemonic == "WAITPIN":
         pin, value = shape(2)
         return WaitPin(ops.pin(pin), _bounded(value, ops.labels, 1, "pin value"))
@@ -190,6 +176,11 @@ def _instruction(mnemonic: str, args: list[str], ops: _Operands) -> Instruction:
     if mnemonic in RegRegOp.__members__:
         rd, rs = shape(2)
         return RegReg(RegRegOp[mnemonic], ops.register(rd), ops.register(rs))
+    if mnemonic in BankOp.__members__:
+        rd, bank = shape(2)
+        return Bank(
+            BankOp[mnemonic], ops.register(rd), _bounded(bank, ops.labels, 31, "bank")
+        )
     if mnemonic in UnaryOp.__members__:
         (rd,) = shape(1)
         return Unary(UnaryOp[mnemonic], ops.register(rd))
@@ -268,13 +259,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=pathlib.Path, help="assembly input file")
     parser.add_argument("-o", "--output", type=pathlib.Path, help="hex output file")
-    parser.add_argument("--isa", choices=sorted(CONFIGS), default=BASE.name)
+    parser.add_argument("--input-pins", type=int, default=15)
+    parser.add_argument("--output-pins", type=int, default=16)
     parser.add_argument(
         "--disassemble", action="store_true", help="print an annotated listing"
     )
     args = parser.parse_args()
 
-    cfg = CONFIGS[args.isa]
+    cfg = IsaConfig(input_pins=args.input_pins, output_pins=args.output_pins)
     image = assemble_image(args.source.read_text(), cfg)
     if args.disassemble:
         output = image.disassemble()

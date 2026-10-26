@@ -1,32 +1,30 @@
-# Programmable Protocol Emulator
+# Programmable Pin Processor
 
 ## How it works
 
-This project implements a small programmable processor optimized for
-cycle-accurate GPIO operations. Firmware programs will read and write pins,
-wait for precise intervals, shift data, and branch on sampled inputs. The
-initial protocol targets are UART, SPI, and I2C.
+An autonomous processor reads synchronized input pins, executes uploaded
+firmware with private RAM, and drives output values/enables. The core has
+256×16-bit instructions, four 8-bit registers, 256 bytes of RAM, and configurable
+1..256 input/output counts. The Tiny Tapeout wrapper exposes 15 inputs and
+16 outputs, including eight bidirectional uio pads. ui[7] selects configuration;
+there is no execution-time host request/response layer.
 
-The first version has 64 16-bit program words, four 8-bit registers, an 8-bit
-delay counter, and eight independently controlled bidirectional pins. Programs
-are uploaded after reset through the dedicated input pins. See
-[the design report](design.md) for the ISA and external interface.
+See [the current architecture](pin_processor.md), [examples](../firmware/README.md),
+and [current status](../README.md). Earlier runtime studies are historical.
 
 ## How to test
 
-Install uv and an RTL simulator, then run:
-
 ```sh
 uv sync --locked
-uv run make -C test
+uv run --locked pytest
+uv run --locked make -B -C test
 ```
 
-Use `SIM=verilator` to select Verilator instead of the default Icarus Verilog
-simulator. Automated tests upload and execute the UART, SPI, and I2C firmware
-and verify the resulting waveforms and sampled data.
+Use SIM=verilator for the second simulator. Tests load complete example programs
+and check GPIO waveforms and pin-visible received data. Physical implementation
+and mapped tests must be regenerated for this architecture.
 
 ## External hardware
 
-No external hardware is required for software simulation. An FPGA development
-board and Pmod breakouts may later be used for interoperability testing with
-real UART, SPI, and I2C devices.
+Simulation needs no external hardware. I2C uses external pullups on real boards.
+FPGA/board interoperability, CDC/MTBF signoff, and full protocol stacks remain open.

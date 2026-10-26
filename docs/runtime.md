@@ -1,3 +1,6 @@
+> Historical architecture: superseded by [pin-v1](pin_processor.md).
+> Results and instructions below apply to the previous design only.
+
 # Generic runtime interface v1
 
 The default ASIC contains a 128x16 instruction memory, four 8-bit registers,

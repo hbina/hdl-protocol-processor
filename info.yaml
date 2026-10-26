@@ -19,32 +19,29 @@ project:
   source_files:
     - "project.v"
     - "protocol_core.v"
-    - "runtime_fifo.v"
-    - "runtime_store.v"
-    - "runtime_bridge.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "Config/runtime token bit 0"
-  ui[1]: "Config/runtime token bit 1"
-  ui[2]: "Config/runtime token bit 2"
-  ui[3]: "Config/runtime token bit 3"
-  ui[4]: "Config/runtime token bit 4"
-  ui[5]: "Config/runtime token bit 5"
-  ui[6]: "Configuration strobe / runtime request toggle"
+  ui[0]: "Configuration data 0 / input pin 8"
+  ui[1]: "Configuration data 1 / input pin 9"
+  ui[2]: "Configuration data 2 / input pin 10"
+  ui[3]: "Configuration data 3 / input pin 11"
+  ui[4]: "Configuration data 4 / input pin 12"
+  ui[5]: "Configuration data 5 / input pin 13"
+  ui[6]: "Configuration strobe / input pin 14"
   ui[7]: "Configuration mode"
 
   # Outputs
-  uo[0]: "Runtime response or loader status bit 0"
-  uo[1]: "Runtime response or loader status bit 1"
-  uo[2]: "Runtime response or loader status bit 2"
-  uo[3]: "Runtime response or loader status bit 3"
-  uo[4]: "Runtime response or loader status bit 4"
-  uo[5]: "Runtime response or loader status bit 5"
-  uo[6]: "Runtime error / loader status bit 6"
-  uo[7]: "Runtime acknowledgement / loader status bit 7"
+  uo[0]: "Output pin 8 / loader status bit 0"
+  uo[1]: "Output pin 9 / loader status bit 1"
+  uo[2]: "Output pin 10 / loader status bit 2"
+  uo[3]: "Output pin 11 / loader status bit 3"
+  uo[4]: "Output pin 12 / loader status bit 4"
+  uo[5]: "Output pin 13 / loader status bit 5"
+  uo[6]: "Output pin 14 / loader status bit 6"
+  uo[7]: "Output pin 15 / loader status bit 7"
 
   # Bidirectional pins
   uio[0]: "Programmable protocol pin 0"

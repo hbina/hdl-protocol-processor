@@ -8,8 +8,27 @@ import sys
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from tools.assembler import assemble_image
-from tools.program import Image
+from tools.isa import (
+    ADDI,
+    CMPI,
+    DJNZ,
+    JFAIL,
+    JMP,
+    LDI,
+    LOAD,
+    Label,
+    NOP,
+    OEBIT,
+    OUTBIT,
+    SHR,
+    STORE,
+    WAIT,
+    r0,
+    r1,
+    r2,
+    r3,
+)
+from tools.program import Comment, Image, Program
 
 
 def generate(
@@ -31,35 +50,63 @@ def generate(
         raise ValueError("payload must contain 1..64 bytes")
     if not 0 <= tx_pin < 8:
         raise ValueError("TX must use a bidirectional output pin 0..7")
-    lines = [
-        f"# 8N1 RAM transmitter: clock={clock_hz}, baud={baud}, bit_clocks={period}.",
-        "# Payload is initialized by firmware, then repeated without reload.",
-        "LDI r1, 0",
-    ]
-
-    def emit(text: str) -> None:
-        lines.extend(text.strip().splitlines())
+    data = Label("data")
+    frame = Label("frame")
+    next_frame = Label("next_frame")
+    no_wrap = Label("no_wrap")
+    program = Program(
+        [
+            Comment(
+                f"8N1 RAM transmitter: clock={clock_hz}, baud={baud}, bit_clocks={period}."
+            ),
+            Comment(
+                "Payload is initialized by firmware, then repeated without reload."
+            ),
+            LDI(r1, 0),
+        ]
+    )
 
     def delay(clocks: int) -> None:
         while clocks:
             span = min(clocks, 256)
-            lines.append(f"WAIT {span - 1}")
+            program.add(WAIT(span - 1))
             clocks -= span
 
     for byte in payload:
-        emit(f"LDI r0, {byte}\nSTORE r0, r1\nADDI r1, 1")
-    emit(f"LDI r3, 1\nOUTBIT r3, {tx_pin}\nOEBIT r3, {tx_pin}\nLDI r1, 0")
+        program.extend([LDI(r0, byte), STORE(r0, r1), ADDI(r1, 1)])
+    program.extend([LDI(r3, 1), OUTBIT(r3, tx_pin), OEBIT(r3, tx_pin), LDI(r1, 0)])
     delay(period)
-    emit(f"frame:\nLDI r0, 0\nOUTBIT r0, {tx_pin}\nLOAD r0, r1\nLDI r2, 8\nLDI r3, 1")
+    program.extend(
+        [
+            frame,
+            LDI(r0, 0),
+            OUTBIT(r0, tx_pin),
+            LOAD(r0, r1),
+            LDI(r2, 8),
+            LDI(r3, 1),
+        ]
+    )
     delay(period - 5)
-    emit(f"data:\nOUTBIT r0, {tx_pin}\nSHR r0")
+    program.extend([data, OUTBIT(r0, tx_pin), SHR(r0)])
     delay(period - 3)
-    emit(
-        f"DJNZ r2, data\nOUTBIT r3, {tx_pin}\nADDI r1, 1\nCMPI r1, {len(payload)}\nJFAIL no_wrap\nLDI r1, 0\nJMP next_frame\nno_wrap:\nNOP\nNOP\nnext_frame:"
+    program.extend(
+        [
+            DJNZ(r2, data),
+            OUTBIT(r3, tx_pin),
+            ADDI(r1, 1),
+            CMPI(r1, len(payload)),
+            JFAIL(no_wrap),
+            LDI(r1, 0),
+            JMP(next_frame),
+            no_wrap,
+            NOP(),
+            NOP(),
+            next_frame,
+        ]
     )
     delay(period - 8)
-    emit("JMP frame")
-    return assemble_image("\n".join(lines) + "\n")
+    program.extend([JMP(frame)])
+    return program.link()
 
 
 def main() -> None:

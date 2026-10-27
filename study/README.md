@@ -1,14 +1,16 @@
-# Historical studies — previous architecture
+# Retired study source
 
-These experiments target the superseded request/queue processor and experimental
-ISA variants. They are preserved at their original paths with their recorded
-successes, failures, and evidence. They are excluded from active CI and may no
-longer import or run with the current tools. They establish no coverage for the
-pin-driven processor. No compatibility layer or frozen toolchain is provided.
+The old protocol_exploration tree, predecessor chains, RTL-patching runners and
+associated tests/artifacts have been removed. They targeted the superseded runtime
+and experimental ISAs and were already excluded from active verification.
 
-The last pre-refactor source tree is the parent of the `refactor/pin-driven-core`
-branch. The separate `bookkeeping/study-refactor-snapshot` branch preserves the
-paused study-framework refactor and is not part of this architecture.
+Historical findings and JSON evidence remain in docs. Source is recoverable from
+commit `c1b6dfc`; the old runtime architecture as a whole is at `efa3001`.
+See [Git recovery instructions](../docs/source_history.md) and the
+[typed-construction audit](../docs/typed_instruction_audit.md).
 
-See `docs/pin_processor.md` for the active design and `firmware/README.md` for
-small standalone examples.
+The separate `bookkeeping/study-refactor-snapshot` branch preserves the paused
+framework refactor. It is not part of the current design.
+
+Use the [current architecture](../docs/pin_processor.md) and
+[standalone firmware](../firmware/README.md) for active development.

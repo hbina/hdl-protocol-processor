@@ -1,5 +1,8 @@
 # Historical runtime dashboard
 
+Source links/commands below refer to retired versions. Use the
+[Git recovery index](source_history.md) for files removed from the current checkout.
+
 Superseded by the pin-driven architecture on 2026-10-26. All results below
 apply to the old source tree, not to the current RTL.
 

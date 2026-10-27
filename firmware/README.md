@@ -26,8 +26,8 @@ allows clock stretching, and intentionally ends with SCL low after ACK sampling;
 it does not implement a full transaction or STOP sequence. Input samples include
 synchronizer latency. RAM must be initialized before reads.
 
-`historical/` contains superseded request-based firmware and is excluded from
-active snapshots and validation.
+Superseded request-based firmware has been removed. See
+[Git recovery instructions](../docs/source_history.md) for its source and old evidence.
 
 ## Continuous UART programs
 

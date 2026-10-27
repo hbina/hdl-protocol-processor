@@ -4,6 +4,8 @@ from pathlib import Path
 import cocotb
 from cocotb.triggers import Timer
 from tools.assembler import assemble
+from tools.program import Program
+from tools.isa import IN, JMP, LDI, Label, OE, OUT, r0, r1, r2
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -16,7 +18,7 @@ async def tick(dut, count=1):
         await Timer(10, unit="ns")
 
 
-async def load(dut, name=None, source=None):
+async def load(dut, name=None, *, program: Program | None = None):
     dut.ena.value = 1
     dut.rst_n.value = 0
     dut.ui_in.value = 128
@@ -24,9 +26,10 @@ async def load(dut, name=None, source=None):
     await tick(dut, 3)
     dut.rst_n.value = 1
     await tick(dut, 3)
-    words = assemble(
-        source if source is not None else (ROOT / "firmware" / name).read_text()
-    )
+    if program is not None:
+        words = program.link().words
+    else:
+        words = assemble((ROOT / "firmware" / name).read_text())
     for word in words:
         for shift in (0, 6, 12):
             value = 128 | ((word >> shift) & 63)
@@ -177,16 +180,18 @@ async def all_wrapper_pins(dut):
     """Both banks, ui[6] reuse, pause, and reset via physical wrapper ports."""
     await load(
         dut,
-        source="""
-        LDI r2,255
-        OE r2,0
-    loop:
-        IN r0,0
-        OUT r0,0
-        IN r1,1
-        OUT r1,1
-        JMP loop
-    """,
+        program=Program(
+            [
+                LDI(r2, 255),
+                OE(r2, 0),
+                Label("loop"),
+                IN(r0, 0),
+                OUT(r0, 0),
+                IN(r1, 1),
+                OUT(r1, 1),
+                JMP(Label("loop")),
+            ]
+        ),
     )
     for low, high in [(0xA5, 0x53), (0x3C, 0x2C), (255, 127), (0, 0)]:
         dut.uio_in.value = low

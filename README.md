@@ -31,7 +31,9 @@ adds latency. The production wrapper provides 15 inputs and 16 outputs at a
 
 Historical runtime/protocol and physical results remain in
 [the previous dashboard](docs/historical_runtime_status.md),
-[historical studies](study/README.md), and their linked reports. They are not
+[source recovery index](docs/source_history.md), and their linked reports.
+Obsolete study/runtime source and artifacts have been removed; their versions
+remain recoverable from Git. They are not
 coverage for this processor. The paused framework refactor is preserved only
 on `bookkeeping/study-refactor-snapshot`.
 
@@ -39,7 +41,7 @@ on `bookkeeping/study-refactor-snapshot`.
 
 | Check | Evidence |
 |---|---|
-| Active Python checks | 139 passed, including 60 UART generation checks; five core configurations and four invalid hardware configurations retained |
+| Active Python checks | 190 passed, including 47 frozen pre-conversion profiles and parser-free construction checks; active core/UART coverage retained |
 | Core simulations | Two groups in each configuration; all 65,536 instruction words checked per configuration |
 | Pin-only wrapper regressions | 15 passed in Icarus 12.0 and 15 passed in Verilator 5.038, including nine UART groups per simulator |
 | Strict Pyright / Ruff | 0 errors; formatter applied |
@@ -47,8 +49,11 @@ on `bookkeeping/study-refactor-snapshot`.
 | iCE40 FPGA synthesis, old → pin-v1 | LUT4: 3,230 → 586 (−81.86%); flip-flops: 2,851 → 174 (−93.90%); 4-Kbit RAM blocks: 3 → 2; [comparison](docs/pin_fpga_comparison.json) |
 | Routed/mapped ASIC verification | Blocked before synthesis: no compatible container engine |
 
-[UART commands, source hashes, XML results and completion audit](docs/uart_verification.json)
-record current firmware evidence. The [baseline architecture/synthesis record](docs/pin_processor_verification.json)
+[Typed-construction audit](docs/typed_instruction_audit.md) records converted sites,
+intentional text interfaces and removed archival code.
+[Current source hashes and results](docs/typed_instruction_verification.json)
+verify exact word/symbol preservation. The [earlier UART record](docs/uart_verification.json)
+remains historical. The [baseline architecture/synthesis record](docs/pin_processor_verification.json)
 still applies to the unchanged RTL; its older test/source snapshots remain historical. Generic cell counts are not
 mapped ASIC area, timing, or physical-fit results. The FPGA comparison also uses
 synthesis only: it does not establish maximum frequency or routed FPGA fit.
@@ -69,8 +74,9 @@ uv run ruff format .
 ```
 
 Install Icarus Verilog and Verilator >=5.036 to run both simulators; CI builds
-the tested Verilator 5.038 release. Old runtime/study
-tests are explicitly excluded from active collection and CI. All Python tools
+the tested Verilator 5.038 release. A local source build can be selected with
+`export PATH="$PWD/.asic-tools/verilator/bin:$PATH"`. Obsolete runtime/study
+tests have been removed; no legacy collection shim is needed. All Python tools
 use uv; no dependency changes are required. See [the physical flow](docs/physical_flow.md)
 for the pinned ASIC toolchain and new-design build commands.
 
@@ -80,6 +86,7 @@ for the pinned ASIC toolchain and new-design build commands.
 - [x] Expand instruction memory to 256 words and define the incompatible pin-v1 ISA.
 - [x] Add independent pin-copy, capture/replay, UART, SPI, and I2C examples.
 - [x] Complete and record the active RTL/tool/synthesis verification.
+- [x] Use typed instructions in all Python builders/test programs and remove obsolete archival code.
 - [ ] Restore the physical tool environment and route the new 6×4, 50 MHz implementation.
 - [ ] Pass new mapped regressions and all configured timing/DRC/LVS checks.
 - [x] Finish and record UART RAM TX/RX/echo, timing and error-recovery verification.
@@ -106,5 +113,5 @@ capacity figures and mapped tests do not establish results for this revision.
 - `tools/`: typed ISA, assembler, linker, and active firmware snapshots.
 - `test/active/`: active Python and parameterized-core regressions.
 - `test/pin_examples.py`: pin-only RTL/mapped example checks.
-- `study/`: historical experiments, excluded from active validation.
+- `study/`: retired source recovery index; reports remain in docs.
 - `docs/`: current architecture and preserved historical evidence.

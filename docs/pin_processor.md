@@ -124,7 +124,9 @@ Opcode 0x6 and every unlisted encoding are reserved.
 ## Tools and examples
 
 `tools/isa.py` is the typed encoding/decoding definition. `tools/program.py`
-links labels, and `tools/assembler.py` parses text. Default pin counts match
+links labels, and `tools/assembler.py` parses handwritten assembly and generated
+listings. Python generators and executable test fixtures build typed instructions
+directly; see the [construction audit](typed_instruction_audit.md). Default pin counts match
 the wrapper (15 inputs, 16 outputs). For another hardware configuration:
 
 ```sh
@@ -138,7 +140,7 @@ Generate generic synthesis measurements with `uv run --locked python -m tools.ch
 
 No historical ISA variants or compatibility aliases are provided. The new
 `test/golden/pin_words.json` snapshot covers only active firmware, including the three standalone UART listings; the old
-snapshot remains historical. See [examples](../firmware/README.md).
+snapshot was removed and is recoverable through [Git history](source_history.md). See [examples](../firmware/README.md).
 
 ## Validation boundary
 

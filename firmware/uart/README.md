@@ -20,8 +20,9 @@ uv run --locked python -m firmware.uart.receive --capacity 128 --baud 9600 -o /t
 ```
 
 Direct-file invocation, for example `uv run --locked python firmware/uart/echo.py`,
-also works. Each generator constructs its own complete program and needs no
-checked-in assembly artifact to run. Upload the generated words using the normal
+also works. Each generator constructs its own complete typed `Program` with instruction
+constructors and `Label` objects, then links it directly. Text assembly is an output
+listing only; no checked-in artifact or text parser is needed for generation. Upload the generated words using the normal
 [configuration interface](../../docs/pin_processor.md); keep external RX idle high
 while loading. Wait for READY before the first received frame.
 
@@ -122,8 +123,8 @@ back-to-back RX at four baud settings and three peer bit durations, capacity/ove
 boundaries, false starts, invalid stops, sustained break, error recovery, and the
 sequential echo READY contract. RAM is inspected only in RTL to verify storage and
 counters; external pin checks also apply to mapped hardware once available.
-Current results: 139 Python checks (60 UART generation checks), strict Pyright
-with zero errors, and all 15 wrapper groups passing in each simulator, including
-the nine UART groups. The [verification record](../../docs/uart_verification.json)
-contains commands, source hashes, XML results and a goal-by-goal audit. No board, new routed timing,
+The original [UART verification record](../../docs/uart_verification.json) records
+behavior before the typed-builder conversion. The current
+[typed-construction record](../../docs/typed_instruction_verification.json) includes
+the 47 exact pre/post profile comparisons and fresh suite results. No board, new routed timing,
 or mapped protocol result is claimed.

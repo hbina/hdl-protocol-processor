@@ -8,8 +8,33 @@ import sys
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from tools.assembler import assemble_image
-from tools.program import Image
+from tools.isa import (
+    ADDI,
+    CMPI,
+    CMPLTI,
+    DJNZ,
+    INBIT,
+    JFAIL,
+    JMP,
+    JZ,
+    LDI,
+    LOAD,
+    Label,
+    OE,
+    OR,
+    OUT,
+    OUTBIT,
+    ROR,
+    SHR,
+    STORE,
+    WAIT,
+    WAITPIN,
+    r0,
+    r1,
+    r2,
+    r3,
+)
+from tools.program import Comment, Image, Program
 
 
 def generate(
@@ -25,62 +50,130 @@ def generate(
         raise ValueError("rounded baud differs from requested baud by more than 1%")
     if not 1 <= capacity <= 240:
         raise ValueError("RX capacity must be 1..240 bytes")
-    lines = [
-        f"# 8N1 RX: clock={clock_hz}, baud={baud}, bit_clocks={period}.",
-        f"# RAM[0..{capacity - 1}] keeps first {capacity} bytes; full buffer drops new bytes.",
-        "# RAM[241]=false starts, [242]=framing errors, [243]=drops (modulo 256).",
-    ]
-
-    def emit(text: str) -> None:
-        lines.extend(text.strip().splitlines())
+    arm = Label("arm")
+    data = Label("data")
+    false_start = Label("false_start")
+    framing_error = Label("framing_error")
+    overflow = Label("overflow")
+    ready = Label("ready")
+    start = Label("start")
+    start_valid = Label("start_valid")
+    program = Program(
+        [
+            Comment(f"8N1 RX: clock={clock_hz}, baud={baud}, bit_clocks={period}."),
+            Comment(
+                f"RAM[0..{capacity - 1}] keeps first {capacity} bytes; full buffer drops new bytes."
+            ),
+            Comment(
+                "RAM[241]=false starts, [242]=framing errors, [243]=drops (modulo 256)."
+            ),
+        ]
+    )
 
     def delay(clocks: int) -> None:
         while clocks:
             span = min(clocks, 256)
-            lines.append(f"WAIT {span - 1}")
+            program.add(WAIT(span - 1))
             clocks -= span
 
-    emit("LDI r0, 0\nOUT r0, 0\nOUT r0, 1\nLDI r1, 252\nOE r1, 0\nLDI r2, 241")
+    program.extend(
+        [LDI(r0, 0), OUT(r0, 0), OUT(r0, 1), LDI(r1, 252), OE(r1, 0), LDI(r2, 241)]
+    )
     for _ in range(3):
-        emit("STORE r0, r2\nADDI r2, 1")
-    emit("LDI r3, 0\narm:\nWAITPIN 1, 1")
+        program.extend([STORE(r0, r2), ADDI(r2, 1)])
+    program.extend([LDI(r3, 0), arm, WAITPIN(1, 1)])
     # Require a sampled idle interval after boot or errors, never between good
     # consecutive frames. Every qualifying sample is separated by three clocks.
     samples = (period + 2) // 3 + 1
     block = 0
     while samples:
         count = min(samples, 255)
-        emit(
-            f"LDI r2, {count}\nidle_{block}:\nINBIT r1, 1\nJZ r1, arm\nDJNZ r2, idle_{block}"
+        idle = Label(f"idle_{block}")
+        program.extend(
+            [
+                LDI(r2, count),
+                idle,
+                INBIT(r1, 1),
+                JZ(r1, arm),
+                DJNZ(r2, idle),
+            ]
         )
         samples -= count
         block += 1
-    emit(
-        "LDI r1, 1\nready:\nOUTBIT r1, 2\nstart:\nWAITPIN 1, 0\nLDI r1, 0\nOUTBIT r1, 2\nOUTBIT r1, 3"
+    program.extend(
+        [
+            LDI(r1, 1),
+            ready,
+            OUTBIT(r1, 2),
+            start,
+            WAITPIN(1, 0),
+            LDI(r1, 0),
+            OUTBIT(r1, 2),
+            OUTBIT(r1, 3),
+        ]
     )
     delay(period // 2 - 4)
-    emit(
-        "INBIT r1, 1\nJZ r1, start_valid\nJMP false_start\nstart_valid:\nLDI r0, 0\nLDI r2, 8"
+    program.extend(
+        [
+            INBIT(r1, 1),
+            JZ(r1, start_valid),
+            JMP(false_start),
+            start_valid,
+            LDI(r0, 0),
+            LDI(r2, 8),
+        ]
     )
     delay(period - 4)
-    emit("data:\nINBIT r1, 1\nSHR r0\nROR r1\nOR r0, r1")
+    program.extend([data, INBIT(r1, 1), SHR(r0), ROR(r1), OR(r0, r1)])
     delay(period - 5)
-    emit(
-        f"DJNZ r2, data\nINBIT r1, 1\nJZ r1, framing_error\nCMPLTI r3, {capacity}\nJFAIL overflow\nSTORE r0, r3\nADDI r3, 1\nOUT r0, 1\nOUTBIT r1, 3\nCMPI r3, {capacity}\nJFAIL ready\nOUTBIT r1, 7\nJMP ready"
+    program.extend(
+        [
+            DJNZ(r2, data),
+            INBIT(r1, 1),
+            JZ(r1, framing_error),
+            CMPLTI(r3, capacity),
+            JFAIL(overflow),
+            STORE(r0, r3),
+            ADDI(r3, 1),
+            OUT(r0, 1),
+            OUTBIT(r1, 3),
+            CMPI(r3, capacity),
+            JFAIL(ready),
+            OUTBIT(r1, 7),
+            JMP(ready),
+        ]
     )
     # On a good stop bit r1=1, so the fast non-full path reaches the next
     # start wait within 12 clocks. Slow-path counters never touch payload RAM.
     for label, pin, address, resume in [
-        ("false_start", 4, 241, "arm"),
-        ("framing_error", 5, 242, "arm"),
+        (false_start, 4, 241, arm),
+        (framing_error, 5, 242, arm),
     ]:
-        emit(
-            f"{label}:\nLDI r1, 1\nOUTBIT r1, {pin}\nLDI r2, {address}\nLOAD r1, r2\nADDI r1, 1\nSTORE r1, r2\nJMP {resume}"
+        program.extend(
+            [
+                label,
+                LDI(r1, 1),
+                OUTBIT(r1, pin),
+                LDI(r2, address),
+                LOAD(r1, r2),
+                ADDI(r1, 1),
+                STORE(r1, r2),
+                JMP(resume),
+            ]
         )
-    emit(
-        "overflow:\nOUTBIT r1, 6\nLDI r2, 243\nLOAD r1, r2\nADDI r1, 1\nSTORE r1, r2\nLDI r1, 1\nJMP ready"
+    program.extend(
+        [
+            overflow,
+            OUTBIT(r1, 6),
+            LDI(r2, 243),
+            LOAD(r1, r2),
+            ADDI(r1, 1),
+            STORE(r1, r2),
+            LDI(r1, 1),
+            JMP(ready),
+        ]
     )
-    return assemble_image("\n".join(lines) + "\n")
+    return program.link()
 
 
 def main() -> None:

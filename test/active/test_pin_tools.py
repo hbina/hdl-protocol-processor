@@ -189,7 +189,7 @@ def test_labels_and_program():
 
 def test_active_snapshot():
     assert snapshot() == json.loads(GOLDEN.read_text())
-    assert len(snapshot()) == 5
+    assert len(snapshot()) == 8
     assert all(len(entry["words"]) <= 256 for entry in snapshot().values())
 
 

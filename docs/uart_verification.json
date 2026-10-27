@@ -1,0 +1,1153 @@
+{
+  "recorded_at": "2026-10-26T16:27:29.880424+00:00",
+  "base_commit": "6fed135d924974c05a11dedc10bfbaa1b07a3b3b",
+  "architecture": "pin-v1 unchanged; UART firmware only",
+  "sources": {
+    ".github/workflows/test.yaml": "b55755b49b8fc4820d0ee330d0b31441211f96a20ea1b6f546fa26de384b60a9",
+    "firmware/capture_replay.asm": "e4f4c5b69d95e33f7cb730f75edf28de4152bb25c976d7dea3ad64e971540e4e",
+    "firmware/i2c_write.asm": "d7bc21d8799755dbb2a8f473c4b6ce33cc2a2fa918668434cff5637c5eed6389",
+    "firmware/pin_copy.asm": "97cb72d06a0ce2f51448bbb8a1eb5964aad004adc3eb8f3689ea59443e265c48",
+    "firmware/spi_mode0.asm": "8d2f486b1622a4e9c1366450021d424ff10c4e4ee01a596264babba54eb5af93",
+    "firmware/uart/echo.asm": "365ca56e5886164be4950d3422d5682d24c683503b655ff4a471cb45007df480",
+    "firmware/uart/echo.py": "3a85e67b3a1c270d3a0b7dfe1ff30bc07fd0f71c4e6d127494cac887cf9ba28b",
+    "firmware/uart/receive.asm": "daeeddef92d1f309051733e0aac21d626e17f721a42d7a2b286be65c578a979d",
+    "firmware/uart/receive.py": "28e9287760039e9857840f0160336701bcea1c6a5840ca7bc53a4c24e5243d23",
+    "firmware/uart/transmit.asm": "f57a909ea21f0fb341b1d6f829b566fae2d0381a213073ff22e95573aa3e2a8c",
+    "firmware/uart/transmit.py": "5f438ab194e1356cf8138ec123648de3e61387f5d588531ef756e6d9e1a8c54f",
+    "firmware/uart_tx.asm": "d479ad11f2115ad57cba7db5cc458cc55dc6a84030f250f96dd44109e67d2534",
+    "pyproject.toml": "ca132037aae7b752711cc577ccb92de3ef3a4b022ef0b0975e8a78ab86d5672e",
+    "src/project.v": "f55d1547201127e28c81e45bb8dc697da9b1584f78968e255151da39cb6d3e57",
+    "src/protocol_core.v": "2ac332f575c7e838d9f14b27f8da9a5e39bf806f782a12aa333b2fdfc6ece8e3",
+    "test/Makefile": "c33c05c7a3770f8315f5cb7824ea2338efd96a4ddfbb5aaee2d3f07ce759dfc1",
+    "test/active/test_pin_core.py": "5f4f4fc9553e933f303f69d123f668ac7b71c890af7dfed988bfaf6e76117f9a",
+    "test/active/test_pin_tools.py": "29c857afbb3124a828d86811fc36cabc328fb4cf1fa1ac3204523565c00c4a1d",
+    "test/active/test_uart_firmware.py": "4bd72bfe21da23048a35b5aaae2bd8fcb56f99507eb018cac94393c8759cce48",
+    "test/conftest.py": "28d5d7c3c0bbb062484b3ebecd3e6cc07cee516cdf8b85616207d3e0190f870f",
+    "test/golden/pin_words.json": "0264943acfb739865f4755ea09f9529400e276e345665a692036194061610367",
+    "test/pin_core_checks.py": "c11c640bf0f73936bb8391720ab843028859383bc50a1c7893f14736b1e564dd",
+    "test/pin_core_tb.v": "fafc0a72e04a49aef90d1fbab564e24e1b2ec35a3470811815c187548837f1e3",
+    "test/pin_examples.py": "240fc55b2bd4f5c823f30bcf5442a88a21faedad87f411cd532619b42dc59127",
+    "test/pin_uart.py": "453f1abf3617014fd71b8d50f3e2268cd6fe7e5b241a3f71520cd44eba2d5c0f",
+    "test/tb.v": "63982a38e29e3d4d6e0c26fc771bab7810383994c6e747cdef257933e6b4bd7f",
+    "test/uart_peer.py": "79232a68068a3b00bd68bf1d7ab2e3418b5f1e7f2e4df336e7077a39899a1251",
+    "tools/assembler.py": "9ab985782dcf7b1f51a7d75b9534c388db2b871e8cc51c87c22236f5ffdc06e1",
+    "tools/isa.py": "8d025b46a35230b0aa98e3b62887c144db6bccd392c492cf76502c67faa39da7",
+    "tools/program.py": "aa060dead73fb349c7e1d836a4ad20d7b698911d920846245d1f9c7527b2ffd4",
+    "tools/snapshot_isa.py": "52c52a5709fd2affc624e67c735b830e753c727c2723094b66b74a901f99f9b2",
+    "uv.lock": "5f696596a912f4767fdc78c3e50e94dc439a8742324584c63c5c023df4b271b0"
+  },
+  "hardware": {
+    "unchanged_from": "docs/pin_processor_verification.json",
+    "sha256": {
+      "src/project.v": "f55d1547201127e28c81e45bb8dc697da9b1584f78968e255151da39cb6d3e57",
+      "src/protocol_core.v": "2ac332f575c7e838d9f14b27f8da9a5e39bf806f782a12aa333b2fdfc6ece8e3"
+    },
+    "new_synthesis_or_physical_run": "not required for firmware-only change; no new physical claim"
+  },
+  "commands": {
+    "python": "UV_CACHE_DIR=/tmp/asic-uv-cache uv run --locked pytest -q --junitxml=test/sim_build/uart_pytest.xml",
+    "icarus": "UV_CACHE_DIR=/tmp/asic-uv-cache uv run --locked make -B -C test SIM_BUILD=sim_build/uart_final_icarus COCOTB_RESULTS_FILE=sim_build/uart_final_icarus.xml",
+    "verilator": "PATH=/tmp/pin-verilator-src/bin:$PATH UV_CACHE_DIR=/tmp/asic-uv-cache uv run --locked make -B -C test SIM=verilator COCOTB_RESULTS_FILE=sim_build/uart_full_verilator.xml",
+    "pyright": "UV_CACHE_DIR=/tmp/asic-uv-cache uv run --locked pyright",
+    "format": "UV_CACHE_DIR=/tmp/asic-uv-cache uv run ruff format .",
+    "snapshot": "UV_CACHE_DIR=/tmp/asic-uv-cache uv run --locked python -m tools.snapshot_isa"
+  },
+  "python": {
+    "path": "test/sim_build/uart_pytest.xml",
+    "sha256": "6a7b278bb8b3f8643b9fc470b1021f49d28dd1683fcec008a15f08698c9edcdf",
+    "passed": 139,
+    "tests": [
+      {
+        "classname": "test.active.test_pin_core",
+        "name": "test_core[1-1]",
+        "time": "1.455"
+      },
+      {
+        "classname": "test.active.test_pin_core",
+        "name": "test_core[8-8]",
+        "time": "1.694"
+      },
+      {
+        "classname": "test.active.test_pin_core",
+        "name": "test_core[15-16]",
+        "time": "1.975"
+      },
+      {
+        "classname": "test.active.test_pin_core",
+        "name": "test_core[17-9]",
+        "time": "2.056"
+      },
+      {
+        "classname": "test.active.test_pin_core",
+        "name": "test_core[256-256]",
+        "time": "9.804"
+      },
+      {
+        "classname": "test.active.test_pin_core",
+        "name": "test_reject_invalid_hardware_counts[0-1]",
+        "time": "0.013"
+      },
+      {
+        "classname": "test.active.test_pin_core",
+        "name": "test_reject_invalid_hardware_counts[1-0]",
+        "time": "0.010"
+      },
+      {
+        "classname": "test.active.test_pin_core",
+        "name": "test_reject_invalid_hardware_counts[257-1]",
+        "time": "0.010"
+      },
+      {
+        "classname": "test.active.test_pin_core",
+        "name": "test_reject_invalid_hardware_counts[1-257]",
+        "time": "0.010"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[PREAD r0,r1]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[PWRITE r0,r1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[CALL 1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[RET]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[SHRC r0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[SETO 1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[SETOE 1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[LDI r4,0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[LDI r0,256]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[INBIT r0,15]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[OUTBIT r0,16]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[IN r0,2]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[OUT r0,2]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[OE r0,-1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[WAITPIN 0,2]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[WAITPIN r4,0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[JMP 256]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[LDI r0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[LDI r0,1,2]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[bad: NOP\\nbad: HALT]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[JMP unknown]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[NOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\n]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_assembly[JMP end\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nNOP\\nend:]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_counts[0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_counts[-1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_counts[257]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_invalid_counts[True]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_branches[0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_branches[63]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_branches[64]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_branches[127]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_branches[128]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_branches[255]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[INBIT r0,14]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[INBIT r0,r0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[OUTBIT r2,r1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[OEBIT r3,15]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[OEBITN r0,r2]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[WAITPIN r3,0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[WAITPIN 14,1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[IN r2,1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[OUT r1,1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[OE r2,1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[CMPI r1,99]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[CMPLTI r2,55]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[CMPLT r3,r0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[JFAIL 255]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[NOP]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[HALT]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[WAIT 255]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[LOAD r1,r1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_round_trip[STORE r2,r2]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[24576]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[28929]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[33792]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[37888]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[45060]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[53249]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[21508]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[62976]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[63492]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[61441]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_reserved[11264]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_dynamic_and_bank_limits",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_timing_and_values",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_labels_and_program",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_active_snapshot",
+        "time": "0.005"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_cli_pin_configuration",
+        "time": "0.083"
+      },
+      {
+        "classname": "test.active.test_pin_tools",
+        "name": "test_generated_isa_table",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-1000000-firmware.uart.transmit]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-1000000-firmware.uart.receive]",
+        "time": "0.002"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-1000000-firmware.uart.echo]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-250000-firmware.uart.transmit]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-250000-firmware.uart.receive]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-250000-firmware.uart.echo]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-115200-firmware.uart.transmit]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-115200-firmware.uart.receive]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-115200-firmware.uart.echo]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-9600-firmware.uart.transmit]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-9600-firmware.uart.receive]",
+        "time": "0.002"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[50000000-9600-firmware.uart.echo]",
+        "time": "0.002"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[25000000-500000-firmware.uart.transmit]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[25000000-500000-firmware.uart.receive]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_supported_timing[25000000-500000-firmware.uart.echo]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[0-1-firmware.uart.transmit]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[0-1-firmware.uart.receive]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[0-1-firmware.uart.echo]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[-1-1-firmware.uart.transmit]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[-1-1-firmware.uart.receive]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[-1-1-firmware.uart.echo]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[50000000-0-firmware.uart.transmit]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[50000000-0-firmware.uart.receive]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[50000000-0-firmware.uart.echo]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[50000000--1-firmware.uart.transmit]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[50000000--1-firmware.uart.receive]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[50000000--1-firmware.uart.echo]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[50000000-2000000-firmware.uart.transmit]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[50000000-2000000-firmware.uart.receive]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_timing[50000000-2000000-firmware.uart.echo]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_tx_payload_bounds[]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_tx_payload_bounds[\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_arbitrary_ram_payload[\\x00]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_arbitrary_ram_payload[\\xff]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_arbitrary_ram_payload[\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\x0c\\r\\x0e\\x0f\\x10\\x11\\x12\\x13\\x14\\x15\\x16\\x17\\x18\\x19\\x1a\\x1b\\x1c\\x1d\\x1e\\x1f !\"#$%&'()*+,-./0123456789:;<=>?]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_arbitrary_ram_payload[\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_tx_pin[-1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_tx_pin[8]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_capacity[0]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_capacity[-1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_bad_capacity[241]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_valid_capacity[1]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_valid_capacity[128]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_valid_capacity[240]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_default_listing[firmware.uart.transmit]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_default_listing[firmware.uart.receive]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_default_listing[firmware.uart.echo]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_no_artifact_or_predecessor_reads[firmware.uart.transmit]",
+        "time": "0.000"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_no_artifact_or_predecessor_reads[firmware.uart.receive]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_no_artifact_or_predecessor_reads[firmware.uart.echo]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_cli[file-transmit]",
+        "time": "0.041"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_cli[file-receive]",
+        "time": "0.036"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_cli[file-echo]",
+        "time": "0.043"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_cli[module-transmit]",
+        "time": "0.038"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_cli[module-receive]",
+        "time": "0.039"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_cli[module-echo]",
+        "time": "0.037"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_program_capacity_is_enforced[firmware.uart.transmit]",
+        "time": "0.002"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_program_capacity_is_enforced[firmware.uart.receive]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_program_capacity_is_enforced[firmware.uart.echo]",
+        "time": "0.001"
+      },
+      {
+        "classname": "test.active.test_uart_firmware",
+        "name": "test_slow_baud_payload_capacity",
+        "time": "0.001"
+      }
+    ]
+  },
+  "icarus": {
+    "path": "test/sim_build/uart_final_icarus.xml",
+    "sha256": "7affe56fd3719d4d0299cbb1a135d2ae67a1530a4ac1d1a0b84a09be22e89425",
+    "passed": 15,
+    "tests": [
+      {
+        "name": "continuous_pin_copy",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "42",
+        "time": "0.00595855712890625",
+        "sim_time_ns": "2760.0",
+        "ratio_time": "463199.38540332904"
+      },
+      {
+        "name": "capture_and_replay",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "62",
+        "time": "0.0091552734375",
+        "sim_time_ns": "5200.0",
+        "ratio_time": "567978.6666666666"
+      },
+      {
+        "name": "uart_tx",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "76",
+        "time": "0.019220352172851562",
+        "sim_time_ns": "15220.0",
+        "ratio_time": "791868.9451225563"
+      },
+      {
+        "name": "spi_mode0",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "104",
+        "time": "0.018627166748046875",
+        "sim_time_ns": "12439.999999999996",
+        "ratio_time": "667841.7694040547"
+      },
+      {
+        "name": "i2c_write",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "129",
+        "time": "0.054107666015625",
+        "sim_time_ns": "33200.0",
+        "ratio_time": "613591.4269599549"
+      },
+      {
+        "name": "all_wrapper_pins",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "175",
+        "time": "0.005700349807739258",
+        "sim_time_ns": "3120.0",
+        "ratio_time": "547334.8312350997"
+      },
+      {
+        "name": "ram_transmit_all_bytes",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "20",
+        "time": "5.823571681976318",
+        "sim_time_ns": "5300560.0",
+        "ratio_time": "910190.5650796718"
+      },
+      {
+        "name": "continuous_receive_and_overflow",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "48",
+        "time": "0.42029833793640137",
+        "sim_time_ns": "366220.0",
+        "ratio_time": "871333.448040938"
+      },
+      {
+        "name": "echo_every_byte",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "74",
+        "time": "7.130191087722778",
+        "sim_time_ns": "5615299.999999999",
+        "ratio_time": "787538.5008501082"
+      },
+      {
+        "name": "receive_phase_and_baud_mismatch",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "94",
+        "time": "106.7402012348175",
+        "sim_time_ns": "114387028.5",
+        "ratio_time": "1071639.6182199456"
+      },
+      {
+        "name": "errors_break_and_recovery",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "123",
+        "time": "0.4019439220428467",
+        "sim_time_ns": "316580.0",
+        "ratio_time": "787622.3090798546"
+      },
+      {
+        "name": "echo_baud_and_busy_contract",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "167",
+        "time": "11.381876707077026",
+        "sim_time_ns": "10163340.0",
+        "ratio_time": "892940.6161710253"
+      },
+      {
+        "name": "echo_busy_traffic_and_recovery",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "193",
+        "time": "0.0739128589630127",
+        "sim_time_ns": "57100.0",
+        "ratio_time": "772531.3402986326"
+      },
+      {
+        "name": "ram_transmit_other_bauds",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "221",
+        "time": "8.520281314849854",
+        "sim_time_ns": "9113620.0",
+        "ratio_time": "1069638.3914127373"
+      },
+      {
+        "name": "receive_capacity_boundaries",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "242",
+        "time": "5.349231719970703",
+        "sim_time_ns": "5072440.0",
+        "ratio_time": "948255.799251071"
+      }
+    ]
+  },
+  "verilator": {
+    "path": "test/sim_build/uart_full_verilator.xml",
+    "sha256": "0331e5cc35d0ad98acada2c4ba7a47624dfded7c460b269baab1b615922b045c",
+    "passed": 15,
+    "tests": [
+      {
+        "name": "continuous_pin_copy",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "42",
+        "time": "0.0024094581604003906",
+        "sim_time_ns": "2760.0",
+        "ratio_time": "1145485.7549970315"
+      },
+      {
+        "name": "capture_and_replay",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "62",
+        "time": "0.0036308765411376953",
+        "sim_time_ns": "5200.0",
+        "ratio_time": "1432161.061133364"
+      },
+      {
+        "name": "uart_tx",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "76",
+        "time": "0.009230375289916992",
+        "sim_time_ns": "15220.0",
+        "ratio_time": "1648903.7034741056"
+      },
+      {
+        "name": "spi_mode0",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "104",
+        "time": "0.00849294662475586",
+        "sim_time_ns": "12439.999999999996",
+        "ratio_time": "1464744.8700241419"
+      },
+      {
+        "name": "i2c_write",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "129",
+        "time": "0.02606368064880371",
+        "sim_time_ns": "33200.0",
+        "ratio_time": "1273803.2071277637"
+      },
+      {
+        "name": "all_wrapper_pins",
+        "classname": "pin_examples",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_examples.py",
+        "lineno": "175",
+        "time": "0.0028901100158691406",
+        "sim_time_ns": "3120.0",
+        "ratio_time": "1079543.679260848"
+      },
+      {
+        "name": "ram_transmit_all_bytes",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "20",
+        "time": "0.8005077838897705",
+        "sim_time_ns": "5300560.0",
+        "ratio_time": "6621497.138033931"
+      },
+      {
+        "name": "continuous_receive_and_overflow",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "48",
+        "time": "0.04905295372009277",
+        "sim_time_ns": "366220.0",
+        "ratio_time": "7465809.339224177"
+      },
+      {
+        "name": "echo_every_byte",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "74",
+        "time": "1.4857523441314697",
+        "sim_time_ns": "5615299.999999999",
+        "ratio_time": "3779432.0313070416"
+      },
+      {
+        "name": "receive_phase_and_baud_mismatch",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "94",
+        "time": "11.912374496459961",
+        "sim_time_ns": "114387028.5",
+        "ratio_time": "9602370.084485907"
+      },
+      {
+        "name": "errors_break_and_recovery",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "123",
+        "time": "0.0516049861907959",
+        "sim_time_ns": "316580.0",
+        "ratio_time": "6134678.514001118"
+      },
+      {
+        "name": "echo_baud_and_busy_contract",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "167",
+        "time": "2.5872135162353516",
+        "sim_time_ns": "10163340.0",
+        "ratio_time": "3928295.804046607"
+      },
+      {
+        "name": "echo_busy_traffic_and_recovery",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "193",
+        "time": "0.01961970329284668",
+        "sim_time_ns": "57100.0",
+        "ratio_time": "2910339.6288780062"
+      },
+      {
+        "name": "ram_transmit_other_bauds",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "221",
+        "time": "1.0858204364776611",
+        "sim_time_ns": "9113620.0",
+        "ratio_time": "8393303.067276996"
+      },
+      {
+        "name": "receive_capacity_boundaries",
+        "classname": "pin_uart",
+        "file": "/mnt/extra_pool/tmp/jane_street_design_asic/test/pin_uart.py",
+        "lineno": "242",
+        "time": "0.5529577732086182",
+        "sim_time_ns": "5072440.0",
+        "ratio_time": "9173286.362476517"
+      }
+    ]
+  },
+  "uart_groups_per_simulator": 9,
+  "pyright": {
+    "exit_code": 0,
+    "output": "0 errors, 0 warnings, 0 informations"
+  },
+  "format": {
+    "exit_code": 0,
+    "output": "192 files left unchanged"
+  },
+  "default_payload_capacity_program_words": {
+    "1000000": {
+      "transmit": 38,
+      "receive": 70,
+      "echo": 69
+    },
+    "250000": {
+      "transmit": 38,
+      "receive": 70,
+      "echo": 69
+    },
+    "115200": {
+      "transmit": 42,
+      "receive": 72,
+      "echo": 74
+    },
+    "9600": {
+      "transmit": 118,
+      "receive": 144,
+      "echo": 203
+    }
+  },
+  "completion_audit": [
+    {
+      "goal": "Arbitrary TX payloads from RAM",
+      "implementation": "firmware/uart/transmit.py initializes and LOADs RAM; echo LOADs a received byte from RAM[0].",
+      "evidence": [
+        "ram_transmit_all_bytes",
+        "echo_every_byte",
+        "test_arbitrary_ram_payload"
+      ]
+    },
+    {
+      "goal": "Repeated TX including back-to-back frames without reset/reload",
+      "implementation": "Repeating pointer-wrapped RAM buffer, exactly one stop bit between frames.",
+      "evidence": [
+        "ram_transmit_all_bytes: all 256 values in four 64-byte buffers, each repeated twice",
+        "ram_transmit_other_bauds: two buffer passes at 115200/9600; exact pin-edge timing"
+      ]
+    },
+    {
+      "goal": "Basic RX: start, eight samples, stop, RAM storage",
+      "implementation": "Mid-start check, LSB-first bit samples, stop validation; RAM storage before publication.",
+      "evidence": [
+        "echo_every_byte: 256 values in a single execution",
+        "continuous_receive_and_overflow",
+        "errors_break_and_recovery"
+      ]
+    },
+    {
+      "goal": "Continuous bounded RX and defined full-buffer behavior",
+      "implementation": "Capacities 1..240; drop-new preserves the first capacity bytes; FULL and overflow flags, modulo-256 drop counter.",
+      "evidence": [
+        "receive_phase_and_baud_mismatch: back-to-back frames",
+        "continuous_receive_and_overflow: capacity16,19 drops",
+        "receive_capacity_boundaries: capacities1/240,261/2 drops; counter wrap"
+      ]
+    },
+    {
+      "goal": "False starts, framing errors, overflow and recovery",
+      "implementation": "Sticky flags and initialized counters; reject malformed frames; one framing error during sustained break; sampled idle rearm. Full RX buffer requires firmware restart to reclaim.",
+      "evidence": [
+        "errors_break_and_recovery: 40/120/200ns false starts, invalid stop,100us break, then valid0xa6 in RX/echo",
+        "continuous_receive_and_overflow",
+        "receive_capacity_boundaries"
+      ]
+    },
+    {
+      "goal": "Configurable clock/baud firmware timing",
+      "implementation": "Nearest integer bit period, minimum50 clocks/bit, generation rejects excessive rounding or program size.",
+      "evidence": [
+        "receive_phase_and_baud_mismatch: 1M/250k/115200/9600 with peer bit durations98/100/102 percent,32 back-to-back frames each",
+        "echo_baud_and_busy_contract: 50MHz at1M/115200/9600 and25MHz at500k",
+        "ram_transmit_other_bauds",
+        "test_supported_timing",
+        "test_bad_timing",
+        "test_slow_baud_payload_capacity"
+      ]
+    },
+    {
+      "goal": "Autonomous sequential 8N1 echo at1M with explicit busy limits",
+      "implementation": "RX -> RAM[0] -> TX; READY low throughout receive/transmit/rearm; sender waits for READY plus one idle bit.",
+      "evidence": [
+        "echo_every_byte",
+        "echo_baud_and_busy_contract",
+        "echo_busy_traffic_and_recovery",
+        "firmware/uart/README.md"
+      ]
+    }
+  ],
+  "deferred_as_requested": [
+    "Parity and alternative framing (data widths/additional stop bits)",
+    "Simultaneous TX/RX scheduling"
+  ],
+  "limitations": [
+    "Sequential echo requires cooperative sender; arbitrary busy traffic may be lost or misframed.",
+    "RX drop-new buffer has no consumer/reclamation interface; restart/reload empties it.",
+    "Error counters wrap modulo256; status flags are sticky until restart.",
+    "Minimum50 core clocks per bit; image must fit256 words. Payload length is1..64 with a tighter capacity limit at slow baud.",
+    "Idle qualification samples every3 clocks (4 at long-interval chunk boundaries); not a general noise filter.",
+    "Selected digital phase/mismatch coverage does not establish real-device interoperability or CDC/MTBF signoff.",
+    "No new ASIC physical or mapped results; the existing missing-container-engine blocker remains."
+  ]
+}

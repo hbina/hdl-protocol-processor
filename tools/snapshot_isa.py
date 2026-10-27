@@ -12,7 +12,11 @@ GOLDEN = ROOT / "test/golden/pin_words.json"
 
 def snapshot() -> dict[str, dict[str, object]]:
     result: dict[str, dict[str, object]] = {}
-    for source in sorted((ROOT / "firmware").glob("*.asm")):
+    active = [
+        *(ROOT / "firmware").glob("*.asm"),
+        *(ROOT / "firmware/uart").glob("*.asm"),
+    ]
+    for source in sorted(active):
         image = assemble_image(source.read_text())
         result[str(source.relative_to(ROOT))] = {
             "words": image.words,

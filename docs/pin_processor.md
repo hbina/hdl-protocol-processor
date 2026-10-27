@@ -137,7 +137,7 @@ Generate generic synthesis measurements with `uv run --locked python -m tools.ch
 (or supply `--yosys /path/to/yowasp-yosys`).
 
 No historical ISA variants or compatibility aliases are provided. The new
-`test/golden/pin_words.json` snapshot covers only active firmware; the old
+`test/golden/pin_words.json` snapshot covers only active firmware, including the three standalone UART listings; the old
 snapshot remains historical. See [examples](../firmware/README.md).
 
 ## Validation boundary
@@ -148,3 +148,13 @@ reset/pause, and full loader/PC boundaries. Pin-only wrapper tests can run
 unchanged on RTL and a newly mapped netlist. Historical netlists are incompatible.
 The production wrapper remains a 50 MHz, 6×4 CMOS5L target. Physical results
 must be regenerated; see the README for current status.
+
+
+## Continuous UART firmware
+
+[UART programs](../firmware/uart/README.md) demonstrate RAM-backed repeating TX,
+continuous bounded RX and sequential echo entirely in firmware. No ISA, RTL, queue
+or host transport was added. READY and error reporting use ordinary GPIO. The
+sequential echo program requires a cooperative sender and does not implement
+simultaneous full-duplex traffic. See the UART guide and root README for evidence
+and the remaining physical/interoperability limitations.

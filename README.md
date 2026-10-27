@@ -10,7 +10,7 @@ request/response transport, peripheral bus, queue, or protocol-specific engine.
 
 ## Status
 
-**Last updated: 2026-10-26.** Incompatible pin-v1 architecture implemented;
+**Last updated: 2026-10-27.** Incompatible pin-v1 architecture implemented;
 RTL/tool verification and generic synthesis pass. Physical implementation is
 **blocked**: the installed LibreLane 3.1.0.dev3 environment has no compatible
 container engine. No new routed timing, area, DRC/LVS, or mapped-test claim exists.
@@ -24,7 +24,7 @@ adds latency. The production wrapper provides 15 inputs and 16 outputs at a
 
 | Protocol | Status | Current scope |
 |---|---|---|
-| UART | Partial | Fixed-byte 8N1 TX example; no full bidirectional protocol claim |
+| UART | Partial | RAM-backed repeating 8N1 TX, bounded continuous RX, READY-gated sequential echo; selected baud/phase/mismatch/error tests pass in both simulators. Full-duplex, parity and board interoperability remain open |
 | SPI | Partial | One mode-0 byte exchange with receive storage |
 | I2C | Partial | Address write, ACK/NACK sampling and clock stretching; no full transaction implementation |
 | USB, Ethernet, JTAG, SWD, PS/2, CAN | Not started | Earlier experiments target the removed runtime architecture |
@@ -39,16 +39,17 @@ on `bookkeeping/study-refactor-snapshot`.
 
 | Check | Evidence |
 |---|---|
-| Active Python checks | 79 passed: tool/assembler checks, five core configurations, four invalid hardware configurations |
+| Active Python checks | 139 passed, including 60 UART generation checks; five core configurations and four invalid hardware configurations retained |
 | Core simulations | Two groups in each configuration; all 65,536 instruction words checked per configuration |
-| Pin-only wrapper regressions | 6 passed in Icarus 12.0 and 6 passed in Verilator 5.038 |
+| Pin-only wrapper regressions | 15 passed in Icarus 12.0 and 15 passed in Verilator 5.038, including nine UART groups per simulator |
 | Strict Pyright / Ruff | 0 errors; formatter applied |
 | Generic Yosys synthesis (`-noabc`) | Wrapper and five configurations pass; wrapper 14,931 cells; 256/256 core 20,483 cells |
 | iCE40 FPGA synthesis, old → pin-v1 | LUT4: 3,230 → 586 (−81.86%); flip-flops: 2,851 → 174 (−93.90%); 4-Kbit RAM blocks: 3 → 2; [comparison](docs/pin_fpga_comparison.json) |
 | Routed/mapped ASIC verification | Blocked before synthesis: no compatible container engine |
 
-[Recorded commands, source hashes, XML results, and synthesis statistics](docs/pin_processor_verification.json)
-separate current evidence from historical results. Generic cell counts are not
+[UART commands, source hashes, XML results and completion audit](docs/uart_verification.json)
+record current firmware evidence. The [baseline architecture/synthesis record](docs/pin_processor_verification.json)
+still applies to the unchanged RTL; its older test/source snapshots remain historical. Generic cell counts are not
 mapped ASIC area, timing, or physical-fit results. The FPGA comparison also uses
 synthesis only: it does not establish maximum frequency or routed FPGA fit.
 
@@ -81,11 +82,19 @@ for the pinned ASIC toolchain and new-design build commands.
 - [x] Complete and record the active RTL/tool/synthesis verification.
 - [ ] Restore the physical tool environment and route the new 6×4, 50 MHz implementation.
 - [ ] Pass new mapped regressions and all configured timing/DRC/LVS checks.
+- [x] Finish and record UART RAM TX/RX/echo, timing and error-recovery verification.
+- [ ] Add simultaneous UART TX/RX and additional framing options when required.
 - [ ] Extend protocol firmware and validate external hardware interoperability.
 
 RAM/program storage is uninitialized at reset; firmware must initialize RAM and
 a complete valid program must be loaded before execution. Pin counts above the
 wrapper's 15/16 are core configurations, not additional physical ASIC pads.
+UART echo requires a sender that waits for READY plus an idle bit; traffic while
+echo is busy may be lost or misframed. RX-only buffers drop new bytes when full
+and require restart/reload to reclaim space. UART framing is currently 8N1 only.
+See [the UART guide](firmware/uart/README.md) for capacities, pins, counters and
+clock/baud limits.
+
 Board validation, CDC/MTBF signoff, full protocol coverage, production physical
 fit/timing, and realistic power/IR analysis remain open. The prior runtime
 capacity figures and mapped tests do not establish results for this revision.
@@ -93,7 +102,7 @@ capacity figures and mapped tests do not establish results for this revision.
 ## Repository
 
 - `src/`: processor, Tiny Tapeout wrapper, and physical configuration.
-- `firmware/`: five standalone active assembly examples.
+- `firmware/`: five introductory assembly examples and three standalone UART programs.
 - `tools/`: typed ISA, assembler, linker, and active firmware snapshots.
 - `test/active/`: active Python and parameterized-core regressions.
 - `test/pin_examples.py`: pin-only RTL/mapped example checks.

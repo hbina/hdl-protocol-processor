@@ -28,3 +28,10 @@ synchronizer latency. RAM must be initialized before reads.
 
 `historical/` contains superseded request-based firmware and is excluded from
 active snapshots and validation.
+
+## Continuous UART programs
+
+The fixed-byte UART file above remains a small introductory example. The independent
+[UART programs](uart/README.md) add RAM-backed repeating TX, bounded continuous RX,
+and sequential echo, with baud generation, error flags/counters, and explicit
+traffic limits. Their default listings are also part of the active ISA snapshot.

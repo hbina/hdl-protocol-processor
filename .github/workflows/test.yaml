@@ -11,7 +11,7 @@ jobs:
 
       - name: Install build tools and Icarus/Yosys
         shell: bash
-        run: sudo apt-get update && sudo apt-get install -y iverilog yosys autoconf bison flex g++ make
+        run: sudo apt-get update && sudo apt-get install -y iverilog yosys tcl autoconf bison flex g++ make
 
       # Ubuntu 24.04's packaged Verilator predates cocotb 2's minimum 5.036.
       - name: Build pinned Verilator 5.038
@@ -35,14 +35,18 @@ jobs:
           uv python install
           uv sync --locked
 
-      - name: Type-check the instruction model (strict)
+      - name: Type-check compiler and examples (strict)
         run: uv run --locked pyright
 
-      - name: Run active pin-processor checks
+      - name: Verify compiler, deterministic generation and both simulators
         run: |
+          uv run --locked ruff format --check .
           uv run --locked pytest
+          uv run --locked python -m tools.check_generated
+          uv run --locked python -m tools.check_simulation --sim icarus
+          uv run --locked python -m tools.check_simulation --sim verilator
           uv run --locked make -B -C test
           uv run --locked make -B -C test SIM=verilator
 
-      - name: Synthesize wrapper and parameterized cores
-        run: uv run --locked python -m tools.check_pin_synthesis
+      - name: Synthesize combinational wrapper and all operations
+        run: uv run --locked python -m tools.check_synthesis --yosys .venv/bin/yowasp-yosys

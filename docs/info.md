@@ -1,30 +1,35 @@
-# Programmable Pin Processor
+# Combinational HDL demonstration
 
 ## How it works
 
-An autonomous processor reads synchronized input pins, executes uploaded
-firmware with private RAM, and drives output values/enables. The core has
-256×16-bit instructions, four 8-bit registers, 256 bytes of RAM, and configurable
-1..256 input/output counts. The Tiny Tapeout wrapper exposes 15 inputs and
-16 outputs, including eight bidirectional uio pads. ui[7] selects configuration;
-there is no execution-time host request/response layer.
+Python constructs a pure expression graph and the compiler emits combinational
+Verilog. The demo shares `a ^ b` between an output and both selection branches:
 
-See [the current architecture](pin_processor.md), [examples](../firmware/README.md),
-and [current status](../README.md). Earlier runtime studies are historical.
+- `shared = a ^ b`
+- `result = choose ? (shared & a) : (shared | b)`
+
+`ui_in[3:0]` is `a`, `ui_in[7:4]` is `b`, and `uio_in[0]` is `choose`.
+`uo_out[3:0]` is `result`; `uo_out[7:4]` is `shared`.
+`uio_out` and `uio_oe` are zero. All uio pads are inputs. `uio_in[7:1]`,
+`clk`, `rst_n`, and `ena` do not affect outputs. There is no functional clock.
 
 ## How to test
 
 ```sh
 uv sync --locked
 uv run --locked pytest
+uv run --locked python -m tools.check_generated
 uv run --locked make -B -C test
+uv run --locked make -B -C test SIM=verilator
 ```
 
-Use SIM=verilator for the second simulator. Tests load complete example programs
-and check GPIO waveforms and pin-visible received data. Physical implementation
-and mapped tests must be regenerated for this architecture.
+The wrapper regression exhausts all 512 meaningful inputs and varies unused
+inputs independently. See [compiler documentation](compiler.md) and the
+[physical-flow guide](physical_flow.md). The virtual 20 ns constraint is a target;
+physical implementation and mapped-netlist verification remain incomplete.
 
 ## External hardware
 
-Simulation needs no external hardware. I2C uses external pullups on real boards.
-FPGA/board interoperability, CDC/MTBF signoff, and full protocol stacks remain open.
+No external hardware is required for simulation. On a board, apply static digital
+inputs and read the two output nibbles after settling. Board validation remains
+open. Outputs may glitch when inputs change.

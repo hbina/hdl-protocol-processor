@@ -15,5 +15,13 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Check generated combinational source
+        run: |
+          uv sync --locked
+          uv run --locked python -m tools.check_generated
+
       - name: FPGA bitstream for TT ASIC Sim (ICE40UP5K)
         uses: TinyTapeout/tt-gds-action/fpga/ice40up5k@ihp-cmos5l

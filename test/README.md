@@ -1,36 +1,21 @@
 # Active verification
 
-`uv run --locked pytest` runs test/active: ISA/assembler behavior, five parameterized
-Icarus core configurations, UART generation, and typed-construction regressions.
-Retired root tests, the old runtime testbench/golden snapshot, and the collection
-ignore shim have been removed. `uv run --locked pytest test` selects the same suite.
+`uv run --locked pytest` collects `test/compiler/`: language semantics, invalid
+construction and graphs, immutable/shared nodes, deep traversal, evaluator input
+validation, deterministic subprocess CLI builds, checked-in HDL freshness,
+Tiny Tapeout metadata/configuration, and Tcl constraint syntax/contract.
 
-`uv run --locked make -B -C test` runs pin_examples and pin_uart against the wrapper.
-`SIM=verilator` selects the second simulator, and `GATES=yes` selects a newly mapped
-netlist. Pin-only observations apply to RTL and gates; UART RAM/counter inspection
-is required in RTL and omitted only for GATES=yes. No new mapped results exist.
+`tools.check_simulation` tests all supported operations at widths 1, 4, and 17
+using independent integer expectations and the evaluator in Icarus and Verilator.
+It also verifies a constant-only module. Reports/logs go under ignored `build/`.
 
-Core tests cover all 65,536 instruction words in each configuration, all RAM
-addresses, fixed access/wait timing, pin and bank boundaries, aliasing, reset,
-configuration, pause/resume, the complete loader, and branch/PC boundaries. Executable
-core and wrapper fixtures use typed instructions; text is used only for assembler
-behavior and loading checked-in assembly files.
+`uv run --locked make -B -C test` runs `demo.exhaustive_wrapper`. Use
+`SIM=verilator` for the other simulator. The 512 meaningful input combinations
+are each checked with 12 patterns: all unused bits low, each unused bit high,
+and all high. The ten bits are uio[7:1], clk, rst_n, ena. Outputs and constant uio
+drivers must be unchanged. Each observation follows a 1 ns simulation settling
+interval, which carries no physical-delay guarantee.
 
-`golden/pin_words.json` covers the five introductory assembly programs and three
-UART listings. `golden/uart_profiles.json` preserves words, symbols and capacity
-errors for 47 pre-conversion profiles from c1b6dfc. Default listings stay unchanged.
-
-UART contributes nine of the fifteen pin-level wrapper groups. It covers all byte
-values, repeated RAM TX, exact edge spacing, bounded back-to-back RX, baud/phase
-variation, errors/break recovery, and the sequential echo READY contract. See
-../firmware/uart/README.md for pins, capacities, counters and traffic limits.
-
-Use `COCOTB_TEST_MODULES=pin_uart` with make to select UART only. Run generic synthesis
-with `uv run --locked python -m tools.check_pin_synthesis`; use
-`--yosys .asic-tools/venv/bin/yowasp-yosys` with the local ASIC environment.
-
-Current evidence is in ../docs/typed_instruction_verification.json. Earlier UART and
-hardware records remain historical; hardware synthesis applies to unchanged RTL.
-No routed timing/area, CDC/MTBF, or real-device interoperability result is implied.
-See ../docs/physical_flow.md for the existing container-engine blocker and
-../docs/source_history.md for retired source recovery.
+`GATES=yes` selects a newly generated `gate_level_netlist.v` and PDK functional
+models; see [physical-flow instructions](../docs/physical_flow.md). No new mapped
+netlist is currently available. Processor-specific active tests were retired.

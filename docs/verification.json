@@ -1,0 +1,514 @@
+{
+  "completed": "2026-10-29",
+  "architecture": "pure combinational expression graph; no processor",
+  "processor_recovery_revision": "d3886c6a364637cd736de369a004ac2693e559e2",
+  "source_sha256": {
+    ".github/workflows/docs.yaml": "e26f36306d43173683ffe1ac4b526dfb73d1eb08477104007d974a8434d5d607",
+    ".github/workflows/fpga.yaml": "783576e7fac489812ea009c715d86099960ca13d3071f30c3d9f977cd2f11e37",
+    ".github/workflows/gds.yaml": "a57f083b3bde7b8734745031bfb1ec05728517df111ea18c94abb44e8885fce1",
+    ".github/workflows/test.yaml": "b34a8f3dbb7f9ef4c4f0a4a90f734846607660dc01b93f8171a9ad6fd1010cef",
+    "combhdl/__init__.py": "f983b7bf36e011292cc1ffafd9fa9a63a300f50e84be127d0aa35b7bc6d6f730",
+    "combhdl/__main__.py": "4540c1e53fb81a1e3d286986cd8dd86fd626cc51cca1030548c52f2cbb4d817a",
+    "combhdl/compiler.py": "29fe8150ebe1c8d057564504c00a0e56adfbe3c3c753e509b5902b294b2287c6",
+    "combhdl/model.py": "79dfeea24145c4947a225b39ae4a04f48dd9d9ad32670c698a3dd8275f93e8ea",
+    "examples/combinational/demo.py": "9400f8b535e62e6e565b9db07f79f0ee8558e0f7e7cd9e41ea312dc575208a64",
+    "examples/combinational/operations.py": "0ec6b779f8bf1ffec77c40c70290214b58728d88a86a83d81af0f10848e4d2e4",
+    "examples/combinational/shared_logic.py": "0f1c9dacb8cb08ddce9ccc3dccddfce7b7ade76b67aa5d522e9c60b25842a335",
+    "info.yaml": "a225831fc5c9441a6076fb8b956dea635ec8bebd4cb4df7a2c5738136a1d831c",
+    "pyproject.toml": "18fc9005fe38a509693401a89b89cd8d17e2e0a5a2b939d643a645d79fc4511f",
+    "src/combhdl_demo.v": "7aba65e0bcb336109eac68a4facf78364395107daec29c350b3653b651aa14d7",
+    "src/config.json": "40e66275b8dd35fb57b2e911394ff1675362fb83e14dbf375b4566cca71df036",
+    "src/pins.sdc": "9177d4f79beaf2a159c27da3bd2cc8b21c3bd51e25912bb9845b25ea04489d41",
+    "src/project.v": "3d54bb71d8119cbd91902eb8bc7f2285cedf98fe6f80c0e72bcb2b60d77f6be4",
+    "test/Makefile": "731e8c06316f97deaee1a642fe1e2880cfda39caf0f10dc908f99b65d72b3c57",
+    "test/compiler/test_integration.py": "273e5fcba7d83da6e160922db15dbc0d1662b20adf873b6fc4c7bdb938d38725",
+    "test/compiler/test_language.py": "03e19f875a063e524ecf205844d4960b527e644af33b1de037c7b28cb65c70df",
+    "test/demo.py": "3cb37a32758c24338ae8c8a8c94035d99cfffe9ecfb5592ea8522abda08d4285",
+    "test/tb.v": "7b68cb11437ddfcfaee4c2d32e3f9b3a78134218afe402a984138096d5f2e4ef",
+    "tools/__init__.py": "530dfa31e602a64ef48093234eba41811a8487bbdba16b1860750585a2d4334f",
+    "tools/check_generated.py": "95e2209d75f7b06233a9e2990f10e713db194cb6f60fc9feaa9c8005fa572a44",
+    "tools/check_simulation.py": "ac4782054b4a4608c1521432a998dbdfad6a57903544c5940c34b75a5c90788a",
+    "tools/check_synthesis.py": "85354b9d859729277c3b8bab6579b0ddc8f85d84112dc35fad1f7e32bd9111bb",
+    "uv.lock": "e6f62e3203fd1ca668fd377c8ae8562e5efb2fe47c608dcec728678156c29d01"
+  },
+  "checks": [
+    {
+      "command": "uv run --locked pytest",
+      "result": "46 passed"
+    },
+    {
+      "command": "uv run --locked pyright",
+      "result": "0 errors, 0 warnings, 0 informations"
+    },
+    {
+      "command": "uv run --locked ruff format --check .",
+      "result": "pass"
+    },
+    {
+      "command": "uv run --locked python -m tools.check_generated",
+      "result": "pass"
+    },
+    {
+      "command": "uv run --locked python -m combhdl examples/combinational/shared_logic.py --component component --output build/shared_logic",
+      "result": "pass"
+    },
+    {
+      "command": "uv run --locked make -B -C test",
+      "tool": "Icarus Verilog 12.0, cocotb 2.0.1",
+      "result": "demo.exhaustive_wrapper passed",
+      "meaningful_inputs": 512,
+      "unused_patterns_per_input": 12,
+      "observations": 6144
+    },
+    {
+      "command": "uv run --locked make -B -C test SIM=verilator VERILATOR_BIN_DIR=/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/verilator/bin",
+      "tool": "Verilator 5.038, cocotb 2.0.1",
+      "result": "demo.exhaustive_wrapper passed",
+      "meaningful_inputs": 512,
+      "unused_patterns_per_input": 12,
+      "observations": 6144
+    }
+  ],
+  "simulation": {
+    "icarus": {
+      "tool": "Icarus Verilog version 12.0 (stable) ()",
+      "cases": [
+        {
+          "component": "operations_1",
+          "vectors": 8,
+          "design_sha256": "10619356a0d797da3503925140f18663f08fab25106f42e281e5718898ef0238",
+          "testbench_sha256": "ff455666d478499f3ee5009ca8bdeb169dc667a5868ea0ee8f418de19abe78cb",
+          "command": [
+            "iverilog",
+            "-g2012",
+            "-s",
+            "tb",
+            "-o",
+            "simulation",
+            "design.v",
+            "tb.v"
+          ],
+          "run_command": [
+            "vvp",
+            "simulation"
+          ]
+        },
+        {
+          "component": "operations_4",
+          "vectors": 512,
+          "design_sha256": "566a1dfca67095daa84cad9d37edd23fe488d973c4e66d2a72388fa9ddc75d14",
+          "testbench_sha256": "c4a7d76518d262ba15283036305b0cde8f031d880c551582fe5f7a78c57782cd",
+          "command": [
+            "iverilog",
+            "-g2012",
+            "-s",
+            "tb",
+            "-o",
+            "simulation",
+            "design.v",
+            "tb.v"
+          ],
+          "run_command": [
+            "vvp",
+            "simulation"
+          ]
+        },
+        {
+          "component": "operations_17",
+          "vectors": 328,
+          "design_sha256": "6c8047106da3a3902ec841c7f572827fe6c19cebcd5dce1487548f47c9a43ffb",
+          "testbench_sha256": "0e3dbe362f9f13691d9167a6409a0cb9f41f764a6f2e2f2742cf444e1be714a7",
+          "command": [
+            "iverilog",
+            "-g2012",
+            "-s",
+            "tb",
+            "-o",
+            "simulation",
+            "design.v",
+            "tb.v"
+          ],
+          "run_command": [
+            "vvp",
+            "simulation"
+          ]
+        },
+        {
+          "component": "constant_circuit",
+          "vectors": 1,
+          "design_sha256": "7c32183c637d2c3df05b04c5218dbde3ea50c7bf009e14aae0c38b519d9c6ff4",
+          "testbench_sha256": "6c8ee7452630eb9554d55c6451b1bf535ba3ac5086dea593e27d660215c02d0f",
+          "command": [
+            "iverilog",
+            "-g2012",
+            "-s",
+            "tb",
+            "-o",
+            "simulation",
+            "design.v",
+            "tb.v"
+          ],
+          "run_command": [
+            "vvp",
+            "simulation"
+          ]
+        }
+      ]
+    },
+    "verilator": {
+      "tool": "Verilator 5.038 2025-07-08 rev v5.038",
+      "cases": [
+        {
+          "component": "operations_1",
+          "vectors": 8,
+          "design_sha256": "10619356a0d797da3503925140f18663f08fab25106f42e281e5718898ef0238",
+          "testbench_sha256": "ff455666d478499f3ee5009ca8bdeb169dc667a5868ea0ee8f418de19abe78cb",
+          "command": [
+            "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/verilator/bin/verilator",
+            "--binary",
+            "--timing",
+            "-Wno-fatal",
+            "--top-module",
+            "tb",
+            "--Mdir",
+            "obj",
+            "-j",
+            "2",
+            "design.v",
+            "tb.v"
+          ],
+          "run_command": [
+            "/mnt/extra_pool/tmp/jane_street_design_asic/build/simulation/verilator/operations_1/obj/Vtb"
+          ]
+        },
+        {
+          "component": "operations_4",
+          "vectors": 512,
+          "design_sha256": "566a1dfca67095daa84cad9d37edd23fe488d973c4e66d2a72388fa9ddc75d14",
+          "testbench_sha256": "c4a7d76518d262ba15283036305b0cde8f031d880c551582fe5f7a78c57782cd",
+          "command": [
+            "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/verilator/bin/verilator",
+            "--binary",
+            "--timing",
+            "-Wno-fatal",
+            "--top-module",
+            "tb",
+            "--Mdir",
+            "obj",
+            "-j",
+            "2",
+            "design.v",
+            "tb.v"
+          ],
+          "run_command": [
+            "/mnt/extra_pool/tmp/jane_street_design_asic/build/simulation/verilator/operations_4/obj/Vtb"
+          ]
+        },
+        {
+          "component": "operations_17",
+          "vectors": 328,
+          "design_sha256": "6c8047106da3a3902ec841c7f572827fe6c19cebcd5dce1487548f47c9a43ffb",
+          "testbench_sha256": "0e3dbe362f9f13691d9167a6409a0cb9f41f764a6f2e2f2742cf444e1be714a7",
+          "command": [
+            "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/verilator/bin/verilator",
+            "--binary",
+            "--timing",
+            "-Wno-fatal",
+            "--top-module",
+            "tb",
+            "--Mdir",
+            "obj",
+            "-j",
+            "2",
+            "design.v",
+            "tb.v"
+          ],
+          "run_command": [
+            "/mnt/extra_pool/tmp/jane_street_design_asic/build/simulation/verilator/operations_17/obj/Vtb"
+          ]
+        },
+        {
+          "component": "constant_circuit",
+          "vectors": 1,
+          "design_sha256": "7c32183c637d2c3df05b04c5218dbde3ea50c7bf009e14aae0c38b519d9c6ff4",
+          "testbench_sha256": "6c8ee7452630eb9554d55c6451b1bf535ba3ac5086dea593e27d660215c02d0f",
+          "command": [
+            "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/verilator/bin/verilator",
+            "--binary",
+            "--timing",
+            "-Wno-fatal",
+            "--top-module",
+            "tb",
+            "--Mdir",
+            "obj",
+            "-j",
+            "2",
+            "design.v",
+            "tb.v"
+          ],
+          "run_command": [
+            "/mnt/extra_pool/tmp/jane_street_design_asic/build/simulation/verilator/constant_circuit/obj/Vtb"
+          ]
+        }
+      ]
+    }
+  },
+  "synthesis": {
+    "tool": "Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)",
+    "cases": [
+      {
+        "top": "tt_um_combhdl_demo",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.venv/bin/yowasp-yosys",
+          "-p",
+          "read_verilog \"/mnt/extra_pool/tmp/jane_street_design_asic/src/project.v\" \"/mnt/extra_pool/tmp/jane_street_design_asic/src/combhdl_demo.v\"; synth -top tt_um_combhdl_demo -flatten -noabc; check -assert; scc -expect 0; delete t:$scopeinfo; tee -o \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/tt_um_combhdl_demo/stat.json\" stat -json; write_json \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/tt_um_combhdl_demo/netlist.json\""
+        ],
+        "source_sha256": {
+          "project.v": "3d54bb71d8119cbd91902eb8bc7f2285cedf98fe6f80c0e72bcb2b60d77f6be4",
+          "combhdl_demo.v": "7aba65e0bcb336109eac68a4facf78364395107daec29c350b3653b651aa14d7"
+        },
+        "statistics": {
+          "creator": "Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)",
+          "invocation": "stat -json ",
+          "modules": {
+            "\\tt_um_combhdl_demo": {
+              "num_wires": 18,
+              "num_wire_bits": 77,
+              "num_pub_wires": 18,
+              "num_pub_wire_bits": 77,
+              "num_ports": 8,
+              "num_port_bits": 43,
+              "num_memories": 0,
+              "num_memory_bits": 0,
+              "num_processes": 0,
+              "num_cells": 16,
+              "num_submodules": 0,
+              "num_cells_by_type": {
+                "$_AND_": 4,
+                "$_MUX_": 4,
+                "$_OR_": 4,
+                "$_XOR_": 4
+              }
+            }
+          },
+          "design": {
+            "num_wires": 18,
+            "num_wire_bits": 77,
+            "num_pub_wires": 18,
+            "num_pub_wire_bits": 77,
+            "num_ports": 8,
+            "num_port_bits": 43,
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_processes": 0,
+            "num_cells": 16,
+            "num_submodules": 0,
+            "num_cells_by_type": {
+              "$_AND_": 4,
+              "$_MUX_": 4,
+              "$_OR_": 4,
+              "$_XOR_": 4
+            }
+          }
+        },
+        "storage_cells": 0,
+        "combinational_loops": 0
+      },
+      {
+        "top": "operations_1",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.venv/bin/yowasp-yosys",
+          "-p",
+          "read_verilog \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/operations_1.v\"; synth -top operations_1 -flatten -noabc; check -assert; scc -expect 0; delete t:$scopeinfo; tee -o \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/operations_1/stat.json\" stat -json; write_json \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/operations_1/netlist.json\""
+        ],
+        "source_sha256": {
+          "operations_1.v": "10619356a0d797da3503925140f18663f08fab25106f42e281e5718898ef0238"
+        },
+        "statistics": {
+          "creator": "Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)",
+          "invocation": "stat -json ",
+          "modules": {
+            "\\operations_1": {
+              "num_wires": 77,
+              "num_wire_bits": 91,
+              "num_pub_wires": 71,
+              "num_pub_wire_bits": 85,
+              "num_ports": 34,
+              "num_port_bits": 40,
+              "num_memories": 0,
+              "num_memory_bits": 0,
+              "num_processes": 0,
+              "num_cells": 16,
+              "num_submodules": 0,
+              "num_cells_by_type": {
+                "$_AND_": 3,
+                "$_MUX_": 1,
+                "$_NOT_": 6,
+                "$_OR_": 3,
+                "$_XOR_": 3
+              }
+            }
+          },
+          "design": {
+            "num_wires": 77,
+            "num_wire_bits": 91,
+            "num_pub_wires": 71,
+            "num_pub_wire_bits": 85,
+            "num_ports": 34,
+            "num_port_bits": 40,
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_processes": 0,
+            "num_cells": 16,
+            "num_submodules": 0,
+            "num_cells_by_type": {
+              "$_AND_": 3,
+              "$_MUX_": 1,
+              "$_NOT_": 6,
+              "$_OR_": 3,
+              "$_XOR_": 3
+            }
+          }
+        },
+        "storage_cells": 0,
+        "combinational_loops": 0
+      },
+      {
+        "top": "operations_4",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.venv/bin/yowasp-yosys",
+          "-p",
+          "read_verilog \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/operations_4.v\"; synth -top operations_4 -flatten -noabc; check -assert; scc -expect 0; delete t:$scopeinfo; tee -o \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/operations_4/stat.json\" stat -json; write_json \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/operations_4/netlist.json\""
+        ],
+        "source_sha256": {
+          "operations_4.v": "566a1dfca67095daa84cad9d37edd23fe488d973c4e66d2a72388fa9ddc75d14"
+        },
+        "statistics": {
+          "creator": "Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)",
+          "invocation": "stat -json ",
+          "modules": {
+            "\\operations_4": {
+              "num_wires": 100,
+              "num_wire_bits": 319,
+              "num_pub_wires": 75,
+              "num_pub_wire_bits": 269,
+              "num_ports": 36,
+              "num_port_bits": 126,
+              "num_memories": 0,
+              "num_memory_bits": 0,
+              "num_processes": 0,
+              "num_cells": 79,
+              "num_submodules": 0,
+              "num_cells_by_type": {
+                "$_AND_": 28,
+                "$_MUX_": 4,
+                "$_NOT_": 12,
+                "$_OR_": 17,
+                "$_XOR_": 18
+              }
+            }
+          },
+          "design": {
+            "num_wires": 100,
+            "num_wire_bits": 319,
+            "num_pub_wires": 75,
+            "num_pub_wire_bits": 269,
+            "num_ports": 36,
+            "num_port_bits": 126,
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_processes": 0,
+            "num_cells": 79,
+            "num_submodules": 0,
+            "num_cells_by_type": {
+              "$_AND_": 28,
+              "$_MUX_": 4,
+              "$_NOT_": 12,
+              "$_OR_": 17,
+              "$_XOR_": 18
+            }
+          }
+        },
+        "storage_cells": 0,
+        "combinational_loops": 0
+      },
+      {
+        "top": "operations_17",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.venv/bin/yowasp-yosys",
+          "-p",
+          "read_verilog \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/operations_17.v\"; synth -top operations_17 -flatten -noabc; check -assert; scc -expect 0; delete t:$scopeinfo; tee -o \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/operations_17/stat.json\" stat -json; write_json \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/operations_17/netlist.json\""
+        ],
+        "source_sha256": {
+          "operations_17.v": "6c8047106da3a3902ec841c7f572827fe6c19cebcd5dce1487548f47c9a43ffb"
+        },
+        "statistics": {
+          "creator": "Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)",
+          "invocation": "stat -json ",
+          "modules": {
+            "\\operations_17": {
+              "num_wires": 212,
+              "num_wire_bits": 1325,
+              "num_pub_wires": 75,
+              "num_pub_wire_bits": 1049,
+              "num_ports": 36,
+              "num_port_bits": 490,
+              "num_memories": 0,
+              "num_memory_bits": 0,
+              "num_processes": 0,
+              "num_cells": 386,
+              "num_submodules": 0,
+              "num_cells_by_type": {
+                "$_AND_": 159,
+                "$_MUX_": 17,
+                "$_NOT_": 38,
+                "$_OR_": 89,
+                "$_XOR_": 83
+              }
+            }
+          },
+          "design": {
+            "num_wires": 212,
+            "num_wire_bits": 1325,
+            "num_pub_wires": 75,
+            "num_pub_wire_bits": 1049,
+            "num_ports": 36,
+            "num_port_bits": 490,
+            "num_memories": 0,
+            "num_memory_bits": 0,
+            "num_processes": 0,
+            "num_cells": 386,
+            "num_submodules": 0,
+            "num_cells_by_type": {
+              "$_AND_": 159,
+              "$_MUX_": 17,
+              "$_NOT_": 38,
+              "$_OR_": 89,
+              "$_XOR_": 83
+            }
+          }
+        },
+        "storage_cells": 0,
+        "combinational_loops": 0
+      }
+    ]
+  },
+  "physical": {
+    "configuration_command": "uv run --no-project --python .asic-tools/venv/bin/python tt/tt_tool.py --create-user-config --ihp",
+    "configuration_result": "pass; new top/sources, CMOS5L 6x4, no functional clock, no CTS, custom fallback/PnR/signoff SDC",
+    "sdc_check": "Tcl command-spy test with and without optional PDK limits; not OpenSTA validation",
+    "launch_command": "uv run --no-project --python .asic-tools/venv/bin/python -m librelane --docker-no-tty --dockerized --pdk-root /mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/pdk --pdk ihp-sg13cmos5l --manual-pdk --run-tag combhdl_demo --force-run-dir runs/combhdl_demo src/config_merged.json",
+    "launch_date": "2026-10-28",
+    "launch_result": "No compatible container engine found.",
+    "physical_signoff": "incomplete; no new routed timing/area/DRC/LVS/mapped simulation/FPGA bitstream",
+    "timing_reference_ns": 20,
+    "timing_reference_is_achieved_performance": false,
+    "remaining_limits": [
+      "KLayout DRC/XOR disabled",
+      "no container engine",
+      "OpenSTA/PDK SDC validation pending",
+      "development-container recipe uses older PDK/toolchain",
+      "board validation and realistic power/IR analysis pending"
+    ]
+  }
+}

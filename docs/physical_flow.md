@@ -23,11 +23,12 @@ CTS, and custom SDC files. The physical launch was retried on 2026-10-28 and exi
 with **`No compatible container engine found.`** Docker/Podman remains absent.
 No new mapped netlist, extracted timing, ASIC area, DRC/LVS, or physical fit exists.
 
-The root uv environment supplies compiler development and verification tools.
-The existing `.asic-tools/venv` is a separate, legacy environment for the pinned
-LibreLane/Tiny Tapeout physical toolchain, not a compiler requirement. It is used
-here only for the physical tools already installed. No new physical dependencies
-were installed. Versions:
+All Python tools use the repository's root `.venv`, including LibreLane and
+Tiny Tapeout orchestration. Install the pinned dependencies from `pyproject.toml`
+and `uv.lock` with `uv sync --locked`, then use `uv run --locked` for commands.
+The former ignored physical-tool environment has been deleted. The container
+continues to supply native synthesis, routing, and layout-checking binaries.
+The recorded historical commands retain their original interpreter paths. Versions:
 
 | Tool | Pinned version |
 |---|---|
@@ -40,9 +41,9 @@ Once a compatible container engine is available, run from the repository root:
 
 ```sh
 uv run --locked python -m tools.check_generated
-uv run --no-project --python .asic-tools/venv/bin/python tt/tt_tool.py \
+uv run --locked python tt/tt_tool.py \
   --create-user-config --ihp
-uv run --no-project --python .asic-tools/venv/bin/python -m librelane \
+uv run --locked python -m librelane \
   --docker-no-tty --dockerized --pdk-root "$PWD/.asic-tools/pdk" \
   --pdk ihp-sg13cmos5l --manual-pdk --run-tag combhdl_demo \
   --force-run-dir runs/combhdl_demo src/config_merged.json

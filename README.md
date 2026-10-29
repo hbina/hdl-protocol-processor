@@ -71,9 +71,11 @@ CI builds Verilator 5.038. With the existing local build, use
 `--executable .asic-tools/verilator/bin/verilator` for `check_simulation`, or
 `VERILATOR_BIN_DIR="$PWD/.asic-tools/verilator/bin"` for `make`.
 Yosys is a development dependency via `yowasp-yosys`; native Yosys is also
-supported with `--yosys yosys`. Python tools use the root uv project.
-The [physical-flow guide](docs/physical_flow.md) explains the separate existing
-LibreLane environment and remaining constraints/signoff work.
+supported with `--yosys yosys`. All Python tools, including LibreLane and Tiny
+Tapeout orchestration, use this repository's `.venv` through `uv run --locked`.
+`uv sync --locked` installs the pinned dependencies; no separate physical-tool
+virtual environment is used. See the [physical-flow guide](docs/physical_flow.md)
+for container prerequisites and remaining constraints/signoff work.
 
 - [x] Define and validate immutable expressions and components.
 - [x] Implement iterative traversal, cycle rejection, evaluator, and Verilog backend.

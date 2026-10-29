@@ -15,7 +15,7 @@
     "examples/combinational/operations.py": "0ec6b779f8bf1ffec77c40c70290214b58728d88a86a83d81af0f10848e4d2e4",
     "examples/combinational/shared_logic.py": "0f1c9dacb8cb08ddce9ccc3dccddfce7b7ade76b67aa5d522e9c60b25842a335",
     "info.yaml": "a225831fc5c9441a6076fb8b956dea635ec8bebd4cb4df7a2c5738136a1d831c",
-    "pyproject.toml": "18fc9005fe38a509693401a89b89cd8d17e2e0a5a2b939d643a645d79fc4511f",
+    "pyproject.toml": "14700edf0d531bf07fba52e54d91d1f58f123a391c621e54e0f03b9aedfa0f31",
     "src/combhdl_demo.v": "7aba65e0bcb336109eac68a4facf78364395107daec29c350b3653b651aa14d7",
     "src/config.json": "40e66275b8dd35fb57b2e911394ff1675362fb83e14dbf375b4566cca71df036",
     "src/pins.sdc": "9177d4f79beaf2a159c27da3bd2cc8b21c3bd51e25912bb9845b25ea04489d41",
@@ -29,7 +29,8 @@
     "tools/check_generated.py": "95e2209d75f7b06233a9e2990f10e713db194cb6f60fc9feaa9c8005fa572a44",
     "tools/check_simulation.py": "ac4782054b4a4608c1521432a998dbdfad6a57903544c5940c34b75a5c90788a",
     "tools/check_synthesis.py": "85354b9d859729277c3b8bab6579b0ddc8f85d84112dc35fad1f7e32bd9111bb",
-    "uv.lock": "e6f62e3203fd1ca668fd377c8ae8562e5efb2fe47c608dcec728678156c29d01"
+    "uv.lock": "952e08129a3cd752b5326c0baf3224870482c6bb5341e90f54be41d6c8106b74",
+    "tools/run_physical.py": "684266a9f4f352d3c228644b167f380b9eb720671363421c0f8c8ac52d8c78ed"
   },
   "checks": [
     {
@@ -510,5 +511,11 @@
       "development-container recipe uses older PDK/toolchain",
       "board validation and realistic power/IR analysis pending"
     ]
+  },
+  "python_environment": {
+    "environment": ".venv",
+    "install_command": "uv sync --locked",
+    "librelane_version": "3.1.0.dev3",
+    "separate_physical_environment_deleted": true
   }
 }

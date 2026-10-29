@@ -1,6 +1,7 @@
 """Construct pure combinational hardware with explicit unsigned expressions."""
 
 from .compiler import CompileResult, compile, evaluate
+from .python import emit_python
 from .model import (
     Add,
     And,
@@ -54,4 +55,5 @@ __all__ = [
     "ZeroExtend",
     "compile",
     "evaluate",
+    "emit_python",
 ]

@@ -74,7 +74,7 @@ uv run --locked python -m tools.check_generated
 ```
 
 The CLI executes a **trusted Python file**, selects the exported component, and
-writes `<component.name>.v`, `interface.json`, `report.json`, and `ast.txt`. The AST
+writes `<component.name>.v`, `interface.json`, `report.json`, `ast.txt`, and `model.py`. The AST
 file shows the full unrolled constructor structure with four-space indentation,
 including input/output names, constants, widths, and operation parameters. Shared
 expressions are repeated in full at every use; there are no node labels,
@@ -90,6 +90,32 @@ operation counts, fanout (operand edges and output uses), shared IDs, output
 bindings, and warnings. They describe the unoptimized graph, not physical cost.
 `build/` is ignored. The Tiny Tapeout demo is checked into `src/combhdl_demo.v`;
 all consumer workflows check freshness.
+
+`emit_python(component) -> str` emits the same standalone Python model as the CLI.
+It validates the in-memory graph directly and leaves `CompileResult` unchanged.
+Each reachable non-input node has one straight-line assignment, in identity-based
+postorder, named `_combhdl_value_<index>` with the report's node index. Both
+branches are computed before selection. Sharing spans all outputs; distinct
+equivalent nodes remain separate. All operations retain unsigned fixed-width
+semantics, including intermediate arithmetic wrapping and integer `0`/`1`
+comparisons. Shifts at least as wide as their operand emit zero.
+
+The function takes all declared inputs in their original order as required
+keyword-only `int` parameters, including unused inputs, and returns an ordered
+dictionary with the original output names. Boolean, non-integer, negative, and
+out-of-range inputs raise `ValueError`; missing, positional, and unexpected
+arguments raise Python's normal `TypeError`. Constant-only models take no arguments.
+The function uses the component name unless it is invalid in Python, a keyword,
+or a built-in name, in which case it uses `_combhdl_model`. Input names with those
+same conflicts (including `$`) become `_combhdl_input_<port-index>`. Indices are
+zero-based; the module docstring records the component name and parameter aliases.
+Output dictionary keys do not need aliases.
+
+Generated Python has no `combhdl` dependency, uses four-space indentation and a
+trailing newline, and contains no timestamps. It is a functional debugging model:
+sequential assignments do not represent hardware timing or concurrency. Original
+construction helpers, loops, and local names are not recovered; `ast.txt` remains
+the fully expanded, label-free view.
 
 The initial language excludes mutable variables, statements, assignment blocks,
 feedback, state, delays, signed/floating arithmetic, multiply/divide/remainder,

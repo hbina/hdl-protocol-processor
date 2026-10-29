@@ -7,8 +7,8 @@
     ".github/workflows/fpga.yaml": "783576e7fac489812ea009c715d86099960ca13d3071f30c3d9f977cd2f11e37",
     ".github/workflows/gds.yaml": "a57f083b3bde7b8734745031bfb1ec05728517df111ea18c94abb44e8885fce1",
     ".github/workflows/test.yaml": "d3ea0c5bc58c82dbba2229ac6ed05ec9aec7330b8de4449fd94b66bdcd03d552",
-    "combhdl/__init__.py": "f983b7bf36e011292cc1ffafd9fa9a63a300f50e84be127d0aa35b7bc6d6f730",
-    "combhdl/__main__.py": "e77670ec0607ad02f1b567fdfe6894248384a1c864ccb774e0be90e66ccdcb1d",
+    "combhdl/__init__.py": "121271d9030f0884dc63201cb950753108419033c057aba85674cc302b52673e",
+    "combhdl/__main__.py": "e103c2eeb074e7751045eb39dadc57cfaa701809ade04e81d7b2980990886f83",
     "combhdl/ast.py": "0561a129d007368a1b795fcae8de82ca1563f1770d8d51d91fd101db03e75f02",
     "combhdl/compiler.py": "29fe8150ebe1c8d057564504c00a0e56adfbe3c3c753e509b5902b294b2287c6",
     "combhdl/model.py": "79dfeea24145c4947a225b39ae4a04f48dd9d9ad32670c698a3dd8275f93e8ea",
@@ -26,7 +26,7 @@
     "test/compiler/test_ast.py": "c3eaa23219218de5f31833bbc695259bb931b27783f0969cca01a222dc2bb051",
     "test/compiler/test_checksum.py": "14a02561c97c78f8ce3bae860d62c37d7e4897d4f394c7b6a45a48a2a33a3efe",
     "test/compiler/test_integration.py": "26253e3903cebe16914af82826424485cd474dcc935112d80b7581c26e349aa2",
-    "test/compiler/test_language.py": "eb8e89a5477029c5f092a536342e64dbeb3369309817f320512acf0bc2f70cfe",
+    "test/compiler/test_language.py": "de0cd847e7e3a3061dfb2d60e88135d54fbd98d06bf9c9853ddf9e0a8e551c61",
     "test/demo.py": "3cb37a32758c24338ae8c8a8c94035d99cfffe9ecfb5592ea8522abda08d4285",
     "test/tb.v": "7b68cb11437ddfcfaee4c2d32e3f9b3a78134218afe402a984138096d5f2e4ef",
     "tools/__init__.py": "530dfa31e602a64ef48093234eba41811a8487bbdba16b1860750585a2d4334f",
@@ -37,7 +37,9 @@
     "tools/check_synthesis.py": "5703f427161ae6153c30c8107bec7d670cc21b197c23f4ec130c62a986abbfde",
     "tools/report_physical.py": "a8c4fc9dd79155e8a69426dd921c88549b24672f5cca20538fb9efb8505d2f5c",
     "tools/run_physical.py": "684266a9f4f352d3c228644b167f380b9eb720671363421c0f8c8ac52d8c78ed",
-    "uv.lock": "952e08129a3cd752b5326c0baf3224870482c6bb5341e90f54be41d6c8106b74"
+    "uv.lock": "952e08129a3cd752b5326c0baf3224870482c6bb5341e90f54be41d6c8106b74",
+    "combhdl/python.py": "dfe52c3d95e8d95db482c5ad8f4024ecb0eed727acad2e9faed401791bdd0490",
+    "test/compiler/test_python.py": "cef656d70f4487f6c002b6f7cbd261525c897ed998f834094a8936aaabd854c8"
   },
   "checks": [
     {
@@ -47,7 +49,7 @@
     },
     {
       "command": "uv run --locked pytest",
-      "result": "59 passed"
+      "result": "98 passed"
     },
     {
       "command": "uv run --locked pyright",
@@ -663,12 +665,13 @@
   },
   "checksum": {
     "record": "docs/checksum_results.json",
-    "record_sha256": "53f2645737b850b9ee84b3e12b3a0e50e5bdde58da944f32be849693d65acefc",
+    "record_sha256": "727f6c61699c96faa309065564fe895478efcda0e8842fa4a76ae8daa234f4b9",
     "example": "examples/combinational/ipv4_checksum.py",
     "python_tests": 10,
     "vectors_per_simulator": 2508,
     "generic_cells": 1019,
-    "scope": "160-bit fixed 20-byte header checksum primitive; no protocol state or packet parser"
+    "scope": "160-bit fixed 20-byte header checksum primitive; no protocol state or packet parser",
+    "python_model_vectors": 2508
   },
   "python_environment": {
     "environment": ".venv",
@@ -688,5 +691,35 @@
     "coverage": "Shared subtrees repeated; operation parameters round-trip to equivalent evaluation; 1,100 nested operations; deterministic CLI artifact across processes",
     "checks": "59 Python tests passed; strict Pyright and Ruff formatting passed",
     "scope": "Human-readable view only; Verilog generation and identity-based hardware sharing unchanged"
+  },
+  "python_model": {
+    "completed": "2026-10-29",
+    "command": "uv run --locked pytest test/compiler/test_python.py",
+    "result": "39 passed; complete Python suite: 98 passed; strict Pyright: zero errors/warnings; Ruff format and generated-demo freshness checks pass",
+    "operations": {
+      "exhaustive_widths": [
+        1,
+        4
+      ],
+      "boundary_seeded_widths": [
+        17,
+        160
+      ],
+      "vectors_per_width": [
+        8,
+        512,
+        328,
+        328
+      ],
+      "oracle": "examples.combinational.operations.expected and combhdl.evaluate"
+    },
+    "checksum_vectors": 2508,
+    "coverage": "Intermediate wrap, subtraction underflow, complement masking, huge shifts, constant-only and direct-input outputs, unused inputs, original port order, Python keyword/built-in/$ aliases, invalid inputs and graphs, shared and distinct equivalent nodes, 5,000-operation generation and execution",
+    "cli": "model.py bytes reproducible across processes; stdout equals Verilog artifact with empty stderr",
+    "artifacts": {
+      "build/shared_logic/model.py": "9f62228c5c70a207ee07059633058f410841b198025fdd9020745c015c5956ae",
+      "build/ipv4_checksum/model.py": "dfa7b1939377ce74d3771c581395414990c1be30badb34efc5628dfa92a00834"
+    },
+    "scope": "Functional debugging models only; HDL and physical-signoff evidence unchanged; no physical-flow reruns"
   }
 }

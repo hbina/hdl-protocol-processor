@@ -185,10 +185,24 @@ def test_cli_deterministic(tmp_path):
             cwd=root,
             check=True,
         )
-    for file in ("example.v", "interface.json", "report.json", "ast.txt"):
+    for file in ("example.v", "interface.json", "report.json", "ast.txt", "model.py"):
         assert (tmp_path / "first" / file).read_bytes() == (
             tmp_path / "second" / file
         ).read_bytes()
+    stdout = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "combhdl",
+            "examples/combinational/shared_logic.py",
+            "--stdout",
+        ],
+        cwd=root,
+        check=True,
+        capture_output=True,
+    )
+    assert stdout.stdout == (tmp_path / "first/example.v").read_bytes()
+    assert stdout.stderr == b""
     assert (
         json.loads((tmp_path / "first/report.json").read_text())["operation_counts"][
             "Xor"

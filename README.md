@@ -1,11 +1,11 @@
 # Pure Combinational HDL Compiler
 
 Python constructs immutable unsigned expression graphs; `combhdl` validates them,
-evaluates them, and emits combinational Verilog. There is no processor, firmware,
+evaluates them, and emits combinational Verilog and standalone Python models. There is no processor, firmware,
 clock, storage, or target-side execution sequence. Reusing an expression object
 preserves explicit sharing. Separate equivalent expressions remain separate.
 
-**Last updated: 2026-10-29.** Compiler, evaluator, CLI, generated Tiny Tapeout demo,
+**Last updated: 2026-10-29.** Compiler, evaluator, executable Python models, CLI, generated Tiny Tapeout demo,
 both simulators, and generic synthesis pass. Rootless Podman 4.9.3 is now working
 and the pinned LibreLane image is installed. The corrected CMOS5L 6×4 flow and
 6,144-check mapped regression pass, with positive extracted timing at all three
@@ -45,7 +45,8 @@ Verification for the retired processor does not establish protocol support here.
 
 | Check | Current evidence |
 |---|---|
-| Python language, validation, CLI and integration | `uv run --locked pytest`: 59 passed; includes full AST unrolling, operation-parameter round trips, deep AST formatting, checksum/carry tests, a 5,000-operation graph, cross-process reproducibility, metadata and Tcl constraint checks |
+| Python language, validation, CLI and integration | `uv run --locked pytest`: 98 passed; includes full AST unrolling, operation-parameter round trips, deep AST formatting, checksum/carry tests, a 5,000-operation graph, cross-process reproducibility, metadata and Tcl constraint checks |
+| Executable Python models | `test/compiler/test_python.py`: 39 passed; independent operation oracle and evaluator at widths 1/4/17/160, all 2,508 checksum vectors, carry folding, aliases, input validation, sharing and deep graphs |
 | All operations in Icarus 12.0 and Verilator 5.038 | `tools.check_simulation`: 8 exhaustive width-one vectors, 512 exhaustive four-bit vectors, 328 boundary/fixed-seed 17-bit vectors, and a constant-only circuit per simulator; independent oracle and evaluator agree |
 | Tiny Tapeout wrapper in both simulators | `make -B -C test` and `SIM=verilator`: all 512 meaningful inputs × 12 unused-control patterns = 6,144 checks each |
 | Larger checksum circuit in both simulators | `tools.check_checksum`: 2,508 vectors each, independent byte-oriented oracle, known values, carry boundaries, valid headers and single-bit corruption; [evidence](docs/checksum_results.json) |
@@ -62,6 +63,10 @@ are not LUT usage, physical area, timing, or fit evidence.
 CLI output directories also contain `ast.txt`: the full unrolled expression
 structure, indented with four spaces and no node labels or references. Every
 shared subtree is repeated at each use. See the [AST format](docs/compiler.md).
+The accompanying `model.py` computes each shared node once using imperative
+Python assignments. Import its component function and pass inputs by keyword;
+see the [checksum import example](docs/checksum.md). The public API is
+`emit_python(component) -> str`.
 
 ```sh
 uv sync --locked
@@ -101,6 +106,7 @@ for container prerequisites and remaining constraints/signoff work.
 - [x] Implement iterative traversal, cycle rejection, evaluator, and Verilog backend.
 - [x] Verify every initial operation and explicit sharing.
 - [x] Provide deterministic CLI artifacts and structured reports/warnings.
+- [x] Emit standalone executable Python models with fixed-width arithmetic and shared-node assignments.
 - [x] Exhaustively verify the Tiny Tapeout combinational demo in both simulators.
 - [x] Integrate generic synthesis, no-storage checks, and active workflows.
 - [x] Retire processor RTL, firmware, ISA tooling, loaders, and active regressions.
@@ -119,6 +125,9 @@ establish physical delay or glitch behavior. The 20 ns virtual reference is an
 I/O timing constraint; extracted timing results apply to the recorded driving,
 load, corner, uncertainty, and derating assumptions. KLayout DRC/XOR remain
 disabled; positive timing alone does not constitute complete signoff.
+Sequential execution of the generated Python model describes functional values;
+it does not model hardware timing or concurrency, or recover construction helpers,
+loops, and local variable names.
 
 `combhdl/` contains the compiler; `examples/combinational/` contains construction
 examples; `src/` contains checked-in generated HDL, wrapper, and physical config;

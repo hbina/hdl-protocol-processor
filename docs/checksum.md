@@ -47,12 +47,31 @@ header |= 0xB861 << 64
 assert evaluate(component, {"header": header}) == {"checksum": 0xB861, "valid": 1}
 ```
 
+After generating the artifacts above, import the standalone model from the
+repository root (no compiler dependency is needed to execute `model.py`):
+
+```python
+from build.ipv4_checksum.model import ipv4_checksum
+
+header = int("450000730000400040110000c0a80001c0a800c7", 16)
+assert ipv4_checksum(header=header) == {"checksum": 0xB861, "valid": 0}
+header |= 0xB861 << 64
+assert ipv4_checksum(header=header) == {"checksum": 0xB861, "valid": 1}
+```
+
+`model.py` preserves shared sums as single assignments and masks intermediate
+arithmetic. Its keyword-only function rejects invalid unsigned inputs with
+`ValueError`. Python evaluation gives functional values, without modeling hardware
+timing or concurrency.
+
 Verification uses an independent byte-oriented integer oracle that folds carry
 after each word, rather than reproducing the expression tree. The 2,508 HDL
 vectors include all-zero/all-one data, every single-bit position and complement,
 known checksums (`0xb861` and the RFC numerical example `0x220d`), 512 seeded
 random headers, corrected valid headers, and single-bit corruption of each valid
-header. Additional Python checks exercise end-around carry and helper validation.
+header. The generated Python model also agrees with the independent oracle and
+graph evaluator on all 2,508 vectors (`test/compiler/test_python.py::test_checksum_vectors`).
+Additional Python checks exercise end-around carry and helper validation.
 
 Both Icarus 12.0 and Verilator 5.038 agree with the independent oracle and graph
 evaluator for every vector. Generic Yosys 0.70 synthesis reports **1,019 cells**,

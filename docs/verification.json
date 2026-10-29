@@ -8,7 +8,8 @@
     ".github/workflows/gds.yaml": "a57f083b3bde7b8734745031bfb1ec05728517df111ea18c94abb44e8885fce1",
     ".github/workflows/test.yaml": "d3ea0c5bc58c82dbba2229ac6ed05ec9aec7330b8de4449fd94b66bdcd03d552",
     "combhdl/__init__.py": "f983b7bf36e011292cc1ffafd9fa9a63a300f50e84be127d0aa35b7bc6d6f730",
-    "combhdl/__main__.py": "b2ad11f1d8f57fee623036cb9c5abd02b1f2fd0c111ef4f1efe5db32d50359b9",
+    "combhdl/__main__.py": "e77670ec0607ad02f1b567fdfe6894248384a1c864ccb774e0be90e66ccdcb1d",
+    "combhdl/ast.py": "0561a129d007368a1b795fcae8de82ca1563f1770d8d51d91fd101db03e75f02",
     "combhdl/compiler.py": "29fe8150ebe1c8d057564504c00a0e56adfbe3c3c753e509b5902b294b2287c6",
     "combhdl/model.py": "79dfeea24145c4947a225b39ae4a04f48dd9d9ad32670c698a3dd8275f93e8ea",
     "examples/combinational/demo.py": "9400f8b535e62e6e565b9db07f79f0ee8558e0f7e7cd9e41ea312dc575208a64",
@@ -22,9 +23,10 @@
     "src/pins.sdc": "a326399a58617b8840930b036409d5c044de672367dd8b3df588ce9645b4b17c",
     "src/project.v": "3d54bb71d8119cbd91902eb8bc7f2285cedf98fe6f80c0e72bcb2b60d77f6be4",
     "test/Makefile": "7e86bd1978b8972b16367aa357fb14d3492c93ac092ca2d6d4b4ebdf6ed7fd0a",
+    "test/compiler/test_ast.py": "c3eaa23219218de5f31833bbc695259bb931b27783f0969cca01a222dc2bb051",
     "test/compiler/test_checksum.py": "14a02561c97c78f8ce3bae860d62c37d7e4897d4f394c7b6a45a48a2a33a3efe",
     "test/compiler/test_integration.py": "26253e3903cebe16914af82826424485cd474dcc935112d80b7581c26e349aa2",
-    "test/compiler/test_language.py": "03e19f875a063e524ecf205844d4960b527e644af33b1de037c7b28cb65c70df",
+    "test/compiler/test_language.py": "eb8e89a5477029c5f092a536342e64dbeb3369309817f320512acf0bc2f70cfe",
     "test/demo.py": "3cb37a32758c24338ae8c8a8c94035d99cfffe9ecfb5592ea8522abda08d4285",
     "test/tb.v": "7b68cb11437ddfcfaee4c2d32e3f9b3a78134218afe402a984138096d5f2e4ef",
     "tools/__init__.py": "530dfa31e602a64ef48093234eba41811a8487bbdba16b1860750585a2d4334f",
@@ -45,7 +47,7 @@
     },
     {
       "command": "uv run --locked pytest",
-      "result": "56 passed"
+      "result": "59 passed"
     },
     {
       "command": "uv run --locked pyright",
@@ -678,5 +680,13 @@
     "container_smoke_command": "LIBRELANE_CONTAINER_ENGINE=podman uv run --locked python -m librelane --docker-no-tty --dockerized --pdk-root /mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/pdk --pdk ihp-sg13cmos5l --manual-pdk --to OpenROAD.STAPrePNR --force-run-dir runs/combhdl_root_uv_smoke src/config_merged.json",
     "smoke_result": "passed synthesis and all three pre-placement timing corners; not a new routed run",
     "smoke_log_sha256": "ba7714e85e1d51a5f477d2ee144e4ea8ebe2426a70ac6d28843faa665f77f30c"
+  },
+  "ast_display": {
+    "command": "uv run --locked python -m combhdl examples/combinational/ipv4_checksum.py --component component --output build/ipv4_checksum",
+    "artifact": "build/ipv4_checksum/ast.txt",
+    "result": "842 lines; fully unrolled, four-space indentation, no labels, references, or truncation",
+    "coverage": "Shared subtrees repeated; operation parameters round-trip to equivalent evaluation; 1,100 nested operations; deterministic CLI artifact across processes",
+    "checks": "59 Python tests passed; strict Pyright and Ruff formatting passed",
+    "scope": "Human-readable view only; Verilog generation and identity-based hardware sharing unchanged"
   }
 }

@@ -28,6 +28,7 @@ clocks, runtime allocation, or automatic compiler optimizations.
 uv run --locked python -m combhdl examples/combinational/ipv4_checksum.py \
   --component component --output build/ipv4_checksum
 cat build/ipv4_checksum/ipv4_checksum.v
+cat build/ipv4_checksum/ast.txt
 uv run --locked python -m tools.check_checksum --sim icarus
 uv run --locked python -m tools.check_checksum --sim verilator
 uv run --locked python -m tools.check_synthesis --yosys .venv/bin/yowasp-yosys

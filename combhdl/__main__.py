@@ -7,6 +7,7 @@ import runpy
 import sys
 
 from . import CompileError, Component, compile
+from .ast import format_ast
 
 
 def main() -> None:
@@ -29,6 +30,7 @@ def main() -> None:
             return
         args.output.mkdir(parents=True, exist_ok=True)
         (args.output / f"{component.name}.v").write_text(result.verilog)
+        (args.output / "ast.txt").write_text(format_ast(component))
         for name, data in (("interface", result.interface), ("report", result.report)):
             (args.output / f"{name}.json").write_text(json.dumps(data, indent=2) + "\n")
     except CompileError as exc:

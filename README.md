@@ -45,7 +45,7 @@ Verification for the retired processor does not establish protocol support here.
 
 | Check | Current evidence |
 |---|---|
-| Python language, validation, CLI and integration | `uv run --locked pytest`: 56 passed; includes checksum/carry tests, a 5,000-operation graph, cross-process reproducibility, metadata and Tcl constraint checks |
+| Python language, validation, CLI and integration | `uv run --locked pytest`: 59 passed; includes full AST unrolling, operation-parameter round trips, deep AST formatting, checksum/carry tests, a 5,000-operation graph, cross-process reproducibility, metadata and Tcl constraint checks |
 | All operations in Icarus 12.0 and Verilator 5.038 | `tools.check_simulation`: 8 exhaustive width-one vectors, 512 exhaustive four-bit vectors, 328 boundary/fixed-seed 17-bit vectors, and a constant-only circuit per simulator; independent oracle and evaluator agree |
 | Tiny Tapeout wrapper in both simulators | `make -B -C test` and `SIM=verilator`: all 512 meaningful inputs × 12 unused-control patterns = 6,144 checks each |
 | Larger checksum circuit in both simulators | `tools.check_checksum`: 2,508 vectors each, independent byte-oriented oracle, known values, carry boundaries, valid headers and single-bit corruption; [evidence](docs/checksum_results.json) |
@@ -58,6 +58,10 @@ Verification for the retired processor does not establish protocol support here.
 Exact commands, versions, and source hashes are in
 [verification.json](docs/verification.json) and the linked physical/checksum records. Graph counts and generic cell counts
 are not LUT usage, physical area, timing, or fit evidence.
+
+CLI output directories also contain `ast.txt`: the full unrolled expression
+structure, indented with four spaces and no node labels or references. Every
+shared subtree is repeated at each use. See the [AST format](docs/compiler.md).
 
 ```sh
 uv sync --locked

@@ -185,7 +185,7 @@ def test_cli_deterministic(tmp_path):
             cwd=root,
             check=True,
         )
-    for file in ("example.v", "interface.json", "report.json"):
+    for file in ("example.v", "interface.json", "report.json", "ast.txt"):
         assert (tmp_path / "first" / file).read_bytes() == (
             tmp_path / "second" / file
         ).read_bytes()

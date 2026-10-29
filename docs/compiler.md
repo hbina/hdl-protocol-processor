@@ -74,7 +74,13 @@ uv run --locked python -m tools.check_generated
 ```
 
 The CLI executes a **trusted Python file**, selects the exported component, and
-writes `<component.name>.v`, `interface.json`, and `report.json`. These artifacts
+writes `<component.name>.v`, `interface.json`, `report.json`, and `ast.txt`. The AST
+file shows the full unrolled constructor structure with four-space indentation,
+including input/output names, constants, widths, and operation parameters. Shared
+expressions are repeated in full at every use; there are no node labels,
+references, depth limits, or omitted subtrees. This view describes dependencies;
+it does not change expression sharing in the generated hardware. Unrolling can
+produce a much larger file than the shared graph. These artifacts
 can instead be omitted by passing `--stdout` in place of `--output DIR`, which
 prints only generated Verilog to standard output. The two options are mutually
 exclusive; compilation diagnostics go to standard error. Generated artifacts

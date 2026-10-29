@@ -8,7 +8,7 @@
     ".github/workflows/gds.yaml": "a57f083b3bde7b8734745031bfb1ec05728517df111ea18c94abb44e8885fce1",
     ".github/workflows/test.yaml": "d3ea0c5bc58c82dbba2229ac6ed05ec9aec7330b8de4449fd94b66bdcd03d552",
     "combhdl/__init__.py": "f983b7bf36e011292cc1ffafd9fa9a63a300f50e84be127d0aa35b7bc6d6f730",
-    "combhdl/__main__.py": "4540c1e53fb81a1e3d286986cd8dd86fd626cc51cca1030548c52f2cbb4d817a",
+    "combhdl/__main__.py": "b2ad11f1d8f57fee623036cb9c5abd02b1f2fd0c111ef4f1efe5db32d50359b9",
     "combhdl/compiler.py": "29fe8150ebe1c8d057564504c00a0e56adfbe3c3c753e509b5902b294b2287c6",
     "combhdl/model.py": "79dfeea24145c4947a225b39ae4a04f48dd9d9ad32670c698a3dd8275f93e8ea",
     "examples/combinational/demo.py": "9400f8b535e62e6e565b9db07f79f0ee8558e0f7e7cd9e41ea312dc575208a64",
@@ -38,6 +38,11 @@
     "uv.lock": "952e08129a3cd752b5326c0baf3224870482c6bb5341e90f54be41d6c8106b74"
   },
   "checks": [
+    {
+      "command": "uv run --locked python -m combhdl examples/combinational/ipv4_checksum.py --stdout",
+      "result": "pass; captured stdout equals file-mode Verilog, stderr is empty; missing/conflicting destination arguments and invalid component fail with diagnostics on stderr",
+      "validation": "manual subprocess checks; pytest (56 passed), strict Pyright, and Ruff formatting rerun"
+    },
     {
       "command": "uv run --locked pytest",
       "result": "56 passed"

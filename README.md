@@ -66,6 +66,7 @@ uv run --locked pyright
 uv run --locked ruff format --check .
 uv run --locked python -m combhdl examples/combinational/shared_logic.py \
   --component component --output build/shared_logic
+uv run --locked python -m combhdl examples/combinational/ipv4_checksum.py --stdout
 uv run --locked python -m tools.check_generated
 uv run --locked python -m tools.check_simulation --sim icarus
 uv run --locked python -m tools.check_simulation --sim verilator
@@ -78,6 +79,10 @@ uv run ruff format .
 ```
 
 Icarus, Tcl, a C++ toolchain, and Verilator ≥5.036 are external prerequisites.
+Use `--stdout` instead of `--output` to print only the generated Verilog for
+inspection or piping. This mode does not create artifact files.
+Validated against file-mode checksum HDL with captured stdout/stderr; conflicting
+destinations and invalid components fail with diagnostics on stderr.
 CI builds Verilator 5.038. With the existing local build, use
 `--executable .asic-tools/verilator/bin/verilator` for `check_simulation`, or
 `VERILATOR_BIN_DIR="$PWD/.asic-tools/verilator/bin"` for `make`.

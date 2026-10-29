@@ -1,9 +1,10 @@
-"""Execute a trusted Python construction file and write reproducible artifacts."""
+"""Compile a trusted Python construction file to artifacts or Verilog stdout."""
 
 import argparse
 import json
 from pathlib import Path
 import runpy
+import sys
 
 from . import CompileError, Component, compile
 
@@ -12,13 +13,20 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
     parser.add_argument("--component", default="component")
-    parser.add_argument("--output", type=Path, required=True)
+    destination = parser.add_mutually_exclusive_group(required=True)
+    destination.add_argument("--output", type=Path, help="write HDL and JSON artifacts")
+    destination.add_argument(
+        "--stdout", action="store_true", help="print only generated Verilog to stdout"
+    )
     args = parser.parse_args()
     try:
         component = runpy.run_path(str(args.source)).get(args.component)
         if not isinstance(component, Component):
             raise CompileError(f"export {args.component!r} must be a Component")
         result = compile(component)
+        if args.stdout:
+            sys.stdout.write(result.verilog)
+            return
         args.output.mkdir(parents=True, exist_ok=True)
         (args.output / f"{component.name}.v").write_text(result.verilog)
         for name, data in (("interface", result.interface), ("report", result.report)):

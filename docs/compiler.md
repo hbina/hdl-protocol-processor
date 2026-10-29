@@ -75,6 +75,9 @@ uv run --locked python -m tools.check_generated
 
 The CLI executes a **trusted Python file**, selects the exported component, and
 writes `<component.name>.v`, `interface.json`, and `report.json`. These artifacts
+can instead be omitted by passing `--stdout` in place of `--output DIR`, which
+prints only generated Verilog to standard output. The two options are mutually
+exclusive; compilation diagnostics go to standard error. Generated artifacts
 contain no timestamps or machine-specific paths. Reports include compiler
 version, ordered ports, node IDs, kinds, widths, parameters, dependencies,
 operation counts, fanout (operand edges and output uses), shared IDs, output

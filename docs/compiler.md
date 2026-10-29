@@ -74,7 +74,8 @@ uv run --locked python -m tools.check_generated
 ```
 
 The CLI executes a **trusted Python file**, selects the exported component, and
-writes `<component.name>.v`, `interface.json`, `report.json`, `ast.txt`, and `model.py`. The AST
+writes `<component.name>.v`, `interface.json`, `report.json`, `ast.txt`, `model.py`,
+and `graph.html`. The AST
 file shows the full unrolled constructor structure with four-space indentation,
 including input/output names, constants, widths, and operation parameters. Shared
 expressions are repeated in full at every use; there are no node labels,
@@ -116,6 +117,83 @@ trailing newline, and contains no timestamps. It is a functional debugging model
 sequential assignments do not represent hardware timing or concurrency. Original
 construction helpers, loops, and local names are not recovered; `ast.txt` remains
 the fully expanded, label-free view.
+
+## Interactive HTML graph
+
+Every `--output DIR` invocation writes `DIR/graph.html`. Open it directly in a
+browser: no server, internet connection, JavaScript libraries, or extra Python
+dependencies are required. For example, the checksum command produces
+`build/ipv4_checksum/graph.html`. The public API `emit_html(component) -> str`
+returns the same self-contained report and rejects invalid graphs with
+`CompileError`. `CompileResult` and Verilog-only `--stdout` are unchanged.
+
+The diagram is a **directed acyclic graph**: arrows run from producers to their
+consumers, from inputs at the top to output ports at the bottom. Valid combhdl
+graphs cannot contain cycles. Every reachable expression appears once, including
+constants and zero-extensions. Shared expressions have multiple outgoing
+connections; equivalent but separately constructed expressions remain distinct.
+Unused declared inputs appear as isolated nodes. Output ports have their own
+nodes, including outputs bound directly to inputs.
+
+- Select a node, or focus it and press Enter/Space, to inspect its width and
+  Python assignment. Arithmetic masks match `model.py`.
+- Blue edges trace all upstream dependencies and immediate consumers. Use the
+  inspector's producer/consumer buttons to follow individual connections.
+- Search by input/output name, operation, report ID (`n26`), or Python temporary
+  (`_combhdl_value_26`), then select a matching node to bring it into view.
+- Scroll or drag the background to pan. Use the zoom buttons or Ctrl + wheel;
+  **Fit graph** shows the whole diagram and **100%** restores readable scale.
+- Edge labels preserve operand order: `a`/`b` for binary operations,
+  `condition`/`true`/`false` for selection, and destination bit ranges for
+  concatenation. Repeated uses of the same operand retain separate edges.
+
+Node IDs match `report.json`; operation variables match `model.py`. The graph
+does not recover Python construction-local variable names or show signal values
+for a particular input. It describes data dependencies, not hardware timing,
+physical routing, or Python execution time. The layered layout can require
+scrolling and zooming for large graphs. Without JavaScript, the complete static
+SVG and tooltips remain available, with browser scrolling.
+
+Generation is deterministic and iterative, including for a 5,000-operation
+chain. The HTML embeds all SVG, CSS, interaction code, and graph data. Original
+names are escaped for HTML and embedded JSON is inert.
+
+## Loop example
+
+[`examples/combinational/loops.py`](../examples/combinational/loops.py) constructs
+two paths from an eight-bit `value` input:
+
+- `fixed_three`: a Python `for` loop creates three consecutive additions of one.
+- `bounded_count`: a second `for` loop creates three conditional stages. A two-bit
+  runtime `count` selects how many increments contribute, from zero to three.
+
+```sh
+uv run --locked python -m combhdl examples/combinational/loops.py \
+  --component component --output build/loops
+```
+
+Open `build/loops/graph.html` and search for either output. Selecting `fixed_three`
+highlights the simple addition chain. Selecting `bounded_count` also highlights
+the three comparisons and `If` nodes; their false edges bypass increments. The
+constant one is shared across both paths. All 18 expression nodes and the two
+output nodes remain visible, with 29 operand/output connections.
+
+The generated model can be called from the repository root:
+
+```python
+from build.loops.model import loop_example
+
+assert loop_example(value=10, count=2) == {"fixed_three": 13, "bounded_count": 12}
+assert loop_example(value=255, count=1) == {"fixed_three": 2, "bounded_count": 0}
+```
+
+Both Python loops execute at construction time. The graph contains all stages,
+and each arithmetic result wraps to eight bits. Input-controlled selection
+provides a bounded combinational equivalent of a runtime loop; it does not change
+the hardware's size or execute iterations over clock cycles. Unbounded loops and
+clocked state feedback remain unsupported.
+
+## Scope and verification
 
 The initial language excludes mutable variables, statements, assignment blocks,
 feedback, state, delays, signed/floating arithmetic, multiply/divide/remainder,

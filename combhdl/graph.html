@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>@@TITLE@@ · combhdl graph</title>
+<style>
+:root { color-scheme: light; font-family: system-ui, sans-serif; color: #17283b; background: #eef3f7; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+header { padding: 22px 28px 16px; background: white; border-bottom: 1px solid #cfdae5; }
+h1 { margin: 2px 0 6px; font-size: 24px; }
+p { margin: 8px 0; line-height: 1.5; }
+.eyebrow { color: #46617b; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.summary { color: #46617b; font-size: 14px; }
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 12px 28px; border-bottom: 1px solid #cfdae5; background: #fff; }
+button, input, select { font: inherit; border: 1px solid #b7c6d5; border-radius: 6px; padding: 7px 10px; background: white; color: inherit; }
+button { cursor: pointer; }
+button:hover { background: #e5edf6; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #4078d0; }
+#search { width: 235px; }
+#matches { max-width: 250px; }
+main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; }
+#viewport { overflow: auto; height: 72vh; min-height: 420px; background-image: radial-gradient(#c7d5e3 .8px, transparent .8px); background-size: 20px 20px; cursor: grab; }
+#viewport.dragging { cursor: grabbing; }
+#graph { display: block; }
+.edge path { fill: none; stroke: #8b9eb1; stroke-width: 1.5; }
+.edge text { fill: #526779; font: 10px system-ui, sans-serif; paint-order: stroke; stroke: #eef3f7; stroke-width: 4px; stroke-linejoin: round; }
+.node { cursor: pointer; }
+.node rect { fill: white; stroke: #9cabbc; stroke-width: 1.5; }
+.node.input rect { fill: #e1f3ef; stroke: #22846f; }
+.node.output rect { fill: #e9e7ff; stroke: #7566bb; }
+.node.constant rect { fill: #fff3d7; stroke: #bc9141; }
+.node .meta { fill: #526779; font: 11px system-ui, sans-serif; }
+.node .kind { fill: #17283b; font: 600 16px system-ui, sans-serif; }
+.node .variable { fill: #354e68; font: 11px ui-monospace, monospace; }
+.node.selected rect, .node:focus rect { stroke: #165dcc; stroke-width: 4px; }
+.node.related rect { stroke: #165dcc; stroke-width: 2.5px; }
+.edge.related path { stroke: #165dcc; stroke-width: 2.5px; }
+.node.dim, .edge.dim { opacity: .17; }
+aside { padding: 22px; background: white; border-left: 1px solid #cfdae5; height: 72vh; min-height: 420px; overflow: auto; }
+aside h2 { font-size: 18px; margin: 0 0 12px; overflow-wrap: anywhere; }
+aside h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; margin-top: 24px; }
+#details { font-size: 14px; }
+#expression { display: block; background: #eef3f7; padding: 12px; border-radius: 8px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.links { display: grid; gap: 6px; }
+.links button { text-align: left; font: 12px ui-monospace, monospace; overflow-wrap: anywhere; }
+.legend { display: flex; gap: 18px; flex-wrap: wrap; padding: 12px 28px; font-size: 13px; }
+.legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: #9cabbc; margin-right: 6px; }
+.legend .input::before { background: #22846f; }.legend .output::before { background: #7566bb; }.legend .constant::before { background: #bc9141; }
+footer { padding: 0 28px 20px; color: #526779; font-size: 13px; }
+@media (max-width: 800px) { main { grid-template-columns: 1fr; } aside { height: auto; min-height: 0; border-top: 1px solid #cfdae5; } #viewport { height: 60vh; } }
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">combhdl / expression graph</div>
+<h1>@@TITLE@@</h1>
+<div class="summary">@@SUMMARY@@</div>
+<p>Follow arrows from inputs to outputs. Select a node to trace its dependencies and inspect its connections.</p>
+</header>
+<div class="toolbar" aria-label="Graph controls">
+<label for="search">Find</label><input id="search" type="search" placeholder="Name, node ID, or operation">
+<select id="matches" aria-label="Matching nodes"><option value="">Select a node…</option></select>
+<button id="zoom-out" aria-label="Zoom out">−</button><output id="zoom-label" aria-live="polite">100%</output><button id="zoom-in" aria-label="Zoom in">+</button>
+<button id="fit">Fit graph</button><button id="actual">100%</button><button id="clear">Clear selection</button>
+</div>
+<main>
+<div id="viewport" aria-label="Scrollable graph">@@SVG@@</div>
+<aside aria-label="Node inspector">
+<h2 id="selection" aria-live="polite">Inspect a node</h2>
+<p id="details">Select any operation, input, or output. Blue connections show everything feeding the selected node and its immediate consumers.</p>
+<code id="expression">Node IDs match report.json. Operation variables match model.py.</code>
+<h3>Operands / producers</h3><div class="links" id="producers">—</div>
+<h3>Consumers</h3><div class="links" id="consumers">—</div>
+</aside>
+</main>
+<div class="legend"><span class="input">Input</span><span>Operation</span><span class="constant">Constant</span><span class="output">Output</span></div>
+<footer>Directed acyclic graph · shared expressions appear once · unused inputs remain visible.<br>
+Scroll or drag the background to pan; use Ctrl + wheel to zoom. Select nodes with a click or Enter.<br>
+This graph describes unsigned data dependencies, without hardware timing or recovered Python local names.</footer>
+<noscript><p>JavaScript is disabled. The full graph and node tooltips remain available; scroll to explore.</p></noscript>
+<script type="application/json" id="graph-data">@@DATA@@</script>
+<script>
+'use strict';
+const data = JSON.parse(document.getElementById('graph-data').textContent);
+const nodes = new Map(data.nodes.map(node => [node.id, node]));
+const incoming = new Map(data.nodes.map(node => [node.id, []]));
+const outgoing = new Map(data.nodes.map(node => [node.id, []]));
+for (const edge of data.edges) {
+    incoming.get(edge.target).push(edge);
+    outgoing.get(edge.source).push(edge);
+}
+const viewport = document.getElementById('viewport');
+const svg = document.getElementById('graph');
+const matches = document.getElementById('matches');
+const search = document.getElementById('search');
+let scale = 1;
+function zoom(next) {
+    const centerX = (viewport.scrollLeft + viewport.clientWidth / 2) / scale;
+    const centerY = (viewport.scrollTop + viewport.clientHeight / 2) / scale;
+    scale = Math.min(3, Math.max(.02, next));
+    svg.setAttribute('width', data.width * scale);
+    svg.setAttribute('height', data.height * scale);
+    viewport.scrollLeft = centerX * scale - viewport.clientWidth / 2;
+    viewport.scrollTop = centerY * scale - viewport.clientHeight / 2;
+    document.getElementById('zoom-label').textContent = Math.round(scale * 100) + '%';
+}
+function fillLinks(elementId, edges, direction) {
+    const element = document.getElementById(elementId);
+    element.replaceChildren();
+    if (!edges.length) { element.textContent = '—'; return; }
+    for (const edge of edges) {
+        const node = nodes.get(edge[direction]);
+        const button = document.createElement('button');
+        button.textContent = `${edge.role}: ${node.variable} (${node.id})`;
+        button.addEventListener('click', () => selectNode(node.id, true));
+        element.append(button);
+    }
+}
+function selectNode(id, reveal = false) {
+    const node = nodes.get(id);
+    if (!node) return;
+    const related = new Set([id]);
+    const activeEdges = new Set();
+    const stack = [id];
+    while (stack.length) {
+        const current = stack.pop();
+        for (const edge of incoming.get(current)) {
+            activeEdges.add(edge.id);
+            if (!related.has(edge.source)) { related.add(edge.source); stack.push(edge.source); }
+        }
+    }
+    for (const edge of outgoing.get(id)) { related.add(edge.target); activeEdges.add(edge.id); }
+    for (const item of data.nodes) {
+        const element = document.getElementById(item.id);
+        element.classList.toggle('selected', item.id === id);
+        element.classList.toggle('related', related.has(item.id) && item.id !== id);
+        element.classList.toggle('dim', !related.has(item.id));
+    }
+    for (const edge of data.edges) {
+        const element = document.getElementById(edge.id);
+        element.classList.toggle('related', activeEdges.has(edge.id));
+        element.classList.toggle('dim', !activeEdges.has(edge.id));
+    }
+    document.getElementById('selection').textContent = node.variable;
+    document.getElementById('details').textContent = `${node.id} · ${node.kind} · unsigned ${node.width} bits · ${node.fanout} consumer connections`;
+    document.getElementById('expression').textContent = node.expression;
+    fillLinks('producers', incoming.get(id), 'source');
+    fillLinks('consumers', outgoing.get(id), 'target');
+    if (reveal) {
+        if (scale < .65) zoom(1);
+        const box = document.getElementById(id).getBoundingClientRect();
+        const frame = viewport.getBoundingClientRect();
+        viewport.scrollLeft += box.left - frame.left + box.width / 2 - viewport.clientWidth / 2;
+        viewport.scrollTop += box.top - frame.top + box.height / 2 - viewport.clientHeight / 2;
+    }
+}
+for (const node of data.nodes) {
+    const element = document.getElementById(node.id);
+    element.addEventListener('click', () => selectNode(node.id));
+    element.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectNode(node.id); }
+    });
+}
+function updateMatches() {
+    const query = search.value.trim().toLowerCase();
+    matches.replaceChildren(new Option('Select a node…', ''));
+    let count = 0;
+    for (const node of data.nodes) {
+        if (`${node.id} ${node.variable} ${node.kind}`.toLowerCase().includes(query)) {
+            matches.add(new Option(`${node.id} · ${node.variable} · ${node.kind}`, node.id));
+            count++;
+        }
+    }
+    if (!count) matches.add(new Option('No matching nodes', ''));
+}
+search.addEventListener('input', updateMatches);
+matches.addEventListener('change', () => selectNode(matches.value, true));
+document.getElementById('zoom-in').addEventListener('click', () => zoom(scale * 1.25));
+document.getElementById('zoom-out').addEventListener('click', () => zoom(scale / 1.25));
+document.getElementById('actual').addEventListener('click', () => zoom(1));
+document.getElementById('fit').addEventListener('click', () => {
+    zoom(Math.min(viewport.clientWidth / data.width, viewport.clientHeight / data.height));
+    viewport.scrollLeft = viewport.scrollTop = 0;
+});
+document.getElementById('clear').addEventListener('click', () => {
+    for (const element of svg.querySelectorAll('.selected, .related, .dim')) element.classList.remove('selected', 'related', 'dim');
+    document.getElementById('selection').textContent = 'Inspect a node';
+    document.getElementById('details').textContent = 'Select any operation, input, or output to trace its connections.';
+    document.getElementById('expression').textContent = 'Node IDs match report.json. Operation variables match model.py.';
+    document.getElementById('producers').textContent = document.getElementById('consumers').textContent = '—';
+    matches.value = '';
+});
+viewport.addEventListener('wheel', event => {
+    if (event.ctrlKey) { event.preventDefault(); zoom(scale * (event.deltaY < 0 ? 1.15 : 1 / 1.15)); }
+}, {passive: false});
+let drag = null;
+viewport.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || event.target.closest('.node')) return;
+    drag = {x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop};
+    viewport.setPointerCapture(event.pointerId);
+    viewport.classList.add('dragging');
+});
+viewport.addEventListener('pointermove', event => {
+    if (drag) { viewport.scrollLeft = drag.left - event.clientX + drag.x; viewport.scrollTop = drag.top - event.clientY + drag.y; }
+});
+function endDrag() { drag = null; viewport.classList.remove('dragging'); }
+viewport.addEventListener('pointerup', endDrag);
+viewport.addEventListener('pointercancel', endDrag);
+updateMatches();
+// Fit the width initially, retaining vertical scrolling and readable node labels.
+zoom(Math.min(1, viewport.clientWidth / data.width));
+viewport.scrollLeft = viewport.scrollTop = 0;
+</script>
+</body>
+</html>

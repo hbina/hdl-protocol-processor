@@ -15,7 +15,8 @@ def _python_name(name: str) -> bool:
     )
 
 
-def _rhs(node: Expr, refs: dict[Expr, str]) -> str:
+def python_rhs(node: Expr, refs: dict[Expr, str]) -> str:
+    """Format an unsigned operation for Python emission and graph inspection."""
     args = [refs[operand] for operand in node.operands]
     kind, params = node.kind, node.params
     mask = hex((1 << node.width) - 1)
@@ -87,7 +88,7 @@ def emit_python(component: Component) -> str:
     }
     for node in order:
         if node.kind != "Input":
-            lines.append(f"    {refs[node]} = {_rhs(node, refs)}")
+            lines.append(f"    {refs[node]} = {python_rhs(node, refs)}")
     lines.append("    return {")
     lines += [
         f"        {out.name!r}: {refs[out.expression]}," for out in component.outputs

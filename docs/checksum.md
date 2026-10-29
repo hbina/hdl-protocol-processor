@@ -29,6 +29,7 @@ uv run --locked python -m combhdl examples/combinational/ipv4_checksum.py \
   --component component --output build/ipv4_checksum
 cat build/ipv4_checksum/ipv4_checksum.v
 cat build/ipv4_checksum/ast.txt
+# Open build/ipv4_checksum/graph.html in a browser to explore the connections.
 uv run --locked python -m tools.check_checksum --sim icarus
 uv run --locked python -m tools.check_checksum --sim verilator
 uv run --locked python -m tools.check_synthesis --yosys .venv/bin/yowasp-yosys
@@ -63,6 +64,13 @@ assert ipv4_checksum(header=header) == {"checksum": 0xB861, "valid": 1}
 arithmetic. Its keyword-only function rejects invalid unsigned inputs with
 `ValueError`. Python evaluation gives functional values, without modeling hardware
 timing or concurrency.
+
+The accompanying `graph.html` displays 51 expression nodes plus the two output
+ports and 65 operand/output connections. Search for `_combhdl_value_26` to inspect
+the shared nine-word sum and follow its three consumer connections into checksum
+generation and validation. Select any operation to see its assignment and bit
+width, or select an output to highlight all dependencies feeding it. The report
+works offline; see the [graph controls](compiler.md#interactive-html-graph).
 
 Verification uses an independent byte-oriented integer oracle that folds carry
 after each word, rather than reproducing the expression tree. The 2,508 HDL

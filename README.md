@@ -5,7 +5,7 @@ evaluates them, and emits combinational Verilog and standalone Python models. Th
 clock, storage, or target-side execution sequence. Reusing an expression object
 preserves explicit sharing. Separate equivalent expressions remain separate.
 
-**Last updated: 2026-10-29.** Compiler, evaluator, executable Python models, CLI, generated Tiny Tapeout demo,
+**Last updated: 2026-10-29.** Compiler, evaluator, executable Python models, interactive HTML graphs, CLI, generated Tiny Tapeout demo,
 both simulators, and generic synthesis pass. Rootless Podman 4.9.3 is now working
 and the pinned LibreLane image is installed. The corrected CMOS5L 6×4 flow and
 6,144-check mapped regression pass, with positive extracted timing at all three
@@ -45,8 +45,9 @@ Verification for the retired processor does not establish protocol support here.
 
 | Check | Current evidence |
 |---|---|
-| Python language, validation, CLI and integration | `uv run --locked pytest`: 98 passed; includes full AST unrolling, operation-parameter round trips, deep AST formatting, checksum/carry tests, a 5,000-operation graph, cross-process reproducibility, metadata and Tcl constraint checks |
+| Python language, validation, CLI and integration | `uv run --locked pytest`: 106 passed; includes full AST unrolling, operation-parameter round trips, deep AST formatting, checksum/carry tests, a 5,000-operation graph, cross-process reproducibility, metadata and Tcl constraint checks |
 | Executable Python models | `test/compiler/test_python.py`: 39 passed; independent operation oracle and evaluator at widths 1/4/17/160, all 2,508 checksum vectors, carry folding, aliases, input validation, sharing and deep graphs |
+| Interactive HTML dependency graphs | `test/compiler/test_graph.py`: 8 passed; node/edge agreement with compiler reports, sharing, operand roles, unused inputs, constants, 5,000-operation graphs and invalid graphs; Chromium local-file interaction and mobile checks pass |
 | All operations in Icarus 12.0 and Verilator 5.038 | `tools.check_simulation`: 8 exhaustive width-one vectors, 512 exhaustive four-bit vectors, 328 boundary/fixed-seed 17-bit vectors, and a constant-only circuit per simulator; independent oracle and evaluator agree |
 | Tiny Tapeout wrapper in both simulators | `make -B -C test` and `SIM=verilator`: all 512 meaningful inputs × 12 unused-control patterns = 6,144 checks each |
 | Larger checksum circuit in both simulators | `tools.check_checksum`: 2,508 vectors each, independent byte-oriented oracle, known values, carry boundaries, valid headers and single-bit corruption; [evidence](docs/checksum_results.json) |
@@ -67,6 +68,17 @@ The accompanying `model.py` computes each shared node once using imperative
 Python assignments. Import its component function and pass inputs by keyword;
 see the [checksum import example](docs/checksum.md). The public API is
 `emit_python(component) -> str`.
+Open `graph.html` from the same output directory for an offline interactive
+dependency graph. Search and select nodes to see their Python assignments,
+bit widths, operand connections, and consumers; zoom and pan to explore shared
+logic. The API is `emit_html(component) -> str`; see the
+[graph report guide](docs/compiler.md#interactive-html-graph).
+The [loop example](examples/combinational/loops.py) compares three fixed increments
+with zero-to-three input-controlled increments. Generate it with
+`uv run --locked python -m combhdl examples/combinational/loops.py --output build/loops`
+and open `build/loops/graph.html`; see the [loop walkthrough](docs/compiler.md#loop-example).
+All 1,024 input combinations agree with independent arithmetic in the evaluator
+and generated Python model; these are unrolled combinational stages, without clocks.
 
 ```sh
 uv sync --locked
@@ -107,6 +119,7 @@ for container prerequisites and remaining constraints/signoff work.
 - [x] Verify every initial operation and explicit sharing.
 - [x] Provide deterministic CLI artifacts and structured reports/warnings.
 - [x] Emit standalone executable Python models with fixed-width arithmetic and shared-node assignments.
+- [x] Generate offline HTML dependency graphs with search, zoom, and connected-node inspection.
 - [x] Exhaustively verify the Tiny Tapeout combinational demo in both simulators.
 - [x] Integrate generic synthesis, no-storage checks, and active workflows.
 - [x] Retire processor RTL, firmware, ISA tooling, loaders, and active regressions.

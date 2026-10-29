@@ -7,8 +7,8 @@
     ".github/workflows/fpga.yaml": "783576e7fac489812ea009c715d86099960ca13d3071f30c3d9f977cd2f11e37",
     ".github/workflows/gds.yaml": "a57f083b3bde7b8734745031bfb1ec05728517df111ea18c94abb44e8885fce1",
     ".github/workflows/test.yaml": "d3ea0c5bc58c82dbba2229ac6ed05ec9aec7330b8de4449fd94b66bdcd03d552",
-    "combhdl/__init__.py": "121271d9030f0884dc63201cb950753108419033c057aba85674cc302b52673e",
-    "combhdl/__main__.py": "e103c2eeb074e7751045eb39dadc57cfaa701809ade04e81d7b2980990886f83",
+    "combhdl/__init__.py": "c66cb07830be102c37920d73c1a3dcf64dd89fc8f9fe15024597e1abc01f138e",
+    "combhdl/__main__.py": "3b57266dc47696fe01239046fe84dc972acd36e19921eb97099ccf91fa776bc3",
     "combhdl/ast.py": "0561a129d007368a1b795fcae8de82ca1563f1770d8d51d91fd101db03e75f02",
     "combhdl/compiler.py": "29fe8150ebe1c8d057564504c00a0e56adfbe3c3c753e509b5902b294b2287c6",
     "combhdl/model.py": "79dfeea24145c4947a225b39ae4a04f48dd9d9ad32670c698a3dd8275f93e8ea",
@@ -26,7 +26,7 @@
     "test/compiler/test_ast.py": "c3eaa23219218de5f31833bbc695259bb931b27783f0969cca01a222dc2bb051",
     "test/compiler/test_checksum.py": "14a02561c97c78f8ce3bae860d62c37d7e4897d4f394c7b6a45a48a2a33a3efe",
     "test/compiler/test_integration.py": "26253e3903cebe16914af82826424485cd474dcc935112d80b7581c26e349aa2",
-    "test/compiler/test_language.py": "de0cd847e7e3a3061dfb2d60e88135d54fbd98d06bf9c9853ddf9e0a8e551c61",
+    "test/compiler/test_language.py": "5d4020053b2204a13fc7020c3e089476faf1638f3fe672bbba492fe31283be21",
     "test/demo.py": "3cb37a32758c24338ae8c8a8c94035d99cfffe9ecfb5592ea8522abda08d4285",
     "test/tb.v": "7b68cb11437ddfcfaee4c2d32e3f9b3a78134218afe402a984138096d5f2e4ef",
     "tools/__init__.py": "530dfa31e602a64ef48093234eba41811a8487bbdba16b1860750585a2d4334f",
@@ -38,8 +38,12 @@
     "tools/report_physical.py": "a8c4fc9dd79155e8a69426dd921c88549b24672f5cca20538fb9efb8505d2f5c",
     "tools/run_physical.py": "684266a9f4f352d3c228644b167f380b9eb720671363421c0f8c8ac52d8c78ed",
     "uv.lock": "952e08129a3cd752b5326c0baf3224870482c6bb5341e90f54be41d6c8106b74",
-    "combhdl/python.py": "dfe52c3d95e8d95db482c5ad8f4024ecb0eed727acad2e9faed401791bdd0490",
-    "test/compiler/test_python.py": "cef656d70f4487f6c002b6f7cbd261525c897ed998f834094a8936aaabd854c8"
+    "combhdl/python.py": "5ab5a1ca407ed2ff3049858b879226b23877a314455f12b3be17edcb5a60ce41",
+    "test/compiler/test_python.py": "cef656d70f4487f6c002b6f7cbd261525c897ed998f834094a8936aaabd854c8",
+    "combhdl/graph.py": "d3c27228ba98c838f17581546dea08a7e2abc2f6ea4db4f5fe384629f99309d7",
+    "combhdl/graph.html": "c394f05dd5931d58b1272ad99ba9d486238ea377f1b51d7d4808510187747d6d",
+    "test/compiler/test_graph.py": "746c23b98a779715bab75d02ad3a8daab70829f6bb6e8f19111f4fede3e66b77",
+    "examples/combinational/loops.py": "8e85678abf0db5c6689efefb42486b98547aff49a9871dff7f19017a4b7fd966"
   },
   "checks": [
     {
@@ -49,7 +53,7 @@
     },
     {
       "command": "uv run --locked pytest",
-      "result": "98 passed"
+      "result": "106 passed"
     },
     {
       "command": "uv run --locked pyright",
@@ -665,7 +669,7 @@
   },
   "checksum": {
     "record": "docs/checksum_results.json",
-    "record_sha256": "727f6c61699c96faa309065564fe895478efcda0e8842fa4a76ae8daa234f4b9",
+    "record_sha256": "93ac15df5f3d1037beb057b3e0b9584cf60377c58d83848b386d2c9c672ececb",
     "example": "examples/combinational/ipv4_checksum.py",
     "python_tests": 10,
     "vectors_per_simulator": 2508,
@@ -721,5 +725,28 @@
       "build/ipv4_checksum/model.py": "dfa7b1939377ce74d3771c581395414990c1be30badb34efc5628dfa92a00834"
     },
     "scope": "Functional debugging models only; HDL and physical-signoff evidence unchanged; no physical-flow reruns"
+  },
+  "html_graph": {
+    "completed": "2026-10-29",
+    "command": "uv run --locked pytest test/compiler/test_graph.py",
+    "result": "8 passed; full suite: 106 passed; strict Pyright, Ruff formatting and generated-demo freshness pass",
+    "coverage": "Node IDs, widths, Python variables, fanout and ordered operand edges agree with report.json; all operations, shared/distinct expressions, repeated operands, conditional and concatenation roles, unused inputs, direct outputs, constants, 5,000-operation graph, invalid graphs; graph.html reproducible across CLI processes and stdout remains Verilog-only",
+    "browser": "Chromium 156.0.8078.4, Playwright (temporary verification dependency only)",
+    "browser_result": "PASS: local-file rendering, search/select shared n26, producer and three-consumer navigation, upstream highlighting, zoom/fit/clear, keyboard selection and 390px mobile viewport; zero JavaScript errors and network requests",
+    "artifacts": {
+      "build/shared_logic/graph.html": "f4261a2f72b30c28f4c3965f5545a1f67fc86fb9eb5e7bcee4abe52fc784c376",
+      "build/ipv4_checksum/graph.html": "be31ab17df39a99a173de686c79b237a3930507737664768e6afa58c6c8e9d4b"
+    },
+    "scope": "Expression data dependencies; no recovered construction-local names, signal values, physical timing or routing. No HDL or physical-flow changes."
+  },
+  "loop_example": {
+    "completed": "2026-10-29",
+    "command": "uv run --locked python -m combhdl examples/combinational/loops.py --component component --output build/loops",
+    "verification": "Exhaustive manual Python check: all 256 value inputs x 4 count inputs (1,024 vectors); evaluator and generated model agree with independent modulo-256 arithmetic for both outputs",
+    "expression_nodes": 18,
+    "visible_nodes": 20,
+    "connections": 29,
+    "graph_sha256": "4f7b806ffbfa96273d3b33e35b22bcf9158e3a72a5f0370eee54f821d7baf9d1",
+    "scope": "Fixed construction loops and input-controlled bounded combinational stages; no sequential loops, clocks or physical-flow changes"
   }
 }

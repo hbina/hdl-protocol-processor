@@ -6,7 +6,7 @@ from pathlib import Path
 import runpy
 import sys
 
-from . import CompileError, Component, compile, emit_python
+from . import CompileError, Component, compile, emit_html, emit_python
 from .ast import format_ast
 
 
@@ -16,7 +16,9 @@ def main() -> None:
     parser.add_argument("--component", default="component")
     destination = parser.add_mutually_exclusive_group(required=True)
     destination.add_argument(
-        "--output", type=Path, help="write HDL, Python, AST and JSON artifacts"
+        "--output",
+        type=Path,
+        help="write HDL, Python, AST, HTML graph and JSON artifacts",
     )
     destination.add_argument(
         "--stdout", action="store_true", help="print only generated Verilog to stdout"
@@ -34,6 +36,7 @@ def main() -> None:
         (args.output / f"{component.name}.v").write_text(result.verilog)
         (args.output / "ast.txt").write_text(format_ast(component))
         (args.output / "model.py").write_text(emit_python(component))
+        (args.output / "graph.html").write_text(emit_html(component), encoding="utf-8")
         for name, data in (("interface", result.interface), ("report", result.report)):
             (args.output / f"{name}.json").write_text(json.dumps(data, indent=2) + "\n")
     except CompileError as exc:

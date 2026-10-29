@@ -7,11 +7,14 @@
     "tools/check_synthesis.py": "5703f427161ae6153c30c8107bec7d670cc21b197c23f4ec130c62a986abbfde",
     "test/compiler/test_checksum.py": "14a02561c97c78f8ce3bae860d62c37d7e4897d4f394c7b6a45a48a2a33a3efe",
     "combhdl/compiler.py": "29fe8150ebe1c8d057564504c00a0e56adfbe3c3c753e509b5902b294b2287c6",
-    "combhdl/__init__.py": "121271d9030f0884dc63201cb950753108419033c057aba85674cc302b52673e",
+    "combhdl/__init__.py": "c66cb07830be102c37920d73c1a3dcf64dd89fc8f9fe15024597e1abc01f138e",
     "combhdl/model.py": "79dfeea24145c4947a225b39ae4a04f48dd9d9ad32670c698a3dd8275f93e8ea",
-    "combhdl/__main__.py": "e103c2eeb074e7751045eb39dadc57cfaa701809ade04e81d7b2980990886f83",
-    "combhdl/python.py": "dfe52c3d95e8d95db482c5ad8f4024ecb0eed727acad2e9faed401791bdd0490",
-    "test/compiler/test_python.py": "cef656d70f4487f6c002b6f7cbd261525c897ed998f834094a8936aaabd854c8"
+    "combhdl/__main__.py": "3b57266dc47696fe01239046fe84dc972acd36e19921eb97099ccf91fa776bc3",
+    "combhdl/python.py": "5ab5a1ca407ed2ff3049858b879226b23877a314455f12b3be17edcb5a60ce41",
+    "test/compiler/test_python.py": "cef656d70f4487f6c002b6f7cbd261525c897ed998f834094a8936aaabd854c8",
+    "combhdl/graph.py": "d3c27228ba98c838f17581546dea08a7e2abc2f6ea4db4f5fe384629f99309d7",
+    "combhdl/graph.html": "c394f05dd5931d58b1272ad99ba9d486238ea377f1b51d7d4808510187747d6d",
+    "test/compiler/test_graph.py": "746c23b98a779715bab75d02ad3a8daab70829f6bb6e8f19111f4fede3e66b77"
   },
   "interface": {
     "compiler_version": "0.1.0",
@@ -849,5 +852,17 @@
     "model_sha256": "dfa7b1939377ce74d3771c581395414990c1be30badb34efc5628dfa92a00834",
     "vectors": 2508,
     "scope": "Standalone functional model; no hardware timing or concurrency. Existing HDL simulation and synthesis results retained; no new physical runs."
+  },
+  "html_graph": {
+    "completed": "2026-10-29",
+    "command": "uv run --locked python -m combhdl examples/combinational/ipv4_checksum.py --component component --output build/ipv4_checksum",
+    "artifact": "build/ipv4_checksum/graph.html",
+    "sha256": "be31ab17df39a99a173de686c79b237a3930507737664768e6afa58c6c8e9d4b",
+    "expression_nodes": 51,
+    "output_nodes": 2,
+    "connections": 65,
+    "browser": "Chromium 156.0.8078.4, Playwright (temporary verification dependency only)",
+    "browser_result": "PASS: local-file rendering, search/select shared n26, producer and three-consumer navigation, upstream highlighting, zoom/fit/clear, keyboard selection and 390px mobile viewport; zero JavaScript errors and network requests",
+    "scope": "Expression data dependencies; no recovered construction-local names, signal values, physical timing or routing. No HDL or physical-flow changes."
   }
 }

@@ -17,5 +17,14 @@ drivers must be unchanged. Each observation follows a 1 ns simulation settling
 interval, which carries no physical-delay guarantee.
 
 `GATES=yes` selects a newly generated `gate_level_netlist.v` and PDK functional
-models; see [physical-flow instructions](../docs/physical_flow.md). No new mapped
-netlist is currently available. Processor-specific active tests were retired.
+models; see [physical-flow instructions](../docs/physical_flow.md). The recorded
+`combhdl_demo_02` netlist passes all 6,144 observations. Prefer the provenance-aware
+`tools.check_mapped` command below. Processor-specific active tests were retired.
+
+`tools.run_physical --engine podman --run-dir runs/<fresh-name>` records source
+snapshots and tool/container provenance before launching the pinned CMOS5L flow.
+`tools.check_mapped --run-dir runs/<name>` selects that run's exact final netlist
+without overwriting a shared copy, verifies provenance, and runs all 6,144 board
+observations. `tools.report_physical --run-dir runs/<name>` audits the real
+all-corner reports, saved constraints, DEF allocation, cells, DRC/LVS, and mapped
+result before writing a physical evidence record. See the physical-flow guide.

@@ -44,7 +44,8 @@ $(IHP_FUNCTIONAL_MODEL): $(IHP_STDCELL_MODEL)
 	@awk '{ print; if ($$0 ~ /wire delayed_D, delayed_RESET_B, delayed_CLK;/) { print "`ifdef FUNCTIONAL"; print "\tassign delayed_D = D;"; print "\tassign delayed_RESET_B = RESET_B;"; print "\tassign delayed_CLK = CLK;"; print "`endif"; } }' $< > $@
 
 # this gets copied in by the GDS action workflow
-VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
+GATE_NETLIST ?= $(PWD)/gate_level_netlist.v
+VERILOG_SOURCES += $(GATE_NETLIST)
 
 endif
 

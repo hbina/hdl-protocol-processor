@@ -6,10 +6,12 @@ clock, storage, or target-side execution sequence. Reusing an expression object
 preserves explicit sharing. Separate equivalent expressions remain separate.
 
 **Last updated: 2026-10-29.** Compiler, evaluator, CLI, generated Tiny Tapeout demo,
-both simulators, and generic synthesis pass. Physical implementation remains
-**blocked**: the installed LibreLane environment has no compatible container
-engine. No routed timing, ASIC area, DRC/LVS, mapped-netlist, or FPGA-bitstream
-result has been established for this design.
+both simulators, and generic synthesis pass. Rootless Podman 4.9.3 is now working
+and the pinned LibreLane image is installed. The corrected CMOS5L 6×4 flow and
+6,144-check mapped regression pass, with positive extracted timing at all three
+corners and zero configured routing DRC, Magic DRC, and LVS errors. Physical
+signoff remains incomplete: KLayout DRC/XOR, board validation, and realistic
+power/IR analysis remain open. No FPGA bitstream result has been established.
 
 ```python
 from combhdl import Component, If, Input, Output, Xor, compile
@@ -44,10 +46,11 @@ Verification for the retired processor does not establish protocol support here.
 | Generic Yosys 0.70 synthesis | `tools.check_synthesis`: wrapper 16 cells; operation circuits at widths 1/4/17: 16/79/386 cells; structural checks pass, zero storage and combinational loops |
 | Strict Pyright / Ruff | Strict compiler/example/tool checks and formatting pass |
 | Tiny Tapeout configuration | Support-tool configuration generation passes; CMOS5L 6×4, clock metadata zero, CTS disabled, virtual 20 ns I/O reference |
-| Routed/mapped ASIC verification | Blocked before synthesis: `No compatible container engine found.` |
+| Routed/mapped ASIC verification | `runs/combhdl_demo_02`: 6×4 fit, 53 non-filler cells, 627.782 µm² cell area, 0.06957% utilization; 6,144 mapped observations pass; routing DRC / Magic DRC / LVS: 0 / 0 / 0 |
+| Extracted input-to-output timing | All three PVT corners pass at a virtual 20 ns reference; worst setup +17.4318 ns, hold +0.1391 ns; no slew, capacitance, or fanout violations; [physical evidence](docs/physical_results.json) |
 
 Exact commands, versions, and source hashes are in
-[verification.json](docs/verification.json). Graph counts and generic cell counts
+[verification.json](docs/verification.json) and the linked physical record. Graph counts and generic cell counts
 are not LUT usage, physical area, timing, or fit evidence.
 
 ```sh
@@ -85,17 +88,19 @@ for container prerequisites and remaining constraints/signoff work.
 - [x] Integrate generic synthesis, no-storage checks, and active workflows.
 - [x] Retire processor RTL, firmware, ISA tooling, loaders, and active regressions.
 - [ ] Update and validate the development-container recipe for pinned CMOS5L.
-- [ ] Restore the container environment and run the new physical flow.
-- [ ] Verify a newly generated mapped netlist, all-corner timing, fit, DRC/LVS.
+- [x] Restore a compatible container environment (rootless Podman 4.9.3).
+- [x] Complete the new physical flow and record the resulting artifacts.
+- [x] Verify a newly generated mapped netlist, all-corner timing, fit, configured DRC/LVS.
 - [ ] Complete remaining physical signoff, board validation, and power/IR analysis.
 
 No constant folding, algebraic simplification, or structural deduplication is
 performed by this compiler. Downstream synthesis can optimize or duplicate logic.
 Signed arithmetic, storage, feedback, runtime indexing, hierarchy, tri-states,
 and four-state semantics are unsupported. Simulation settling intervals do not
-establish physical delay or glitch behavior. The 20 ns virtual timing reference
-is a proposed budget, not measured performance. KLayout DRC/XOR remain disabled;
-positive future timing alone will not constitute complete signoff.
+establish physical delay or glitch behavior. The 20 ns virtual reference is an
+I/O timing constraint; extracted timing results apply to the recorded driving,
+load, corner, uncertainty, and derating assumptions. KLayout DRC/XOR remain
+disabled; positive timing alone does not constitute complete signoff.
 
 `combhdl/` contains the compiler; `examples/combinational/` contains construction
 examples; `src/` contains checked-in generated HDL, wrapper, and physical config;

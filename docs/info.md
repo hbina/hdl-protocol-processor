@@ -25,8 +25,10 @@ uv run --locked make -B -C test SIM=verilator
 
 The wrapper regression exhausts all 512 meaningful inputs and varies unused
 inputs independently. See [compiler documentation](compiler.md) and the
-[physical-flow guide](physical_flow.md). The virtual 20 ns constraint is a target;
-physical implementation and mapped-netlist verification remain incomplete.
+[physical-flow guide](physical_flow.md). The CMOS5L 6×4 routed implementation
+passes extracted timing at all three corners, configured DRC/LVS, and the same
+6,144 checks against its exact mapped netlist. KLayout DRC/XOR, board validation,
+and realistic power/IR analysis remain open.
 
 ## External hardware
 

@@ -15,22 +15,24 @@
     "examples/combinational/operations.py": "0ec6b779f8bf1ffec77c40c70290214b58728d88a86a83d81af0f10848e4d2e4",
     "examples/combinational/shared_logic.py": "0f1c9dacb8cb08ddce9ccc3dccddfce7b7ade76b67aa5d522e9c60b25842a335",
     "info.yaml": "a225831fc5c9441a6076fb8b956dea635ec8bebd4cb4df7a2c5738136a1d831c",
-    "pyproject.toml": "14700edf0d531bf07fba52e54d91d1f58f123a391c621e54e0f03b9aedfa0f31",
+    "pyproject.toml": "f51778b2869a5ae43200da9ff0145e459cad35c7d39a6dc7ed6012a388504bb1",
     "src/combhdl_demo.v": "7aba65e0bcb336109eac68a4facf78364395107daec29c350b3653b651aa14d7",
-    "src/config.json": "40e66275b8dd35fb57b2e911394ff1675362fb83e14dbf375b4566cca71df036",
-    "src/pins.sdc": "9177d4f79beaf2a159c27da3bd2cc8b21c3bd51e25912bb9845b25ea04489d41",
+    "src/config.json": "28222664922785fd1af94cf75d1dde8d161eaa31cff6b86eaf64a5cde6b9c24d",
+    "src/pins.sdc": "a326399a58617b8840930b036409d5c044de672367dd8b3df588ce9645b4b17c",
     "src/project.v": "3d54bb71d8119cbd91902eb8bc7f2285cedf98fe6f80c0e72bcb2b60d77f6be4",
-    "test/Makefile": "731e8c06316f97deaee1a642fe1e2880cfda39caf0f10dc908f99b65d72b3c57",
-    "test/compiler/test_integration.py": "273e5fcba7d83da6e160922db15dbc0d1662b20adf873b6fc4c7bdb938d38725",
+    "test/Makefile": "7e86bd1978b8972b16367aa357fb14d3492c93ac092ca2d6d4b4ebdf6ed7fd0a",
+    "test/compiler/test_integration.py": "26253e3903cebe16914af82826424485cd474dcc935112d80b7581c26e349aa2",
     "test/compiler/test_language.py": "03e19f875a063e524ecf205844d4960b527e644af33b1de037c7b28cb65c70df",
     "test/demo.py": "3cb37a32758c24338ae8c8a8c94035d99cfffe9ecfb5592ea8522abda08d4285",
     "test/tb.v": "7b68cb11437ddfcfaee4c2d32e3f9b3a78134218afe402a984138096d5f2e4ef",
     "tools/__init__.py": "530dfa31e602a64ef48093234eba41811a8487bbdba16b1860750585a2d4334f",
     "tools/check_generated.py": "95e2209d75f7b06233a9e2990f10e713db194cb6f60fc9feaa9c8005fa572a44",
+    "tools/check_mapped.py": "b19fee6fe1eeb70d4449a255df38cdbf1b9a364656aa44dc367442230d7c5d4e",
     "tools/check_simulation.py": "ac4782054b4a4608c1521432a998dbdfad6a57903544c5940c34b75a5c90788a",
     "tools/check_synthesis.py": "85354b9d859729277c3b8bab6579b0ddc8f85d84112dc35fad1f7e32bd9111bb",
-    "uv.lock": "952e08129a3cd752b5326c0baf3224870482c6bb5341e90f54be41d6c8106b74",
-    "tools/run_physical.py": "684266a9f4f352d3c228644b167f380b9eb720671363421c0f8c8ac52d8c78ed"
+    "tools/report_physical.py": "a8c4fc9dd79155e8a69426dd921c88549b24672f5cca20538fb9efb8505d2f5c",
+    "tools/run_physical.py": "684266a9f4f352d3c228644b167f380b9eb720671363421c0f8c8ac52d8c78ed",
+    "uv.lock": "952e08129a3cd752b5326c0baf3224870482c6bb5341e90f54be41d6c8106b74"
   },
   "checks": [
     {
@@ -495,27 +497,112 @@
     ]
   },
   "physical": {
-    "configuration_command": "uv run --no-project --python .asic-tools/venv/bin/python tt/tt_tool.py --create-user-config --ihp",
-    "configuration_result": "pass; new top/sources, CMOS5L 6x4, no functional clock, no CTS, custom fallback/PnR/signoff SDC",
-    "sdc_check": "Tcl command-spy test with and without optional PDK limits; not OpenSTA validation",
-    "launch_command": "uv run --no-project --python .asic-tools/venv/bin/python -m librelane --docker-no-tty --dockerized --pdk-root /mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/pdk --pdk ihp-sg13cmos5l --manual-pdk --run-tag combhdl_demo --force-run-dir runs/combhdl_demo src/config_merged.json",
-    "launch_date": "2026-10-28",
-    "launch_result": "No compatible container engine found.",
-    "physical_signoff": "incomplete; no new routed timing/area/DRC/LVS/mapped simulation/FPGA bitstream",
-    "timing_reference_ns": 20,
-    "timing_reference_is_achieved_performance": false,
-    "remaining_limits": [
-      "KLayout DRC/XOR disabled",
-      "no container engine",
-      "OpenSTA/PDK SDC validation pending",
-      "development-container recipe uses older PDK/toolchain",
-      "board validation and realistic power/IR analysis pending"
+    "record": "docs/physical_results.json",
+    "record_sha256": "be6874d770098555791449dec66ec250fbec06556e5e871795cbbb8723d6d49f",
+    "run": "runs/combhdl_demo_02",
+    "result": "passed",
+    "launcher_command": "uv run --locked python -m tools.run_physical --engine podman --run-dir runs/combhdl_demo_02",
+    "mapped_command": "uv run --locked python -m tools.check_mapped --run-dir runs/combhdl_demo_02",
+    "audit_command": "uv run --locked python -m tools.report_physical --run-dir runs/combhdl_demo_02",
+    "all_corner_timing": {
+      "nom_slow_1p08V_125C": {
+        "metrics": {
+          "timing__setup__ws": 17.4317738511162,
+          "timing__hold__ws": 0.67013096968325,
+          "timing__setup__tns": 0,
+          "timing__hold__tns": 0,
+          "timing__setup_vio__count": 0,
+          "timing__hold_vio__count": 0,
+          "design__max_slew_violation__count": 0,
+          "design__max_cap_violation__count": 0,
+          "design__max_fanout_violation__count": 0,
+          "timing__unannotated_net_filtered__count": 0
+        },
+        "timed_output_paths": {
+          "min.rpt": 8,
+          "max.rpt": 8
+        },
+        "report_sha256": {
+          "clock.rpt": "c607a2ed3f13fce6bc0f078bbe6885e19dae86fcb0fd896b69e04fef09c7b73c",
+          "min.rpt": "99f09f5ec131b8e623fbf4572dd312950d4e0bff0aa4b3cb842c69091df3c7ff",
+          "max.rpt": "e317a65716856b370c8b6e4e8ae59dfceba0d291f6a73c93799a46c03a7b1685",
+          "checks.rpt": "7b0664129e6971dff7b505f1484fce758136f21307607d6c98675e547f011936"
+        }
+      },
+      "nom_typ_1p20V_25C": {
+        "metrics": {
+          "timing__setup__ws": 18.301122912905555,
+          "timing__hold__ws": 0.3264079376951703,
+          "timing__setup__tns": 0,
+          "timing__hold__tns": 0,
+          "timing__setup_vio__count": 0,
+          "timing__hold_vio__count": 0,
+          "design__max_slew_violation__count": 0,
+          "design__max_cap_violation__count": 0,
+          "design__max_fanout_violation__count": 0,
+          "timing__unannotated_net_filtered__count": 0
+        },
+        "timed_output_paths": {
+          "min.rpt": 8,
+          "max.rpt": 8
+        },
+        "report_sha256": {
+          "clock.rpt": "c607a2ed3f13fce6bc0f078bbe6885e19dae86fcb0fd896b69e04fef09c7b73c",
+          "min.rpt": "836aa6a56765ad4e539c1e46b0d8c821fdc974c692513320c551d60fc244b1c0",
+          "max.rpt": "017f4fdffcb6b7983777ba45f05b01473b927c164cfefd5b6637dcfbc55e92c6",
+          "checks.rpt": "e24737a7b7e0a5db54b0929d92b43c6a8fae079cb026e02213f17f29e18f214f"
+        }
+      },
+      "nom_fast_1p32V_m40C": {
+        "metrics": {
+          "timing__setup__ws": 18.7762468665342,
+          "timing__hold__ws": 0.139100040978333,
+          "timing__setup__tns": 0,
+          "timing__hold__tns": 0,
+          "timing__setup_vio__count": 0,
+          "timing__hold_vio__count": 0,
+          "design__max_slew_violation__count": 0,
+          "design__max_cap_violation__count": 0,
+          "design__max_fanout_violation__count": 0,
+          "timing__unannotated_net_filtered__count": 0
+        },
+        "timed_output_paths": {
+          "min.rpt": 8,
+          "max.rpt": 8
+        },
+        "report_sha256": {
+          "clock.rpt": "c607a2ed3f13fce6bc0f078bbe6885e19dae86fcb0fd896b69e04fef09c7b73c",
+          "min.rpt": "c80583df64b133ce69ce6f906b4d4e3e28b9601c34ffa21b25fa3f5cb161708b",
+          "max.rpt": "5bc1e68b09301b54289c88356866e5b78deb9fd739f8eca93678eb49dab9db62",
+          "checks.rpt": "b80665d0484ba1363fcdae535abbed3cafaa222ad5b2fce097b37820a6ea5416"
+        }
+      }
+    },
+    "configured_route_magic_drc_lvs_errors": [
+      0,
+      0,
+      0
+    ],
+    "standard_cells": 53,
+    "cell_area_um2": 627.782,
+    "utilization": 0.000695668,
+    "mapped_observations": 6144,
+    "remaining_signoff_limits": [
+      "KLayout DRC and Magic/KLayout XOR disabled",
+      "No formal equivalence or board validation",
+      "Power/IR uses default activity and lacks explicit voltage-source locations",
+      "Older development-container recipe is not validated for CMOS5L"
     ]
   },
   "python_environment": {
     "environment": ".venv",
     "install_command": "uv sync --locked",
     "librelane_version": "3.1.0.dev3",
-    "separate_physical_environment_deleted": true
+    "separate_physical_environment_deleted": true,
+    "configuration_command": "uv run --locked python tt/tt_tool.py --create-user-config --ihp",
+    "configuration_matches_recorded_routed_run": true,
+    "container_smoke_command": "LIBRELANE_CONTAINER_ENGINE=podman uv run --locked python -m librelane --docker-no-tty --dockerized --pdk-root /mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/pdk --pdk ihp-sg13cmos5l --manual-pdk --to OpenROAD.STAPrePNR --force-run-dir runs/combhdl_root_uv_smoke src/config_merged.json",
+    "smoke_result": "passed synthesis and all three pre-placement timing corners; not a new routed run",
+    "smoke_log_sha256": "ba7714e85e1d51a5f477d2ee144e4ea8ebe2426a70ac6d28843faa665f77f30c"
   }
 }

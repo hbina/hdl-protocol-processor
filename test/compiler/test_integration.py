@@ -29,6 +29,8 @@ def test_board_metadata_and_physical_configuration():
         assert config[key] == "dir::pins.sdc"
     assert config["CLOCK_PERIOD"] == 20
     assert len(config["PNR_CORNERS"]) == 3
+    for kind in ("TIMING", "SETUP", "HOLD", "MAX_SLEW", "MAX_CAP"):
+        assert config[f"{kind}_VIOLATION_CORNERS"] == ["*"]
 
 
 def test_sdc_tcl_contract(tmp_path):
@@ -38,7 +40,7 @@ def test_sdc_tcl_contract(tmp_path):
     for optional in (False, True):
         script = """
 set calls {}
-foreach name {create_clock set_input_delay set_output_delay set_driving_cell set_load set_max_fanout set_max_transition set_max_capacitance set_clock_uncertainty set_clock_transition set_timing_derate} {
+foreach name {create_clock unset_propagated_clock set_input_delay set_output_delay set_driving_cell set_load set_max_fanout set_max_transition set_max_capacitance set_clock_uncertainty set_clock_transition set_timing_derate} {
     proc $name {args} {global calls; lappend calls [linsert $args 0 [lindex [info level 0] 0]]}
 }
 proc all_inputs {} {return INPUTS}
@@ -62,6 +64,8 @@ set env(TIME_DERATING_CONSTRAINT) 5
         )
         commands = result.stdout.splitlines()
         assert "create_clock -name comb_reference -period 20" in commands
+        assert "unset_propagated_clock comb_reference" in commands
+        assert not any(call.startswith("set_clock_transition ") for call in commands)
         assert "set_input_delay 0 -clock comb_reference INPUTS" in commands
         assert "set_output_delay 0 -clock comb_reference OUTPUTS" in commands
         assert "set_driving_cell -lib_cell driver -pin Y INPUTS" in commands

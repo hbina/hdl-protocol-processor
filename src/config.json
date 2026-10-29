@@ -32,5 +32,20 @@
   "FP_PDN_MULTILAYER": 0,
   "MAGIC_DEF_LABELS": 0,
   "MAGIC_WRITE_LEF_PINONLY": 1,
-  "FALLBACK_SDC": "dir::pins.sdc"
+  "FALLBACK_SDC": "dir::pins.sdc",
+  "TIMING_VIOLATION_CORNERS": [
+    "*"
+  ],
+  "SETUP_VIOLATION_CORNERS": [
+    "*"
+  ],
+  "HOLD_VIOLATION_CORNERS": [
+    "*"
+  ],
+  "MAX_SLEW_VIOLATION_CORNERS": [
+    "*"
+  ],
+  "MAX_CAP_VIOLATION_CORNERS": [
+    "*"
+  ]
 }

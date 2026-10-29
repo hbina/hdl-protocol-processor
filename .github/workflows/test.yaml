@@ -45,6 +45,8 @@ jobs:
           uv run --locked python -m tools.check_generated
           uv run --locked python -m tools.check_simulation --sim icarus
           uv run --locked python -m tools.check_simulation --sim verilator
+          uv run --locked python -m tools.check_checksum --sim icarus
+          uv run --locked python -m tools.check_checksum --sim verilator
           uv run --locked make -B -C test
           uv run --locked make -B -C test SIM=verilator
 

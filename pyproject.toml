@@ -29,6 +29,6 @@ pythonpath = ["."]
 testpaths = ["test/compiler"]
 
 [tool.pyright]
-include = ["combhdl", "examples/combinational", "tools/check_generated.py", "tools/check_simulation.py", "tools/check_synthesis.py", "tools/run_physical.py", "tools/check_mapped.py", "tools/report_physical.py"]
+include = ["combhdl", "examples/combinational", "tools/check_generated.py", "tools/check_simulation.py", "tools/check_synthesis.py", "tools/run_physical.py", "tools/check_mapped.py", "tools/check_checksum.py", "tools/report_physical.py"]
 pythonVersion = "3.12"
 typeCheckingMode = "strict"

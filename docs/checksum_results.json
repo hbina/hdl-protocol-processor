@@ -1,0 +1,841 @@
+{
+  "component": "ipv4_checksum",
+  "source_sha256": {
+    "examples/combinational/ipv4_checksum.py": "4ce0392ffb1cfefd43e43022136bea39b04ef907e73cffdafd58ae67a085680d",
+    "tools/check_checksum.py": "0d8faf2b10ac608285f1917e5c215cc969bb369a361c27a8a796948caa5cabb0",
+    "tools/check_simulation.py": "ac4782054b4a4608c1521432a998dbdfad6a57903544c5940c34b75a5c90788a",
+    "tools/check_synthesis.py": "5703f427161ae6153c30c8107bec7d670cc21b197c23f4ec130c62a986abbfde",
+    "test/compiler/test_checksum.py": "14a02561c97c78f8ce3bae860d62c37d7e4897d4f394c7b6a45a48a2a33a3efe",
+    "combhdl/compiler.py": "29fe8150ebe1c8d057564504c00a0e56adfbe3c3c753e509b5902b294b2287c6",
+    "combhdl/__init__.py": "f983b7bf36e011292cc1ffafd9fa9a63a300f50e84be127d0aa35b7bc6d6f730",
+    "combhdl/model.py": "79dfeea24145c4947a225b39ae4a04f48dd9d9ad32670c698a3dd8275f93e8ea",
+    "combhdl/__main__.py": "4540c1e53fb81a1e3d286986cd8dd86fd626cc51cca1030548c52f2cbb4d817a"
+  },
+  "interface": {
+    "compiler_version": "0.1.0",
+    "component": "ipv4_checksum",
+    "inputs": [
+      {
+        "name": "header",
+        "width": 160
+      }
+    ],
+    "outputs": [
+      {
+        "name": "checksum",
+        "width": 16
+      },
+      {
+        "name": "valid",
+        "width": 1
+      }
+    ]
+  },
+  "graph_report": {
+    "compiler_version": "0.1.0",
+    "component": "ipv4_checksum",
+    "node_count": 51,
+    "operation_counts": {
+      "Add": 13,
+      "Bit": 2,
+      "BitNot": 1,
+      "Const": 1,
+      "Eq": 1,
+      "Input": 1,
+      "Slice": 12,
+      "Truncate": 4,
+      "ZeroExtend": 16
+    },
+    "nodes": [
+      {
+        "id": "n0",
+        "kind": "Input",
+        "width": 160,
+        "name": "header",
+        "parameters": [
+          160
+        ],
+        "operands": [],
+        "fanout": 10
+      },
+      {
+        "id": "n1",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_1",
+        "parameters": [
+          144,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n2",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_2",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n1"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n3",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_3",
+        "parameters": [
+          128,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n4",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_4",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n3"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n5",
+        "kind": "Add",
+        "width": 20,
+        "name": "_combhdl_5",
+        "parameters": [],
+        "operands": [
+          "n2",
+          "n4"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n6",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_6",
+        "parameters": [
+          112,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n7",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_7",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n6"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n8",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_8",
+        "parameters": [
+          96,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n9",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_9",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n8"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n10",
+        "kind": "Add",
+        "width": 20,
+        "name": "_combhdl_10",
+        "parameters": [],
+        "operands": [
+          "n7",
+          "n9"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n11",
+        "kind": "Add",
+        "width": 20,
+        "name": "_combhdl_11",
+        "parameters": [],
+        "operands": [
+          "n5",
+          "n10"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n12",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_12",
+        "parameters": [
+          80,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n13",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_13",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n12"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n14",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_14",
+        "parameters": [
+          48,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n15",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_15",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n14"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n16",
+        "kind": "Add",
+        "width": 20,
+        "name": "_combhdl_16",
+        "parameters": [],
+        "operands": [
+          "n13",
+          "n15"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n17",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_17",
+        "parameters": [
+          32,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n18",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_18",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n17"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n19",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_19",
+        "parameters": [
+          16,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n20",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_20",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n19"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n21",
+        "kind": "Add",
+        "width": 20,
+        "name": "_combhdl_21",
+        "parameters": [],
+        "operands": [
+          "n18",
+          "n20"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n22",
+        "kind": "Add",
+        "width": 20,
+        "name": "_combhdl_22",
+        "parameters": [],
+        "operands": [
+          "n16",
+          "n21"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n23",
+        "kind": "Add",
+        "width": 20,
+        "name": "_combhdl_23",
+        "parameters": [],
+        "operands": [
+          "n11",
+          "n22"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n24",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_24",
+        "parameters": [
+          0,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n25",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_25",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n24"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n26",
+        "kind": "Add",
+        "width": 20,
+        "name": "_combhdl_26",
+        "parameters": [],
+        "operands": [
+          "n23",
+          "n25"
+        ],
+        "fanout": 3
+      },
+      {
+        "id": "n27",
+        "kind": "Truncate",
+        "width": 16,
+        "name": "_combhdl_27",
+        "parameters": [
+          16
+        ],
+        "operands": [
+          "n26"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n28",
+        "kind": "ZeroExtend",
+        "width": 17,
+        "name": "_combhdl_28",
+        "parameters": [
+          17
+        ],
+        "operands": [
+          "n27"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n29",
+        "kind": "Slice",
+        "width": 4,
+        "name": "_combhdl_29",
+        "parameters": [
+          16,
+          4
+        ],
+        "operands": [
+          "n26"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n30",
+        "kind": "ZeroExtend",
+        "width": 17,
+        "name": "_combhdl_30",
+        "parameters": [
+          17
+        ],
+        "operands": [
+          "n29"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n31",
+        "kind": "Add",
+        "width": 17,
+        "name": "_combhdl_31",
+        "parameters": [],
+        "operands": [
+          "n28",
+          "n30"
+        ],
+        "fanout": 2
+      },
+      {
+        "id": "n32",
+        "kind": "Truncate",
+        "width": 16,
+        "name": "_combhdl_32",
+        "parameters": [
+          16
+        ],
+        "operands": [
+          "n31"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n33",
+        "kind": "Bit",
+        "width": 1,
+        "name": "_combhdl_33",
+        "parameters": [
+          16
+        ],
+        "operands": [
+          "n31"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n34",
+        "kind": "ZeroExtend",
+        "width": 16,
+        "name": "_combhdl_34",
+        "parameters": [
+          16
+        ],
+        "operands": [
+          "n33"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n35",
+        "kind": "Add",
+        "width": 16,
+        "name": "_combhdl_35",
+        "parameters": [],
+        "operands": [
+          "n32",
+          "n34"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n36",
+        "kind": "BitNot",
+        "width": 16,
+        "name": "_combhdl_36",
+        "parameters": [],
+        "operands": [
+          "n35"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n37",
+        "kind": "Slice",
+        "width": 16,
+        "name": "_combhdl_37",
+        "parameters": [
+          64,
+          16
+        ],
+        "operands": [
+          "n0"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n38",
+        "kind": "ZeroExtend",
+        "width": 20,
+        "name": "_combhdl_38",
+        "parameters": [
+          20
+        ],
+        "operands": [
+          "n37"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n39",
+        "kind": "Add",
+        "width": 20,
+        "name": "_combhdl_39",
+        "parameters": [],
+        "operands": [
+          "n26",
+          "n38"
+        ],
+        "fanout": 2
+      },
+      {
+        "id": "n40",
+        "kind": "Truncate",
+        "width": 16,
+        "name": "_combhdl_40",
+        "parameters": [
+          16
+        ],
+        "operands": [
+          "n39"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n41",
+        "kind": "ZeroExtend",
+        "width": 17,
+        "name": "_combhdl_41",
+        "parameters": [
+          17
+        ],
+        "operands": [
+          "n40"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n42",
+        "kind": "Slice",
+        "width": 4,
+        "name": "_combhdl_42",
+        "parameters": [
+          16,
+          4
+        ],
+        "operands": [
+          "n39"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n43",
+        "kind": "ZeroExtend",
+        "width": 17,
+        "name": "_combhdl_43",
+        "parameters": [
+          17
+        ],
+        "operands": [
+          "n42"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n44",
+        "kind": "Add",
+        "width": 17,
+        "name": "_combhdl_44",
+        "parameters": [],
+        "operands": [
+          "n41",
+          "n43"
+        ],
+        "fanout": 2
+      },
+      {
+        "id": "n45",
+        "kind": "Truncate",
+        "width": 16,
+        "name": "_combhdl_45",
+        "parameters": [
+          16
+        ],
+        "operands": [
+          "n44"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n46",
+        "kind": "Bit",
+        "width": 1,
+        "name": "_combhdl_46",
+        "parameters": [
+          16
+        ],
+        "operands": [
+          "n44"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n47",
+        "kind": "ZeroExtend",
+        "width": 16,
+        "name": "_combhdl_47",
+        "parameters": [
+          16
+        ],
+        "operands": [
+          "n46"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n48",
+        "kind": "Add",
+        "width": 16,
+        "name": "_combhdl_48",
+        "parameters": [],
+        "operands": [
+          "n45",
+          "n47"
+        ],
+        "fanout": 1
+      },
+      {
+        "id": "n49",
+        "kind": "Const",
+        "width": 16,
+        "name": "_combhdl_49",
+        "parameters": [
+          65535,
+          16
+        ],
+        "operands": [],
+        "fanout": 1
+      },
+      {
+        "id": "n50",
+        "kind": "Eq",
+        "width": 1,
+        "name": "_combhdl_50",
+        "parameters": [],
+        "operands": [
+          "n48",
+          "n49"
+        ],
+        "fanout": 1
+      }
+    ],
+    "outputs": [
+      {
+        "port": "checksum",
+        "node": "n36"
+      },
+      {
+        "port": "valid",
+        "node": "n50"
+      }
+    ],
+    "shared_nodes": [
+      "n0",
+      "n26",
+      "n31",
+      "n39",
+      "n44"
+    ],
+    "warnings": []
+  },
+  "python_tests": {
+    "command": "uv run --locked pytest test/compiler/test_checksum.py",
+    "result": "10 passed"
+  },
+  "simulation": {
+    "icarus": {
+      "tool": "Icarus Verilog version 12.0 (stable) ()",
+      "case": {
+        "component": "ipv4_checksum",
+        "vectors": 2508,
+        "design_sha256": "679695d2f05255b03c9467c29189bfc25add5f2f04e8f7afce976d48f0bcc6ca",
+        "testbench_sha256": "472c985adbfe191c220166de49a578960f28f0ac6243149a4c89f46512225ec4",
+        "command": [
+          "iverilog",
+          "-g2012",
+          "-s",
+          "tb",
+          "-o",
+          "simulation",
+          "design.v",
+          "tb.v"
+        ],
+        "run_command": [
+          "vvp",
+          "simulation"
+        ]
+      }
+    },
+    "verilator": {
+      "tool": "Verilator 5.038 2025-07-08 rev v5.038",
+      "case": {
+        "component": "ipv4_checksum",
+        "vectors": 2508,
+        "design_sha256": "679695d2f05255b03c9467c29189bfc25add5f2f04e8f7afce976d48f0bcc6ca",
+        "testbench_sha256": "472c985adbfe191c220166de49a578960f28f0ac6243149a4c89f46512225ec4",
+        "command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/.asic-tools/verilator/bin/verilator",
+          "--binary",
+          "--timing",
+          "-Wno-fatal",
+          "--top-module",
+          "tb",
+          "--Mdir",
+          "obj",
+          "-j",
+          "2",
+          "design.v",
+          "tb.v"
+        ],
+        "run_command": [
+          "/mnt/extra_pool/tmp/jane_street_design_asic/build/checksum/verilator/ipv4_checksum/obj/Vtb"
+        ]
+      }
+    }
+  },
+  "synthesis_tool": "Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)",
+  "synthesis": {
+    "top": "ipv4_checksum",
+    "command": [
+      "/mnt/extra_pool/tmp/jane_street_design_asic/.venv/bin/yowasp-yosys",
+      "-p",
+      "read_verilog \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/ipv4_checksum.v\"; synth -top ipv4_checksum -flatten -noabc; check -assert; scc -expect 0; delete t:$scopeinfo; tee -o \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/ipv4_checksum/stat.json\" stat -json; write_json \"/mnt/extra_pool/tmp/jane_street_design_asic/build/synthesis/ipv4_checksum/netlist.json\""
+    ],
+    "source_sha256": {
+      "ipv4_checksum.v": "679695d2f05255b03c9467c29189bfc25add5f2f04e8f7afce976d48f0bcc6ca"
+    },
+    "statistics": {
+      "creator": "Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)",
+      "invocation": "stat -json ",
+      "modules": {
+        "\\ipv4_checksum": {
+          "num_wires": 260,
+          "num_wire_bits": 1875,
+          "num_pub_wires": 46,
+          "num_pub_wire_bits": 850,
+          "num_ports": 3,
+          "num_port_bits": 177,
+          "num_memories": 0,
+          "num_memory_bits": 0,
+          "num_processes": 0,
+          "num_cells": 1019,
+          "num_submodules": 0,
+          "num_cells_by_type": {
+            "$_AND_": 442,
+            "$_NOT_": 33,
+            "$_OR_": 184,
+            "$_XOR_": 360
+          }
+        }
+      },
+      "design": {
+        "num_wires": 260,
+        "num_wire_bits": 1875,
+        "num_pub_wires": 46,
+        "num_pub_wire_bits": 850,
+        "num_ports": 3,
+        "num_port_bits": 177,
+        "num_memories": 0,
+        "num_memory_bits": 0,
+        "num_processes": 0,
+        "num_cells": 1019,
+        "num_submodules": 0,
+        "num_cells_by_type": {
+          "$_AND_": 442,
+          "$_NOT_": 33,
+          "$_OR_": 184,
+          "$_XOR_": 360
+        }
+      }
+    },
+    "storage_cells": 0,
+    "combinational_loops": 0
+  },
+  "scope": "Fixed 20-byte header checksum primitive; no parsing, options, packet state, or streaming",
+  "physical_measurements": null
+}

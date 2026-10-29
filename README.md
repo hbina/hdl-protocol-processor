@@ -31,6 +31,11 @@ Widths are positive integers without an eight-bit limit. Constants are explicit,
 comparisons are unsigned, and arithmetic wraps to the operand width. See the
 [language/API contract](docs/compiler.md) for rules and diagnostics.
 
+The [larger checksum example](docs/checksum.md) generates and checks a fixed
+20-byte IPv4 header checksum from a 160-bit input. Its Python helpers construct
+an adder tree and share a sum between both outputs. It is a combinational
+primitive; packet parsing, options, streaming, and protocol state are excluded.
+
 | Protocol | Status | Current scope |
 |---|---|---|
 | UART, SPI, I²C | Not started | Temporal protocols require state, which this language excludes |
@@ -40,17 +45,18 @@ Verification for the retired processor does not establish protocol support here.
 
 | Check | Current evidence |
 |---|---|
-| Python language, validation, CLI and integration | `uv run --locked pytest`: 46 passed; includes a 5,000-operation graph, cross-process reproducibility, metadata and Tcl constraint checks |
+| Python language, validation, CLI and integration | `uv run --locked pytest`: 56 passed; includes checksum/carry tests, a 5,000-operation graph, cross-process reproducibility, metadata and Tcl constraint checks |
 | All operations in Icarus 12.0 and Verilator 5.038 | `tools.check_simulation`: 8 exhaustive width-one vectors, 512 exhaustive four-bit vectors, 328 boundary/fixed-seed 17-bit vectors, and a constant-only circuit per simulator; independent oracle and evaluator agree |
 | Tiny Tapeout wrapper in both simulators | `make -B -C test` and `SIM=verilator`: all 512 meaningful inputs × 12 unused-control patterns = 6,144 checks each |
-| Generic Yosys 0.70 synthesis | `tools.check_synthesis`: wrapper 16 cells; operation circuits at widths 1/4/17: 16/79/386 cells; structural checks pass, zero storage and combinational loops |
+| Larger checksum circuit in both simulators | `tools.check_checksum`: 2,508 vectors each, independent byte-oriented oracle, known values, carry boundaries, valid headers and single-bit corruption; [evidence](docs/checksum_results.json) |
+| Generic Yosys 0.70 synthesis | `tools.check_synthesis`: wrapper 16 cells; operation circuits at widths 1/4/17: 16/79/386 cells; checksum 1,019 cells; structural checks pass, zero storage and combinational loops |
 | Strict Pyright / Ruff | Strict compiler/example/tool checks and formatting pass |
 | Tiny Tapeout configuration | Support-tool configuration generation passes; CMOS5L 6×4, clock metadata zero, CTS disabled, virtual 20 ns I/O reference |
 | Routed/mapped ASIC verification | `runs/combhdl_demo_02`: 6×4 fit, 53 non-filler cells, 627.782 µm² cell area, 0.06957% utilization; 6,144 mapped observations pass; routing DRC / Magic DRC / LVS: 0 / 0 / 0 |
 | Extracted input-to-output timing | All three PVT corners pass at a virtual 20 ns reference; worst setup +17.4318 ns, hold +0.1391 ns; no slew, capacitance, or fanout violations; [physical evidence](docs/physical_results.json) |
 
 Exact commands, versions, and source hashes are in
-[verification.json](docs/verification.json) and the linked physical record. Graph counts and generic cell counts
+[verification.json](docs/verification.json) and the linked physical/checksum records. Graph counts and generic cell counts
 are not LUT usage, physical area, timing, or fit evidence.
 
 ```sh
@@ -63,6 +69,8 @@ uv run --locked python -m combhdl examples/combinational/shared_logic.py \
 uv run --locked python -m tools.check_generated
 uv run --locked python -m tools.check_simulation --sim icarus
 uv run --locked python -m tools.check_simulation --sim verilator
+uv run --locked python -m tools.check_checksum --sim icarus
+uv run --locked python -m tools.check_checksum --sim verilator
 uv run --locked make -B -C test
 uv run --locked make -B -C test SIM=verilator
 uv run --locked python -m tools.check_synthesis --yosys .venv/bin/yowasp-yosys
@@ -87,6 +95,7 @@ for container prerequisites and remaining constraints/signoff work.
 - [x] Exhaustively verify the Tiny Tapeout combinational demo in both simulators.
 - [x] Integrate generic synthesis, no-storage checks, and active workflows.
 - [x] Retire processor RTL, firmware, ISA tooling, loaders, and active regressions.
+- [x] Add a useful larger checksum circuit with helper reuse, shared logic, two-simulator coverage and measured synthesis.
 - [ ] Update and validate the development-container recipe for pinned CMOS5L.
 - [x] Restore a compatible container environment (rootless Podman 4.9.3).
 - [x] Complete the new physical flow and record the resulting artifacts.

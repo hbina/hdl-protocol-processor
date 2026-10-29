@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 
 from combhdl import compile
+from examples.combinational.ipv4_checksum import component as checksum
 from examples.combinational.operations import operations
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,6 +35,9 @@ def main() -> None:
         path = output / f"{circuit.name}.v"
         path.write_text(compile(circuit).verilog)
         cases.append((circuit.name, [path]))
+    checksum_path = output / f"{checksum.name}.v"
+    checksum_path.write_text(compile(checksum).verilog)
+    cases.append((checksum.name, [checksum_path]))
     for top, sources in cases:
         build = output / top
         build.mkdir(exist_ok=True)

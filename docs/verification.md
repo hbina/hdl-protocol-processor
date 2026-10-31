@@ -1,0 +1,90 @@
+# Initial RHDL protocol processor verification
+
+Validated locally on 2026-10-31 with rustc 1.99.0
+`b940084d7 2026-09-28`, Cargo 1.99.0 `5f94df478 2026-08-27`,
+and Icarus Verilog 12.0. RHDL dependencies are pinned in the root Cargo manifest;
+the root lockfile fixes transitive dependency versions.
+
+```sh
+cargo fmt --all --check
+cargo clippy --workspace --all-targets --locked -- -D warnings
+cargo test --workspace --locked
+make emit example
+```
+
+All commands pass locally: ten tests and four doctests (three compile-fail). During this
+session, `CARGO_HOME=/tmp/jane-rhdl-cargo` reused the earlier evaluation's cache;
+this variable is not an application requirement.
+
+## Independent comparisons
+
+`protocol-isa` implements a native integer reference machine without depending
+on RHDL. The processor's `step` function implements the instruction contract
+using RHDL bit types. Every byte, every pin and bit periods of 1, 2 and 8 produce
+6,144 single-byte programs. Their execution checks both state agreement and an
+independent UART waveform expectation: idle, start, data, stop, exact hold time,
+and preservation of unrelated pins. There are 247,808 waveform cycle checks.
+These periods exercise one-cycle execution and off-by-one timing; no physical
+clock speed is inferred from them.
+The programs now come from the `#[protocol]` UART frontend. For every UART case,
+the native annotated function's effects also agree with the generated compiler
+path's IR, before the instruction stream is executed by the reference and RHDL.
+
+Another test compares 864 instruction/state combinations covering PCs 0/254/255,
+wait counters 0/1/2/65535, pin values 0/0x55/0xff, running/halted states, and twelve
+valid or malformed instruction words. Native RHDL execution is checked against
+the reference. Upstream's pinned, internal
+`test_kernel_vm_and_verilog_synchronous` helper then checks RHIF and RTL
+interpreters, emitted RTL Verilog, and optimized-netlist Verilog in Icarus.
+The comparisons are finite functional tests, not exhaustive state-space proof.
+
+## Actual register bank
+
+The integration harness exports `Processor`, including its RHDL DFF state bank,
+and instantiates it with asynchronous-read instruction memory in a Verilog
+testbench. Icarus executes 1,454 checked rising edges. Scenarios cover:
+
+- Four-byte UART streams (`00 ff 55 a5`), pins 0/7, bit periods 1/2/8.
+- Synchronous reset, including recovery from an active long WAIT.
+- Invalid opcode, WAIT(0), reserved SET_PINS bits, and malformed HALT.
+- Valid HALT at PC=255 and fault instead of wrap on an incrementing instruction.
+- Stable state following halt or fault.
+
+For every edge the testbench checks PC, wait counter, output values, halted and
+fault against the independent reference. Simulator failures and missing success
+markers cause test failure. Reset is checked independently against zero state.
+
+## Host-side checks
+
+The ISA test round-trips all 65,535 legal WAIT values and all 65,536 mask/value
+pairs (with canonical masked values), and rejects malformed words and invalid
+program construction. Compiler tests check the twelve-byte limit with WAITs,
+the twenty-five-byte limit without WAITs, and an empty payload. CLI tests check
+the 43-word `Hi` image at eight clocks per bit and reject invalid pins, zero
+period, and overflowed period values. A compile-fail doctest requires Rust to
+reject addition between `b8` and `b4`.
+
+## Rust frontend checks
+
+`tests/frontend.rs` compares native Rust effects, captured effect IR, and
+reference instruction execution for helper composition, local mutation, `if`
+and `match` specialization. A long-wait test checks zero-wait removal, wait merging
+and splitting, and retained redundant drives across 80,003 waveform cycles.
+Work-limit and native-capture cleanup tests cover bounded compilation, nested
+capture rejection and recovery after a native panic.
+
+Macro unit tests require specific diagnostics for unsupported syntax. Compiler
+doctests exercise a complete annotated pulse, reject unbounded loops, and require
+Rust to reject a non-boolean drive value. The existing RHDL width mismatch
+doctest remains. CLI tests also check a deterministic 43-line assembly listing.
+The processor ISA and its cycle contract are unchanged by this frontend addition.
+
+`make emit` produces `build/protocol_processor.v`. `make example` produces
+`build/uart.mem`. These artifacts are generated rather than checked in.
+
+## Limits
+
+There is no formal equivalence proof, post-synthesis regression, FPGA or ASIC
+place-and-route result, board test, CDC integration, or electrical verification.
+Only Icarus has been exercised for the new processor. A complete program-memory
+or loading design has not been implemented. No CI workflow is configured at this stage.

@@ -2,14 +2,28 @@
 
 These instructions apply to the entire repository.
 
-## Python and dependency management
+## Rust and hardware verification
+
+This is a Rust workspace with an RHDL protocol processor and host-side protocol
+implementations that compile to its instructions. Use Cargo for Rust dependencies
+and keep `Cargo.lock` checked in. Pin RHDL dependencies to explicit Git revisions.
+Run `cargo fmt --all`, `cargo clippy --workspace --all-targets --locked -- -D warnings`,
+and `cargo test --workspace --locked` for material Rust changes. Icarus Verilog
+(`iverilog` and `vvp`) is required by hardware integration tests.
+
+Keep the instruction encoding, Rust reference model, RHDL decoder, and cycle
+contract in sync. Protocol compiler tests must check emitted programs against
+independent expected behavior and the clocked generated HDL where appropriate.
+Do not claim physical timing, FPGA fit, or ASIC signoff from functional simulation.
+
+## Optional Python tooling
 
 Use `uv` to manage Python environments and dependencies for this project.
 Run Python scripts and tools with `uv run`, install the locked dependencies with
 `uv sync --locked`, and use `uv add` or `uv remove` to change dependencies.
 Keep `pyproject.toml` and `uv.lock` in sync when dependencies change.
 
-Use Ruff to format Python code. Run the formatter with:
+If Python tooling is introduced, use Ruff to format it:
 
 ```sh
 uv run ruff format .

@@ -1,41 +1,6 @@
-# Python environments and caches
-.venv/
-.uv-cache/
-__pycache__/
-*.pyc
-*.pyo
-.pytest_cache/
-
-# Project-local ASIC toolchain, PDK, and downloaded support tools
-/.asic-tools/
-/tt/
-
-# LibreLane runs, submission exports, and generated configurations
-/runs/
-/tt_submission/
-/src/user_config.json
-/src/config_merged.json
-
-# Cocotb / Icarus / Verilator build products and test artifacts
-/test/sim_build/
-/test/results.xml
-/test/output/
-/test/gate_level_netlist.v
+/target/
+/build/
 *.vcd
 *.fst
-*.fst.hier
-
-# Assembler output written to the repository root (e.g. spi.hex)
-/*.hex
-
-# Local editor and OS files; keep *.gtkw waveform-viewer configuration
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
-.DS_Store
-Thumbs.db
-
-# Compiler and verification artifacts
-/build/

@@ -87,4 +87,5 @@ The processor ISA and its cycle contract are unchanged by this frontend addition
 There is no formal equivalence proof, post-synthesis regression, FPGA or ASIC
 place-and-route result, board test, CDC integration, or electrical verification.
 Only Icarus has been exercised for the new processor. A complete program-memory
-or loading design has not been implemented. No CI workflow is configured at this stage.
+or loading design has not been implemented. The GitHub workflow is configured
+to repeat local checks; no remote CI execution is claimed.

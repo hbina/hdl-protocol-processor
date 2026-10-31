@@ -75,7 +75,7 @@ and the [instruction contract](docs/isa.md).
 | Clocked emitted processor | 1,454 cycle observations in Icarus; multi-byte UART, reset including active WAIT recovery, halt/fault, and final-PC behavior agree with the reference |
 | Construction and CLI | All nonzero 16-bit WAIT encodings and all mask/value pairs checked; program limits, invalid pins/periods, CLI emission, and width mismatch rejection pass |
 | Rust protocol frontend | Native Rust effects agree with IR for all 6,144 UART cases; helper/mutation/branch tests agree with instruction execution; zero/merged waits preserve elapsed clocks; syntax/type rejection and work limits checked |
-| Tooling | `cargo fmt --all --check`, Clippy with warnings denied, `make emit`, and `make example` pass locally; CI is not yet configured |
+| Tooling | `cargo fmt --all --check`, Clippy with warnings denied, `make emit`, and `make example` pass locally; Rust CI configured, not yet run remotely |
 
 Exact scope and commands are in [verification](docs/verification.md).
 Prior results do not validate this processor.

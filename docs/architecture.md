@@ -11,7 +11,8 @@ syntax, generated paths, timing rules, and current host-time specialization limi
 ## Processor
 
 `State` contains an eight-bit PC, sixteen-bit wait counter, eight output values,
-and sticky halted/fault flags. The pure RHDL `step` kernel computes next state.
+64 scratch bits, and sticky halted/fault flags. The pure RHDL `step_with_inputs`
+kernel computes next state (`step` supplies zero inputs).
 `Processor` connects it to an explicit `rhdl-fpga::DFF<State>` register bank.
 Local Rust mutation describes combinational next-state logic, not extra cycles.
 
@@ -22,6 +23,7 @@ The generated top-level ports are:
 | `clk` | Input | Rising-edge execution clock |
 | `reset` | Input | Active-high synchronous reset; returns all state to zero |
 | `instruction[31:0]` | Input | Word at the current PC, supplied by external combinational memory |
+| `inputs[7:0]` | Input | Input values sampled by CAPTURE_INPUTS; top-level integration owns synchronization |
 | `pc[7:0]` | Output | Current fetch address |
 | `wait_remaining[15:0]` | Output | Remaining hold cycles after WAIT issue |
 | `pins[7:0]` | Output | Registered pin values |
@@ -52,8 +54,10 @@ This unrolled transmitter is intentionally simple. At N>1, B bytes require
 `2*(1+10*B)+1` words, so at most twelve bytes fit in the current image.
 At N=1 the limit is twenty-five bytes. Larger programs are rejected, not truncated.
 An empty payload is allowed and emits idle plus HALT. This is not an efficient
-general-purpose protocol engine yet; loops, input sampling and buffering need
-their own ISA and timing design.
+general-purpose protocol engine yet; runtime protocol loops and buffering need
+their own ISA and timing design. Input capture and bit computations now exist
+in the processor ISA; the timed protocol frontend still specializes all arguments
+on the host.
 
 ## Development direction
 

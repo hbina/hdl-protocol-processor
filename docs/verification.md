@@ -1,6 +1,6 @@
 # Initial RHDL protocol processor verification
 
-Validated locally on 2026-10-31 with rustc 1.99.0
+Validated locally on 2026-11-05 with rustc 1.99.0
 `b940084d7 2026-09-28`, Cargo 1.99.0 `5f94df478 2026-08-27`,
 and Icarus Verilog 12.0. RHDL dependencies are pinned in the root Cargo manifest;
 the root lockfile fixes transitive dependency versions.
@@ -12,9 +12,9 @@ cargo test --workspace --locked
 make emit example
 ```
 
-All commands pass locally: ten tests and four doctests (three compile-fail). During this
-session, `CARGO_HOME=/tmp/jane-rhdl-cargo` reused the earlier evaluation's cache;
-this variable is not an application requirement.
+All commands pass locally: 12 tests and four doctests (three compile-fail).
+The earlier 2026-10-31 run used `CARGO_HOME=/tmp/jane-rhdl-cargo`; the current run
+uses the normal Cargo cache. Neither location is an application requirement.
 
 ## Independent comparisons
 
@@ -77,7 +77,11 @@ Macro unit tests require specific diagnostics for unsupported syntax. Compiler
 doctests exercise a complete annotated pulse, reject unbounded loops, and require
 Rust to reject a non-boolean drive value. The existing RHDL width mismatch
 doctest remains. CLI tests also check a deterministic 43-line assembly listing.
-The processor ISA and its cycle contract are unchanged by this frontend addition.
+The timed frontend retains its existing instruction and cycle behavior. A separate
+processor regression checks 240 bit-instruction cases against the independent
+reference, RHIF/RTL interpreters, and both generated Verilog forms in Icarus.
+Cases cover all truth tables, Boolean operands, low/high/aliased destinations,
+input capture, output writes, reserved encodings, and halt/wait/final-PC behavior.
 
 `make emit` produces `build/protocol_processor.v`. `make example` produces
 `build/uart.mem`. These artifacts are generated rather than checked in.

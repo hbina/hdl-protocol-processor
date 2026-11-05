@@ -1,7 +1,7 @@
 use std::{fmt::Write, num::NonZeroU16, process::Command};
 
 use protocol_isa::{Instruction, Machine, PROGRAM_CAPACITY, Pin};
-use protocol_processor::{State, step};
+use protocol_processor::{State, step, step_with_inputs};
 use rhdl::prelude::*;
 
 fn hardware_state(machine: Machine) -> State {
@@ -11,6 +11,7 @@ fn hardware_state(machine: Machine) -> State {
         pins: bits(machine.pins.into()),
         halted: machine.halted,
         fault: machine.fault,
+        scratch: bits(machine.scratch.into()),
     }
 }
 
@@ -99,6 +100,7 @@ fn compiled_kernel_matches_reference_on_boundary_and_malformed_words() {
                             pins,
                             halted,
                             fault: false,
+                            scratch: 0,
                         };
                         let before = hardware_state(reference);
                         reference.tick(word);
@@ -118,10 +120,78 @@ fn compiled_kernel_matches_reference_on_boundary_and_malformed_words() {
 }
 
 #[test]
+fn bit_kernel_truth_tables_boundaries_and_invalid_words() {
+    let mut cases = Vec::new();
+    for table in 0..16 {
+        for (a, b) in [(0, 0), (0, 1), (1, 0), (1, 1)] {
+            for (dst, lhs, rhs) in [(0, 1, 63), (63, 0, 1), (1, 1, 63)] {
+                let instruction = Instruction::EvalBit {
+                    dst,
+                    lhs,
+                    rhs,
+                    table,
+                };
+                let scratch = (u64::from(a != 0) << lhs) | (u64::from(b != 0) << rhs);
+                let expected = (table >> ((a << 1) | b)) & 1;
+                let mut reference = Machine {
+                    scratch,
+                    ..Machine::default()
+                };
+                let before = hardware_state(reference);
+                reference.tick_with_inputs(instruction.encode(), 0);
+                assert_eq!((reference.scratch >> dst) & 1, u64::from(expected));
+                assert_eq!(
+                    step_with_inputs(bits(instruction.encode().into()), bits(0), before),
+                    hardware_state(reference)
+                );
+                cases.push((bits(instruction.encode().into()), bits(0), before));
+            }
+        }
+    }
+    for word in [
+        0x4000_0000,
+        0x5000_0000,
+        0x5000_01ff,
+        0x3040_0000,
+        0x4000_0001,
+        0x5000_0200,
+    ] {
+        for pc in [0, 255] {
+            for wait_remaining in [0, 1] {
+                for halted in [false, true] {
+                    let mut reference = Machine {
+                        pc,
+                        wait_remaining,
+                        halted,
+                        scratch: u64::MAX,
+                        pins: 0x55,
+                        ..Machine::default()
+                    };
+                    let before = hardware_state(reference);
+                    reference.tick_with_inputs(word, 0xa5);
+                    assert_eq!(
+                        step_with_inputs(bits(word.into()), bits(0xa5), before),
+                        hardware_state(reference)
+                    );
+                    cases.push((bits(word.into()), bits(0xa5), before));
+                }
+            }
+        }
+    }
+    rhdl::core::sim::testbench::kernel::test_kernel_vm_and_verilog_synchronous::<
+        step_with_inputs,
+        _,
+        _,
+        _,
+    >(step_with_inputs, cases.into_iter())
+    .unwrap();
+}
+
+#[test]
 fn emitted_clocked_processor_matches_reference_cycle_by_cycle() {
     let directory = tempfile::tempdir().unwrap();
     let mut source = protocol_processor::emit_verilog().unwrap();
-    source.push_str("\nmodule tb;\nreg clk = 0; reg reset = 1;\nreg [31:0] rom [0:255];\nwire [7:0] pc, pins; wire [15:0] wait_remaining;\nwire halted, fault; wire [31:0] instruction = rom[pc]; integer i;\nprotocol_processor dut(.clk(clk), .reset(reset), .instruction(instruction), .pc(pc), .pins(pins), .wait_remaining(wait_remaining), .halted(halted), .fault(fault));\ninitial begin\n");
+    source.push_str("\nmodule tb;\nreg clk = 0; reg reset = 1;\nreg [31:0] rom [0:255];\nwire [7:0] pc, pins; wire [15:0] wait_remaining;\nwire halted, fault; wire [31:0] instruction = rom[pc]; integer i;\nprotocol_processor dut(.clk(clk), .reset(reset), .instruction(instruction), .inputs(8'b0), .pc(pc), .pins(pins), .wait_remaining(wait_remaining), .halted(halted), .fault(fault));\ninitial begin\n");
 
     let mut scenarios = Vec::new();
     for pin in [0, 7] {

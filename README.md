@@ -1,9 +1,20 @@
 # RHDL Protocol Processor
 
-**Last updated: 2026-10-31.** A Rust workspace for two connected projects:
+**Last updated: 2026-11-05.** A Rust workspace for two connected projects:
 
 1. A clocked protocol processor implemented in [RHDL](https://github.com/samitbasu/rhdl).
 2. Protocol implementations written in Rust that compile into processor instructions.
+
+Development is moving to the separate RHDL Git checkout in `rhdl/`, on branch
+`feature/protocol-processor`. The four protocol crates have been ported unchanged
+and pass all ten tests and four doctests using local RHDL dependencies. Formatting,
+protocol-scoped Clippy, Verilog export, and example generation pass there.
+See its [dashboard](rhdl/README.md) and [porting notes](rhdl/docs/porting.md).
+The fork must still be pushed and verified from a fresh remote clone; this
+original project is retained until that verification succeeds. The nested checkout
+is a separate repository and is not vendored into this repository's Git history.
+The `rhdl/` directory is absent in this checkout as of 2026-11-05; new changes and
+verification below apply to the root workspace.
 
 The first vertical slice is UART transmission: Rust code emits a program, and
 the RHDL processor executes it to drive a pin. This is a small starting ISA,
@@ -15,8 +26,9 @@ Protocols now use an RHDL-style `#[protocol]` macro: ordinary Rust functions wit
 local variables, loops, conditions and annotated helpers compile into a typed
 effect IR and then processor instructions. The native function remains callable
 inside a simulation capture. See the [frontend guide](docs/protocol_frontend.md).
-Current compilation specializes all arguments on the host; target-side branches
-and input-dependent execution are not implemented.
+Current protocol compilation specializes all arguments on the host. The processor
+now supports input capture and bit computations; the protocol frontend does not
+yet lower input-dependent execution or target-side branches.
 
 ```text
 Rust protocol implementation → instruction image
@@ -69,9 +81,9 @@ and the [instruction contract](docs/isa.md).
 
 | Check | Current evidence |
 |---|---|
-| Workspace regression | `cargo test --workspace --locked`: 10 tests and 4 doctests pass (3 compile-fail) |
+| Workspace regression | `cargo test --workspace --locked`: 12 tests and 4 doctests pass (3 compile-fail) |
 | UART timing and masking | 6,144 programs (all 256 byte values × 8 pins × bit periods 1/2/8); 247,808 native cycle observations match an independent waveform oracle and reference machine |
-| Compiled RHDL transition | 864 boundary/malformed-word cases agree with the independent reference, RHIF/RTL interpreters, and two generated Verilog lowerings in Icarus |
+| Compiled RHDL transition | 864 original boundary/malformed-word cases plus 240 bit-operation cases agree with the independent reference, RHIF/RTL interpreters, and two generated Verilog lowerings in Icarus |
 | Clocked emitted processor | 1,454 cycle observations in Icarus; multi-byte UART, reset including active WAIT recovery, halt/fault, and final-PC behavior agree with the reference |
 | Construction and CLI | All nonzero 16-bit WAIT encodings and all mask/value pairs checked; program limits, invalid pins/periods, CLI emission, and width mismatch rejection pass |
 | Rust protocol frontend | Native Rust effects agree with IR for all 6,144 UART cases; helper/mutation/branch tests agree with instruction execution; zero/merged waits preserve elapsed clocks; syntax/type rejection and work limits checked |
@@ -87,16 +99,18 @@ Prior results do not validate this processor.
 - [x] Compile annotated Rust protocols through typed effect IR; expose native simulation, source inspection, and assembly listings.
 - [x] Simplify waits while preserving protocol cycle timing.
 - [x] Complete and record native, compiled-kernel, and emitted-hardware validation.
-- [ ] Add input sampling and control flow with explicit cycle contracts.
+- [x] Add input capture, truth-table bit computations, and output-bit writes with explicit cycle contracts.
+- [ ] Add target-side control flow to the timed protocol frontend.
 - [ ] Add a program-memory integration and loading strategy for a selected target.
 - [ ] Add more protocol implementations and protocol composition.
 - [ ] Measure synthesis, placement/routing, timing, resources, and board behavior.
 
 ## Limits
 
-The processor has eight output pins and an eight-bit PC (256 instruction words).
+The processor has eight input pins, eight output pins, 64 scratch bits, and an
+eight-bit PC (256 instruction words).
 Program memory must provide the addressed instruction combinationally; synchronous
-block RAM needs a fetch stage and a revised timing contract. No input sampling,
+block RAM needs a fetch stage and a revised timing contract. No instruction
 branches, interrupts, runtime loader, bidirectional pads, or concurrent engines
 exist yet. Programs are straight-line and terminate with `HALT`.
 The frontend accepts a documented Rust subset and specializes source control

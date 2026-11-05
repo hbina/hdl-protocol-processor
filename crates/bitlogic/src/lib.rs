@@ -48,7 +48,6 @@
 //! ```
 
 mod ir;
-mod processor;
 pub use bitlogic_macros::logic;
 pub use ir::{Binary, Builder, Error, Logic, Node, NodeId, Operation, Port};
 use std::ops::{Add, BitAnd, BitOr, BitXor, Not, Shl, Shr, Sub};

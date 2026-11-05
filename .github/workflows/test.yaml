@@ -1,4 +1,4 @@
-name: Rust and RHDL verification
+name: Rust and bitlogic verification
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -16,9 +16,9 @@ jobs:
         run: |
           cargo fmt --all --check
           cargo clippy --workspace --all-targets --locked -- -D warnings
-      - name: Verify instruction compiler and processor
+      - name: Verify bit logic and generated HDL
         run: cargo test --workspace --locked
-      - name: Export processor and example program
+      - name: Export combinational HDL example
         run: |
           make emit
           make example

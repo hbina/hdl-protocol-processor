@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/protocol-isa", "crates/protocol-processor", "crates/protocol-compiler", "crates/protocol-macros", "crates/bitlogic", "crates/bitlogic-macros"]
+members = ["crates/bitlogic", "crates/bitlogic-macros"]
 resolver = "2"
 
 [workspace.package]
@@ -9,10 +9,4 @@ license = "Apache-2.0"
 publish = false
 
 [workspace.dependencies]
-protocol-isa = { path = "crates/protocol-isa" }
-protocol-processor = { path = "crates/protocol-processor" }
-protocol-compiler = { path = "crates/protocol-compiler" }
-protocol-macros = { path = "crates/protocol-macros" }
-rhdl = { git = "https://github.com/samitbasu/rhdl", rev = "c99d5cc53269a247bbc675d0fbd766991d409f56" }
-rhdl-fpga = { git = "https://github.com/samitbasu/rhdl", rev = "c99d5cc53269a247bbc675d0fbd766991d409f56" }
 tempfile = "3.21.0"

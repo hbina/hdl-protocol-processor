@@ -9,7 +9,7 @@ check:
 
 emit:
 	mkdir -p build
-	cargo run --locked -p protocol-processor --bin export-processor > build/protocol_processor.v
+	cargo run --locked -p bitlogic --example emit -- verilog > build/select_logic.v
 
 example:
-	cargo run --locked -p protocol-compiler -- uart-tx --pin 0 --cycles-per-bit 8 --text Hi --output build/uart.mem
+	cargo run --locked -p bitlogic --example emit -- verilog

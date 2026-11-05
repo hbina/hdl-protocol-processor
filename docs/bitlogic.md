@@ -1,8 +1,8 @@
 # Untimed bit logic in Rust
 
 `bitlogic` captures a restricted Rust function as a typed expression graph. The
-same graph can be interpreted, emitted as combinational Verilog, composed with
-another graph, or lowered into the protocol processor's instructions. Ordinary
+same graph can be interpreted, emitted as combinational Verilog, or composed with
+another graph. Ordinary
 assignments define values; no `connect()` calls, clock, reset, wait, or sampling
 primitive appears in the source language.
 
@@ -20,15 +20,12 @@ pub fn select(a: &Bits<3>, b: &Bits<3>, enabled: &bool, output: &mut Bits<3>) {
 let ir = select::ir()?;
 assert_eq!(ir.evaluate(&[2, 3, 1])?, [2]);
 let verilog = ir.to_verilog("select_logic")?;
-let program = ir.to_program()?;
 ```
 
 Run the complete example:
 
 ```sh
 cargo run --locked -p bitlogic --example emit -- verilog
-cargo run --locked -p bitlogic --example emit -- asm
-cargo run --locked -p bitlogic --example emit -- memh
 ```
 
 The macro retains the original function, so `select(&a, &b, &enabled, &mut output)`
@@ -63,8 +60,7 @@ before a conditional or assign it in every branch. No latch is inferred.
 Shared input references allow fan-out. Mutable references describe exclusive
 access during native evaluation. They do not establish a lifetime for physical
 drivers or a physical pin identity. The IR has named logical ports; the top module
-connects them to actual pins. The processor mapping additionally rejects duplicate
-output pin assignments. Public low-level `Builder` construction does not receive
+connects them to actual pins. Public low-level `Builder` construction does not receive
 the source macro's Rust borrowing checks.
 
 ## Supported Rust subset
@@ -119,41 +115,19 @@ pads, and electrical modes. State machines can be represented by explicit
 current-state input and next-state output ports; the surrounding module owns the
 state register. Rust borrow lifetimes have no clock-domain meaning.
 
-## Processor integration
-
-The backend uses `CAPTURE_INPUTS`, `EVAL_BIT`, and `WRITE_BIT`, then `HALT`. It
-captures the eight physical input bits once and computes using that snapshot.
-By default input and output ports flatten least significant bit first onto
-ascending pins. `to_program_with_pins(input_pins, output_pins)` provides explicit
-physical mappings; each flattened bit needs a mapping entry. Input mappings may
-repeat for fan-out; output mappings must be disjoint. The default mapping supports
-at most eight input and eight output bits.
-
-The target has 64 one-bit scratch registers; r0..r7 hold the snapshot, r8/r9
-hold zero/one, and remaining registers hold expressions. The backend prunes
-unreachable nodes, simplifies gates, and shares identical gates, but does not
-recycle scratch registers. Excess scratch or instruction capacity is an error.
-HDL widths up to 64 remain available even when a graph does not fit the processor.
-
-Processor execution takes multiple cycles and publishes output bits successively.
-Read outputs after `halted` and check `fault`; intermediate pin values are not an
-atomic result. Integration owns synchronization before capture and reset/relaunch
-between evaluations. Only mapped output pins change. HDL and processor backends
-agree on final values for the same inputs, without a claim of equal latency or
-intermediate pin waveforms. See the [instruction contract](isa.md).
-
 ## Verification
 
-`cargo test --workspace --locked` checks native Rust, graph interpretation, an
-independent mathematical oracle, the processor reference machine, RHDL execution,
-and generated HDL in Icarus. The `bitlogic` integration suite exhausts the small
-input domains of its examples and all eleven binary operations at three bits.
-The HDL operator regression also checks one-, three-, and 64-bit boundaries,
-slices, concatenation, and shifts. The clocked test changes physical inputs after
-capture and checks every instruction's state and final results. Compile-fail
-examples cover shared/mutable aliasing, duplicate output borrows, input mutation,
-and incomplete output definitions. Unsupported syntax and width/slice errors have
-frontend rejection tests.
+`cargo test --workspace --locked` checks native Rust and graph interpretation
+against independent mathematical expectations and executes generated combinational
+HDL in Icarus. Five integration tests cover small exhaustive truth tables,
+composition, all eleven binary operations, one-/three-/64-bit boundaries, slices,
+concatenation, and shifts. A macro unit test and four compile-fail examples cover
+unsupported syntax, incomplete outputs, width/slice errors, and borrowing errors.
+See [verification](verification.md) for exact evidence and commands.
+
+The previous processor backend and its associated tests have been retired. Their
+results are historical; see [project history](history.md). The active library
+has no processor ISA or RHDL dependencies.
 
 This is functional verification. No FPGA fit, physical timing, ASIC signoff, or
 electrical correctness is established.

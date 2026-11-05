@@ -1,159 +1,94 @@
-# RHDL Protocol Processor
+# Bitlogic
 
-**Last updated: 2026-11-05.** A Rust workspace for three connected projects:
+**Last updated: 2026-11-05.** An untimed Rust DSL for bit-vector transformations.
+Write normal assignments in `#[logic]` functions, capture a typed expression graph,
+and interpret it or emit combinational Verilog. The native function remains
+callable and Rust checks its types and borrowing. Clocking, reset, CDC, state
+registers, and pad integration belong in the user's top module.
 
-1. A clocked protocol processor implemented in [RHDL](https://github.com/samitbasu/rhdl).
-2. Protocol implementations written in Rust that compile into processor instructions.
-3. Untimed bit transformations written with Rust assignments, targeting combinational
-   HDL or runtime bit operations on the processor.
+```rust
+use bitlogic::{logic, bits, Bits};
 
-Development is moving to the separate RHDL Git checkout in `rhdl/`, on branch
-`feature/protocol-processor`. The four protocol crates have been ported unchanged
-and pass all ten tests and four doctests using local RHDL dependencies. Formatting,
-protocol-scoped Clippy, Verilog export, and example generation pass there.
-See its [dashboard](rhdl/README.md) and [porting notes](rhdl/docs/porting.md).
-The fork must still be pushed and verified from a fresh remote clone; this
-original project is retained until that verification succeeds. The nested checkout
-is a separate repository and is not vendored into this repository's Git history.
-The `rhdl/` directory is absent in this checkout as of 2026-11-05; new changes and
-verification below apply to the root workspace.
+#[logic]
+fn invert(input: &Bits<8>, output: &mut Bits<8>) {
+    *output = *input ^ bits::<8>(0xff);
+}
 
-The first vertical slice is UART transmission: Rust code emits a program, and
-the RHDL processor executes it to drive a pin. This is a small starting ISA,
-not a restored version of the earlier processor. The previous Python DSL,
-NAND experiments, protocol studies, Tiny Tapeout integration, and physical-flow
-tooling have been removed from the active project.
-
-Protocols now use an RHDL-style `#[protocol]` macro: ordinary Rust functions with
-local variables, loops, conditions and annotated helpers compile into a typed
-effect IR and then processor instructions. The native function remains callable
-inside a simulation capture. See the [frontend guide](docs/protocol_frontend.md).
-The timed protocol frontend specializes all arguments on the host; target-side
-protocol branches are not implemented. The separate `#[logic]` frontend captures
-input-dependent expressions and conditions without timing. It preserves native
-Rust borrowing, checks complete output definitions, and produces a typed graph
-for interpretation, composition, combinational Verilog, or processor lowering.
-See the [bitlogic guide](docs/bitlogic.md).
-
-```text
-Rust protocol implementation → instruction image
-                                      ↓
-                         RHDL protocol processor → pins
-                                      ↓
-                         Verilog → FPGA/ASIC tools
+let ir = invert::ir().unwrap();
+assert_eq!(ir.evaluate(&[0x55]).unwrap(), [0xaa]);
+let verilog = ir.to_verilog("invert").unwrap();
 ```
 
 ## Run
 
-Install a Rust toolchain supporting edition 2024 and Icarus Verilog (`iverilog`
-and `vvp`). This workspace is tested with rustc/Cargo 1.99.0 and Icarus 12.0;
-an older minimum Rust version has not been established. RHDL and `rhdl-fpga` are
-pinned to Git revision `c99d5cc53269a247bbc675d0fbd766991d409f56`, with locked
-transitive dependencies. The first Cargo build needs network access.
+Install Rust with edition 2024 support and Icarus Verilog (`iverilog`, `vvp`).
+The workspace is tested with rustc/Cargo 1.99.0 and Icarus 12.0; an older minimum
+Rust version has not been established. Cargo.lock fixes dependency versions.
 
 ```sh
 cargo test --workspace --locked
 cargo run --locked -p bitlogic --example emit -- verilog
-cargo run --locked -p bitlogic --example emit -- asm
-cargo run --locked -p protocol-compiler -- uart-tx \
-  --pin 0 --cycles-per-bit 8 --text Hi --output build/uart.mem
-cargo run --locked -p protocol-compiler -- uart-tx \
-  --pin 0 --cycles-per-bit 8 --text Hi --format asm
-mkdir -p build
-cargo run --locked -p protocol-processor --bin export-processor \
-  > build/protocol_processor.v
+make check
+make emit
 ```
 
-`uart.mem` contains one 32-bit instruction word per hexadecimal line, suitable
-for `$readmemh`. The exported processor exposes an external instruction-fetch
-interface; it does not load this file itself. The integration test supplies
-program memory and checks execution. See [architecture and timing](docs/architecture.md)
-and the [instruction contract](docs/isa.md).
+`make emit` writes `build/select_logic.v`. The generated module has `i_` input
+ports, `o_` output ports, and continuous wire assignments. It has no clocks or
+inferred registers. See the [language and integration guide](docs/bitlogic.md).
 
 ## Source layout
 
 | Crate | Responsibility |
 |---|---|
-| [`protocol-processor`](crates/protocol-processor/src/lib.rs) | RHDL state transition, explicit register bank, and named-port Verilog export |
-| [`protocol-compiler`](crates/protocol-compiler/src/lib.rs) | Annotated Rust protocols, effect IR/lowering, native trace simulation and instruction-image CLI |
-| [`protocol-isa`](crates/protocol-isa/src/lib.rs) | Shared instruction encoding, program validation, pin types, and independent cycle reference |
-| [`protocol-macros`](crates/protocol-macros/src/lib.rs) | Rust syntax validation and generation of native/compiler companion paths |
-| [`bitlogic`](crates/bitlogic/src/lib.rs) | Fixed-width values, expression IR, composition, interpretation, and HDL/processor backends |
-| [`bitlogic-macros`](crates/bitlogic-macros/src/lib.rs) | `#[logic]` assignment/conditional capture and complete-output validation |
+| [`bitlogic`](crates/bitlogic/src/lib.rs) | Fixed-width values, typed IR, interpretation, composition, and combinational Verilog |
+| [`bitlogic-macros`](crates/bitlogic-macros/src/lib.rs) | Rust assignment/conditional capture and complete-output validation |
 
 ## Status
 
-| Protocol | Status | Evidence/scope |
+| Feature | Status | Evidence/scope |
 |---|---|---|
-| UART | Partial | Integer-cycle 8N1 transmit only; no receive, baud recovery, or board validation |
-| SPI, I²C, JTAG, SWD, PS/2, USB, Ethernet, CAN | Not started | No implementations in this workspace |
+| Rust frontend | Partial | Documented Rust subset; native evaluation retained; repeated assignments, local mutation, conditionals, and bounded loop expansion checked |
+| Bit-vector IR and composition | Verified | Independent truth tables, all eleven three-bit binary operations, composition identities, port-shape/value errors, and width boundaries in integration tests |
+| Combinational Verilog | Partial | Icarus checks 128 conditional-transform combinations and 2,725 operator/boundary cases; no synthesis or board evidence |
+| Ownership and output definitions | Verified | Macro diagnostics plus compile-fail examples for incomplete outputs, input mutation, and Rust E0499/E0502 aliasing errors |
 
-| Check | Current evidence |
-|---|---|
-| Workspace regression | `cargo test --workspace --locked`: 19 tests and 9 doctests pass (7 compile-fail) |
-| UART timing and masking | 6,144 programs (all 256 byte values × 8 pins × bit periods 1/2/8); 247,808 native cycle observations match an independent waveform oracle and reference machine |
-| Compiled RHDL transition | 864 original boundary/malformed-word cases plus 240 bit-operation cases agree with the independent reference, RHIF/RTL interpreters, and two generated Verilog lowerings in Icarus |
-| Clocked emitted processor | 1,454 cycle observations in Icarus; multi-byte UART, reset including active WAIT recovery, halt/fault, and final-PC behavior agree with the reference |
-| Construction and CLI | All nonzero 16-bit WAIT encodings and all mask/value pairs checked; program limits, invalid pins/periods, CLI emission, and width mismatch rejection pass |
-| Rust protocol frontend | Native Rust effects agree with IR for all 6,144 UART cases; helper/mutation/branch tests agree with instruction execution; zero/merged waits preserve elapsed clocks; syntax/type rejection and work limits checked |
-| Untimed bit logic | Six integration tests: independent truth tables, native/IR/processor comparisons, composition and pin mapping, 1/3/64-bit HDL operators in Icarus, and 3,328 clocked processor observations with changing inputs after capture; macro and compile-fail checks reject invalid programs |
-| Tooling | `cargo fmt --all --check`, Clippy with warnings denied, `make emit`, and `make example` pass locally; Rust CI configured, not yet run remotely |
+`cargo test --workspace --locked`: **6 tests and 5 doctests pass** (4 compile-fail).
+`cargo fmt --all --check`, Clippy with warnings denied, and `make emit example`
+pass locally. CI runs the same Rust and HDL checks; no remote execution is claimed.
+Exact scope is in [verification](docs/verification.md).
 
-Exact scope and commands are in [verification](docs/verification.md).
-Prior results do not validate this processor.
-
-- [x] Establish a root Cargo workspace and pin RHDL.
-- [x] Define a shared instruction ABI and bounded program image.
-- [x] Implement `SET_PINS`, `WAIT`, and `HALT` in a clocked RHDL processor.
-- [x] Implement a Rust UART transmitter that emits processor instructions.
-- [x] Compile annotated Rust protocols through typed effect IR; expose native simulation, source inspection, and assembly listings.
-- [x] Simplify waits while preserving protocol cycle timing.
-- [x] Complete and record native, compiled-kernel, and emitted-hardware validation.
-- [x] Add untimed Rust assignment DSL with typed bit-vector IR and HDL/processor backends.
-- [x] Add processor input capture, truth-table bit operations, and output-bit writes with cycle contracts.
-- [ ] Add target-side control flow to the timed protocol frontend.
-- [ ] Add a program-memory integration and loading strategy for a selected target.
-- [ ] Add more protocol implementations and protocol composition.
-- [ ] Measure synthesis, placement/routing, timing, resources, and board behavior.
+- [x] Establish an independent bitlogic workspace with locked dependencies.
+- [x] Capture ordinary Rust assignments into typed bit-vector expressions.
+- [x] Preserve native Rust evaluation and borrowing checks.
+- [x] Validate complete output definitions and supported syntax.
+- [x] Interpret and compose typed expression graphs.
+- [x] Generate and functionally verify combinational HDL.
+- [x] Retire protocol crates and the processor backend from the active tree.
+- [ ] Extend the supported Rust subset and composition ergonomics.
+- [ ] Add stronger equivalence checking and optimization passes.
+- [ ] Measure synthesis, physical timing, resources, and board behavior.
 
 ## Limits
 
-The processor has eight input pins, eight output pins, 64 scratch bits, and an
-eight-bit PC (256 instruction words).
-Program memory must provide the addressed instruction combinationally; synchronous
-block RAM needs a fetch stage and a revised timing contract. No instruction
-branches, interrupts, runtime loader, bidirectional pads, or concurrent engines
-exist yet. Programs are straight-line and terminate with `HALT`.
-The timed protocol frontend accepts a documented Rust subset and specializes
-source control flow on the host; it does not yet lower runtime Rust variables or branches to
-processor registers/instructions. Native simulation and compilation need matching
-Rust arithmetic settings when expressions overflow.
+The frontend supports `bool` and unsigned `Bits<1..=64>` in a documented Rust
+subset. Arbitrary helpers, type aliases, reference aliases in bodies, shadowing,
+compound assignments, unbounded loops, and arbitrary Rust types are unsupported.
+Names and types are recognized syntactically. Loops have expansion/work limits.
+Arithmetic wraps at the declared width; outputs must be defined on every path.
 
-The untimed DSL accepts a restricted Rust subset and uses defined unsigned
-wrapping arithmetic. HDL ports support 1..=64 bits. Processor lowering is limited
-by physical pin mappings, 64 scratch bits (no register reuse), and instruction
-capacity. It captures inputs once and publishes outputs bit by bit before HALT;
-the top-level integration owns synchronization, output validity, and relaunch.
-The HDL backend emits combinational logic without clocks, resets, pads, or CDC.
-This is NetKAT-inspired composition, without NetKAT union/history/iteration or a
-formal equivalence procedure.
+The IR is acyclic and combinational. State requires explicit current-state input
+and next-state output ports with registers in the surrounding module. Types and
+borrowing do not establish clock-domain safety, electrical correctness, protocol
+correctness, or efficient hardware. Physical pin connections remain the top
+module's responsibility.
 
-The current register bank uses RHDL's FPGA DFF primitive, including its generated
-initialization and synchronous reset. ASIC initialization support has not been
-established. The pin interface exposes logic values, not electrical pad modes.
-No FPGA bitstream, ASIC physical implementation, timing closure, or hardware
-signoff is claimed. Types check representation and some construction errors;
-they do not guarantee protocol correctness or efficient physical hardware.
+There is no processor backend, runtime instruction image, or RHDL dependency in
+the active workspace. No formal equivalence proof, FPGA fit, ASIC implementation,
+physical timing closure, or hardware signoff is claimed.
 
-## Previous project
+## History
 
-The pre-reset committed tree is available at
-`bd94857315fcb1038f4e4df8f9ac3ca477c2e0c2`:
-
-```sh
-git show bd94857315fcb1038f4e4df8f9ac3ca477c2e0c2:README.md
-```
-
-Uncommitted pre-reset source was additionally saved outside the repository at
-`/tmp/jane-street-before-rhdl-reset-20261030/sources.tar.gz`, with a diff and
-status record alongside it. This temporary backup is not durable Git history.
+The protocol processor and protocol compiler were committed separately before
+retirement. Their code and verification remain in Git history; see
+[project history](docs/history.md). Earlier processor results do not verify the
+active combinational HDL implementation.

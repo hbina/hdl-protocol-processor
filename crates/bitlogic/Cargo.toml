@@ -7,9 +7,6 @@ publish.workspace = true
 
 [dependencies]
 bitlogic-macros = { path = "../bitlogic-macros" }
-protocol-isa.workspace = true
 
 [dev-dependencies]
 tempfile.workspace = true
-protocol-processor.workspace = true
-rhdl.workspace = true

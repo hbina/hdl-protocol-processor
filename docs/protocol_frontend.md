@@ -97,8 +97,10 @@ panics remain ordinary Rust behavior. The frontend is not a sandbox.
 **All arguments and control conditions are currently host-time values.**
 Loops expand and branches specialize before execution on the processor. Changing
 the bytes or a parameter requires compiling a new image. This is not a compiler
-for arbitrary Rust machine code. Target-side variables, arithmetic, runtime
-branches, input sampling, and receive protocols require further ISA/backend work.
+for arbitrary Rust machine code. This timed frontend still needs lowering for
+target-side variables, arithmetic, and input sampling, plus further ISA/backend
+work for runtime branches and receive protocols. Input capture and bit arithmetic
+are available through the separate [untimed bitlogic frontend](bitlogic.md).
 
 ## Timing-preserving lowering
 

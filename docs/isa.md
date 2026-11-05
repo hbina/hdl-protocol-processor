@@ -34,3 +34,7 @@ pin operands before accepting typed instructions. EVAL_BIT reserves payload bits
 wait, and final-PC rules. `Machine::tick_with_inputs` models the input port;
 `tick` remains shorthand with zero inputs. The RHDL `step_with_inputs` kernel
 provides the corresponding transition; `step` retains the zero-input wrapper.
+
+The untimed [bitlogic backend](bitlogic.md) owns instruction scheduling. Input
+snapshot and final output values define its functional equivalence with HDL;
+these instructions do not introduce timing into the source logic language.

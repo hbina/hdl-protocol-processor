@@ -56,8 +56,8 @@ At N=1 the limit is twenty-five bytes. Larger programs are rejected, not truncat
 An empty payload is allowed and emits idle plus HALT. This is not an efficient
 general-purpose protocol engine yet; runtime protocol loops and buffering need
 their own ISA and timing design. Input capture and bit computations now exist
-in the processor ISA; the timed protocol frontend still specializes all arguments
-on the host.
+for the separate [untimed bitlogic frontend](bitlogic.md); the timed protocol
+frontend still specializes all arguments on the host.
 
 ## Development direction
 

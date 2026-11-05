@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/protocol-isa", "crates/protocol-processor", "crates/protocol-compiler", "crates/protocol-macros"]
+members = ["crates/protocol-isa", "crates/protocol-processor", "crates/protocol-compiler", "crates/protocol-macros", "crates/bitlogic", "crates/bitlogic-macros"]
 resolver = "2"
 
 [workspace.package]

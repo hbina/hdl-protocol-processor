@@ -12,7 +12,7 @@ cargo test --workspace --locked
 make emit example
 ```
 
-All commands pass locally: 12 tests and four doctests (three compile-fail).
+All commands pass locally: 19 tests and nine doctests (seven compile-fail).
 The earlier 2026-10-31 run used `CARGO_HOME=/tmp/jane-rhdl-cargo`; the current run
 uses the normal Cargo cache. Neither location is an application requirement.
 
@@ -77,14 +77,44 @@ Macro unit tests require specific diagnostics for unsupported syntax. Compiler
 doctests exercise a complete annotated pulse, reject unbounded loops, and require
 Rust to reject a non-boolean drive value. The existing RHDL width mismatch
 doctest remains. CLI tests also check a deterministic 43-line assembly listing.
-The timed frontend retains its existing instruction and cycle behavior. A separate
-processor regression checks 240 bit-instruction cases against the independent
-reference, RHIF/RTL interpreters, and both generated Verilog forms in Icarus.
-Cases cover all truth tables, Boolean operands, low/high/aliased destinations,
-input capture, output writes, reserved encodings, and halt/wait/final-PC behavior.
+The timed frontend retains its existing instruction and cycle behavior. The
+untimed frontend adds the bit-operation instructions described below.
 
 `make emit` produces `build/protocol_processor.v`. `make example` produces
 `build/uart.mem`. These artifacts are generated rather than checked in.
+
+## Untimed bit logic
+
+The six `bitlogic/tests/logic.rs` integration tests compare ordinary native Rust,
+IR evaluation, independent mathematical expectations, and programs executing on
+the reference processor. Three-bit operands exhaust all eleven binary operations;
+other cases cover mutation, defaults, statement/value conditionals, else-if,
+bounded loops, slices, concatenation, shifts, boolean outputs, composition,
+explicit pin mappings, and preservation of unmapped output bits. Errors cover
+mapping conflicts, invalid widths/values/names, and processor width limits.
+
+Icarus checks 128 combinations of a conditional transform against an independent
+Verilog oracle. A separate operator test checks 2,725 cases across 1/3/64-bit
+operations, slices, concatenation, and shift boundaries. These tests execute the
+emitted combinational HDL, not an alternate handwritten implementation alone.
+
+A clocked processor test runs the captured transform for all 128 input tuples,
+checks 3,328 rising-edge observations, and changes physical inputs after capture.
+Final pin values agree with the independent oracle. Native RHDL state, including
+scratch bits, is also compared with the integer reference at each step.
+
+An additional processor-kernel regression checks 240 cases: all sixteen two-input
+truth tables at every Boolean input combination with low/high/aliased destination
+registers, capture/write instructions, reserved-bit faults, PC=255, waiting, and
+halted states. The pinned RHIF/RTL interpreters and both generated Verilog forms
+in Icarus agree with the independent reference. ISA tests round-trip bit operands
+and reject out-of-range typed operands and reserved encodings.
+
+Macro rejection tests and four bitlogic compile-fail examples check incomplete
+outputs, reads before definition, width and slice mistakes, unsupported syntax,
+expansion bounds, input writes, and Rust E0499/E0502 aliasing errors. One additional
+bitlogic doctest executes native evaluation and graph/HDL construction. See the
+[language and integration guide](bitlogic.md) for the supported subset and limits.
 
 ## Limits
 

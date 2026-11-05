@@ -1,9 +1,11 @@
 # RHDL Protocol Processor
 
-**Last updated: 2026-11-05.** A Rust workspace for two connected projects:
+**Last updated: 2026-11-05.** A Rust workspace for three connected projects:
 
 1. A clocked protocol processor implemented in [RHDL](https://github.com/samitbasu/rhdl).
 2. Protocol implementations written in Rust that compile into processor instructions.
+3. Untimed bit transformations written with Rust assignments, targeting combinational
+   HDL or runtime bit operations on the processor.
 
 Development is moving to the separate RHDL Git checkout in `rhdl/`, on branch
 `feature/protocol-processor`. The four protocol crates have been ported unchanged
@@ -26,9 +28,12 @@ Protocols now use an RHDL-style `#[protocol]` macro: ordinary Rust functions wit
 local variables, loops, conditions and annotated helpers compile into a typed
 effect IR and then processor instructions. The native function remains callable
 inside a simulation capture. See the [frontend guide](docs/protocol_frontend.md).
-Current protocol compilation specializes all arguments on the host. The processor
-now supports input capture and bit computations; the protocol frontend does not
-yet lower input-dependent execution or target-side branches.
+The timed protocol frontend specializes all arguments on the host; target-side
+protocol branches are not implemented. The separate `#[logic]` frontend captures
+input-dependent expressions and conditions without timing. It preserves native
+Rust borrowing, checks complete output definitions, and produces a typed graph
+for interpretation, composition, combinational Verilog, or processor lowering.
+See the [bitlogic guide](docs/bitlogic.md).
 
 ```text
 Rust protocol implementation → instruction image
@@ -48,6 +53,8 @@ transitive dependencies. The first Cargo build needs network access.
 
 ```sh
 cargo test --workspace --locked
+cargo run --locked -p bitlogic --example emit -- verilog
+cargo run --locked -p bitlogic --example emit -- asm
 cargo run --locked -p protocol-compiler -- uart-tx \
   --pin 0 --cycles-per-bit 8 --text Hi --output build/uart.mem
 cargo run --locked -p protocol-compiler -- uart-tx \
@@ -71,6 +78,8 @@ and the [instruction contract](docs/isa.md).
 | [`protocol-compiler`](crates/protocol-compiler/src/lib.rs) | Annotated Rust protocols, effect IR/lowering, native trace simulation and instruction-image CLI |
 | [`protocol-isa`](crates/protocol-isa/src/lib.rs) | Shared instruction encoding, program validation, pin types, and independent cycle reference |
 | [`protocol-macros`](crates/protocol-macros/src/lib.rs) | Rust syntax validation and generation of native/compiler companion paths |
+| [`bitlogic`](crates/bitlogic/src/lib.rs) | Fixed-width values, expression IR, composition, interpretation, and HDL/processor backends |
+| [`bitlogic-macros`](crates/bitlogic-macros/src/lib.rs) | `#[logic]` assignment/conditional capture and complete-output validation |
 
 ## Status
 
@@ -81,12 +90,13 @@ and the [instruction contract](docs/isa.md).
 
 | Check | Current evidence |
 |---|---|
-| Workspace regression | `cargo test --workspace --locked`: 12 tests and 4 doctests pass (3 compile-fail) |
+| Workspace regression | `cargo test --workspace --locked`: 19 tests and 9 doctests pass (7 compile-fail) |
 | UART timing and masking | 6,144 programs (all 256 byte values × 8 pins × bit periods 1/2/8); 247,808 native cycle observations match an independent waveform oracle and reference machine |
 | Compiled RHDL transition | 864 original boundary/malformed-word cases plus 240 bit-operation cases agree with the independent reference, RHIF/RTL interpreters, and two generated Verilog lowerings in Icarus |
 | Clocked emitted processor | 1,454 cycle observations in Icarus; multi-byte UART, reset including active WAIT recovery, halt/fault, and final-PC behavior agree with the reference |
 | Construction and CLI | All nonzero 16-bit WAIT encodings and all mask/value pairs checked; program limits, invalid pins/periods, CLI emission, and width mismatch rejection pass |
 | Rust protocol frontend | Native Rust effects agree with IR for all 6,144 UART cases; helper/mutation/branch tests agree with instruction execution; zero/merged waits preserve elapsed clocks; syntax/type rejection and work limits checked |
+| Untimed bit logic | Six integration tests: independent truth tables, native/IR/processor comparisons, composition and pin mapping, 1/3/64-bit HDL operators in Icarus, and 3,328 clocked processor observations with changing inputs after capture; macro and compile-fail checks reject invalid programs |
 | Tooling | `cargo fmt --all --check`, Clippy with warnings denied, `make emit`, and `make example` pass locally; Rust CI configured, not yet run remotely |
 
 Exact scope and commands are in [verification](docs/verification.md).
@@ -99,7 +109,8 @@ Prior results do not validate this processor.
 - [x] Compile annotated Rust protocols through typed effect IR; expose native simulation, source inspection, and assembly listings.
 - [x] Simplify waits while preserving protocol cycle timing.
 - [x] Complete and record native, compiled-kernel, and emitted-hardware validation.
-- [x] Add input capture, truth-table bit computations, and output-bit writes with explicit cycle contracts.
+- [x] Add untimed Rust assignment DSL with typed bit-vector IR and HDL/processor backends.
+- [x] Add processor input capture, truth-table bit operations, and output-bit writes with cycle contracts.
 - [ ] Add target-side control flow to the timed protocol frontend.
 - [ ] Add a program-memory integration and loading strategy for a selected target.
 - [ ] Add more protocol implementations and protocol composition.
@@ -113,10 +124,19 @@ Program memory must provide the addressed instruction combinationally; synchrono
 block RAM needs a fetch stage and a revised timing contract. No instruction
 branches, interrupts, runtime loader, bidirectional pads, or concurrent engines
 exist yet. Programs are straight-line and terminate with `HALT`.
-The frontend accepts a documented Rust subset and specializes source control
-flow on the host; it does not yet lower runtime Rust variables or branches to
+The timed protocol frontend accepts a documented Rust subset and specializes
+source control flow on the host; it does not yet lower runtime Rust variables or branches to
 processor registers/instructions. Native simulation and compilation need matching
 Rust arithmetic settings when expressions overflow.
+
+The untimed DSL accepts a restricted Rust subset and uses defined unsigned
+wrapping arithmetic. HDL ports support 1..=64 bits. Processor lowering is limited
+by physical pin mappings, 64 scratch bits (no register reuse), and instruction
+capacity. It captures inputs once and publishes outputs bit by bit before HALT;
+the top-level integration owns synchronization, output validity, and relaunch.
+The HDL backend emits combinational logic without clocks, resets, pads, or CDC.
+This is NetKAT-inspired composition, without NetKAT union/history/iteration or a
+formal equivalence procedure.
 
 The current register bank uses RHDL's FPGA DFF primitive, including its generated
 initialization and synchronous reset. ASIC initialization support has not been

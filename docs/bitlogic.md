@@ -115,6 +115,37 @@ pads, and electrical modes. State machines can be represented by explicit
 current-state input and next-state output ports; the surrounding module owns the
 state register. Rust borrow lifetimes have no clock-domain meaning.
 
+## Bounded set example
+
+Run the example or emit its combinational Verilog:
+
+```sh
+cargo run --locked -p bitlogic --example set -- demo
+cargo run --locked -p bitlogic --example set -- verilog
+```
+
+`crates/bitlogic/examples/set.rs` represents a set of keys `0..=7` as `Bits<8>`:
+bit `k` is one exactly when key `k` is a member. The `#[logic]` function
+`set_step` accepts `current: &Bits<8>`, `key: &Bits<3>`, and
+`operation: &Bits<2>`, and writes `next: &mut Bits<8>` and `present: &mut bool`.
+
+| Operation | Encoding | Next state |
+|---|---|---|
+| Contains | 0 | Current state |
+| Insert | 1 | Current set with key included |
+| Remove | 2 | Current set with key excluded |
+| Clear | 3 | Empty set, regardless of key |
+
+`present` always reports membership of `key` in the **current** set, including
+during clear. Inserting an existing key and removing an absent key leave the
+set unchanged. All bit patterns of the key and operation ports are valid.
+The key decoder uses bounded loop expansion, comparisons, and constant shifts;
+it needs no language extensions. The native demo feeds `next` back on each call.
+An HDL integrator must supply the state register and any clock/reset/enable logic.
+This example has a fixed universe, not dynamically allocated storage or arbitrary
+key types. Its two exhaustive tests compare native/IR and generated HDL with a
+`BTreeSet` oracle for all 8,192 input combinations.
+
 ## Verification
 
 `cargo test --workspace --locked` checks native Rust and graph interpretation

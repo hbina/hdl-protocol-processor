@@ -10,3 +10,7 @@ bitlogic-macros = { path = "../bitlogic-macros" }
 
 [dev-dependencies]
 tempfile.workspace = true
+
+[[example]]
+name = "set"
+test = true

@@ -1,6 +1,6 @@
 # Bitlogic
 
-**Last updated: 2026-11-07.** An untimed Rust DSL for bit-vector transformations.
+**Last updated: 2026-11-08.** An untimed Rust DSL for bit-vector transformations.
 Write normal assignments in `#[logic]` functions, capture a typed expression graph,
 and interpret it or emit combinational Verilog. The native function remains
 callable and Rust checks its types and borrowing. Clocking, reset, CDC, state
@@ -30,6 +30,8 @@ cargo test --workspace --locked
 cargo run --locked -p bitlogic --example emit -- verilog
 cargo run --locked -p bitlogic --example set -- demo
 cargo run --locked -p bitlogic --example set -- verilog
+cargo run --locked -p bitlogic --example protocol_processor -- demo Hi 0 8
+cargo run --locked -p bitlogic --example protocol_processor -- verilog
 make check
 make emit
 ```
@@ -42,6 +44,13 @@ The [set example](crates/bitlogic/examples/set.rs) implements contains, insert,
 remove, and clear for keys `0..=7` using an eight-bit membership bitmap. The demo
 owns the state; emitted HDL exposes current-state and next-state ports. See the
 [set interface](docs/bitlogic.md#bounded-set-example) for operation encodings.
+
+The [protocol processor example](crates/bitlogic/examples/protocol_processor/main.rs)
+uses the library for an instruction-driven next-state function. A separate top
+module owns registers and synchronous reset. It runs UART TX/RX, a bounded input
+poll, SPI, I²C, JTAG sequences, SWD and PS/2 device transmission within documented limits.
+See the [architecture](docs/protocol_processor.md),
+[protocol scope](docs/protocols.md), and the [step-by-step implementation plan](docs/protocol_processor_plan.md#step-by-step-execution-guide).
 
 ## Source layout
 
@@ -59,11 +68,22 @@ owns the state; emitted HDL exposes current-state and next-state ports. See the
 | Combinational Verilog | Partial | Icarus checks 128 conditional-transform combinations and 2,725 operator/boundary cases; no synthesis or board evidence |
 | Ownership and output definitions | Verified | Macro diagnostics plus compile-fail examples for incomplete outputs, input mutation, and Rust E0499/E0502 aliasing errors |
 | Bounded set example | Verified | Native Rust, IR, and Icarus match a `BTreeSet` oracle for all 8,192 state/key/operation combinations; eight-key universe, caller-owned storage |
+| Protocol processor example | Partial | Checked 32-bit ISA; 327,190 transitions match reference/native/IR and source HDL; chip/IO integration remains |
+| UART | Partial | 8N1 TX: 6,144 byte/pin/period cases; 797 single-frame and 780 complete adjacent-frame batch RX scenarios; independent waveforms and clocked HDL; bounded 1..=6-frame reception, no FIFO or board evidence |
+| SPI | Partial | 2,112 single-byte full-duplex programs cover four modes, both bit orders, and an independent peer in native/IR/clocked HDL; no multi-byte API or board timing evidence |
+| I²C | Partial | 684 single-byte read/write scenarios with an independent resolved-bus peer: all bytes/ordinary addresses, ACK/NACK, busy, stretching and timeout boundaries; reset releases pads; no multi-controller or electrical evidence |
+| JTAG | Partial | 672 TAP scenarios plus IR-then-DR sequences from all 16 states; results retained and selected IR survives DR capture; 4-bit IR + 32-bit DR fits 251 words; no device/chain or board integration |
+| PS/2 | Partial | 272 resolved-bus device-TX scenarios: all bytes, odd parity, initial inhibit, mid-frame abort and request detection; no host-command receive, automatic resend or physical timing evidence |
+| SWD | Partial | 549 independent resolved-wire scenarios: raw 32-bit DP/AP read/write, ACKs, parity, turnaround and bounded WAIT retries; line reset; no target connection or board validation |
+| Protocol composition | Partial | Explicit success exits, branch relocation, conservative pin claims and shared-pin release; 24 independent UART/SPI waveforms and conditional-error tests; caller owns scratch/entry contracts |
+| CAN, USB, Ethernet | Not started | [Feasibility study](docs/protocol_feasibility.md) selects roles and buffered/controller boundaries; no link implementations |
 
-`cargo test --workspace --locked`: **8 tests and 5 doctests pass** (4 compile-fail).
+`cargo test --workspace --locked`: **33 tests and 5 doctests pass** (4 compile-fail).
 `cargo fmt --all --check`, Clippy with warnings denied, and `make emit example`
 pass locally. CI runs the same Rust and HDL checks; no remote execution is claimed.
 Exact scope is in [verification](docs/verification.md).
+
+
 
 - [x] Establish an independent bitlogic workspace with locked dependencies.
 - [x] Capture ordinary Rust assignments into typed bit-vector expressions.
@@ -73,9 +93,20 @@ Exact scope is in [verification](docs/verification.md).
 - [x] Generate and functionally verify combinational HDL.
 - [x] Implement and exhaustively verify a bounded set example.
 - [x] Retire protocol crates and the processor backend from the active tree.
+- [x] Document the [processor and protocol implementation plan](docs/protocol_processor_plan.md) using bitlogic as a library.
+- [x] Implement a processor example with checked ISA, independent cycle model, and clocked HDL verification.
+- [x] Implement and verify UART transmission on the example processor.
+- [x] Add input/scratch operations, runtime branches, bounded loops and timeout polling.
+- [x] Add single-byte SPI transfers and single-frame UART reception with independent peer/waveform tests.
+- [x] Add bidirectional output controls and resolved-pad I²C read/write verification.
+- [x] Add bounded JTAG scans and PS/2 device transmit with independent peer checks.
+- [x] Add SWD request/response, parity, turnaround and bounded retries.
+- [x] Receive complete adjacent UART frames in bounded batches and preserve JTAG IR/DR sequencing.
+- [x] Compose operations with explicit successful exits, pin handoff and independent timing/result checks.
+- [x] Study CAN, USB and Ethernet feasibility and record controller/buffering decisions.
 - [ ] Extend the supported Rust subset and composition ergonomics.
 - [ ] Add stronger equivalence checking and optimization passes.
-- [ ] Measure synthesis, physical timing, resources, and board behavior.
+- [ ] Measure synthesis and physical implementation; complete full-corner timing, chip-level IO/ROM/CDC integration, independent DRC/LVS, power/signoff and hardware validation.
 
 ## Limits
 
@@ -94,13 +125,26 @@ module's responsibility.
 The set example has a fixed eight-key universe; it does not provide dynamically
 allocated storage or arbitrary key types.
 
-There is no processor backend, runtime instruction image, or RHDL dependency in
-the active workspace. No formal equivalence proof, FPGA fit, ASIC implementation,
-physical timing closure, or hardware signoff is claimed.
+There is no library processor backend or RHDL dependency. The processor example
+has at most 256 words of externally supplied combinational instruction memory,
+eight input/output values and enables, 64 scratch bits and one loop counter. It
+has no loader, interrupts, synchronizers or target-specific pad integration. The
+logical tri-state pad example is not a physical IO implementation. Reset releases
+outputs; HALT and processor fault preserve enables. Open-drain protocol cleanup
+releases owned pins, including on modeled error paths.
+Protocol rates require an instruction/synchronizer/peer timing budget; logical
+simulation does not prove pad timing. UART RX captures at most six frames;
+SPI and I²C transfer one byte. JTAG sequences preserve TAP state within the image;
+PS/2 needs a stable qualified idle interval and returns inhibited frames to its
+caller. SWD assumes an already selected/configured target. Composition requires
+explicit success metadata and scratch/entry-state planning. See [protocol limits](docs/protocols.md).
+Functional regressions are finite evidence. Native Rust/IR-to-HDL
+formal proof, technology implementation, physical timing, chip-level IO/ROM/CDC
+integration, DRC/LVS, power signoff and hardware validation remain unverified.
 
 ## History
 
-The protocol processor and protocol compiler were committed separately before
-retirement. Their code and verification remain in Git history; see
+The earlier RHDL protocol processor and protocol compiler were committed separately
+before retirement. Their code and verification remain in Git history; see
 [project history](docs/history.md). Earlier processor results do not verify the
-active combinational HDL implementation.
+active bitlogic implementation or the new processor example.

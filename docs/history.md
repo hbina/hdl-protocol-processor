@@ -4,6 +4,9 @@ Development now focuses on the standalone `bitlogic` and `bitlogic-macros` crate
 The protocol processor, protocol compiler, protocol ISA, protocol macros, and
 bitlogic's processor backend were retired from the active tree on 2026-11-05.
 The active DSL and HDL backend do not depend on those crates or on RHDL.
+On 2026-11-07, a new [protocol processor example](protocol_processor.md) was added
+as a user of bitlogic, with an independent reference, clocked wrapper and new
+tests. It does not restore the retired backend or inherit historical verification.
 
 The retirement followed two separate commits so the implementations remain
 reviewable and recoverable:

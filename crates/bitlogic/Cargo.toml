@@ -14,3 +14,8 @@ tempfile.workspace = true
 [[example]]
 name = "set"
 test = true
+
+[[example]]
+name = "protocol_processor"
+path = "examples/protocol_processor/main.rs"
+test = true

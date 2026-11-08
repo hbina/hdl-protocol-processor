@@ -53,8 +53,10 @@ follows from this flow. Resolved-wire simulation remains distinct evidence.
 
 ## Selected physical study and remaining integration
 
-Target selection and physical implementation remain planned. Chip-level
-integration must implement and validate:
+The [SKY130 HD block study](sky130_implementation.md) now selects a concrete
+platform, 20 ns clock and external-interface assumptions, and completes routing,
+extracted TT timing and routed functional regression. Generic mapping remains
+separate evidence. A chip-level integration must still implement and validate:
 
 - Instruction storage: a stable combinational ROM interface, or an explicitly
   redesigned synchronous fetch pipeline and its revised protocol cycle contracts.
@@ -64,6 +66,6 @@ integration must implement and validate:
 - Technology library/device, implementation constraints, resource budget and
   protocol-specific timing/board checks.
 
-Generic mapping does not close these system-level integration tasks. Independent
+The block study does not close these system-level integration tasks. Independent
 ASIC DRC/LVS/signoff and hardware checks remain separately tracked; passing
 functional, generic-mapped or single-corner routed checks cannot substitute for them.

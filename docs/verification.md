@@ -13,6 +13,11 @@ make emit example
 
 The active workspace has thirty-three tests and five doctests (four compile-fail).
 
+Final audit also reran all 16 commands in the processor architecture guide,
+the generic mapped and routed processor regressions, Ruff and the physical
+report checker. All passed. Freshly emitted processor RTL matches both flow
+inputs byte for byte, and all 15 recorded physical-evidence hashes match.
+
 ## Native and graph checks
 
 Five `bitlogic/tests/logic.rs` integration tests include independent comparisons
@@ -106,6 +111,26 @@ formal equivalence proof. The pad module remains a logical simulation model.
 Exact commands, tool versions, cell types, tri-state warning and physical limits
 are recorded in the [synthesis baseline](processor_synthesis.md).
 
+## SKY130 routed block
+
+`make processor-sky130-test` passes on the pinned offline ORFS container. It
+checks the routed TT/25 °C/1.8 V block at a 20 ns clock: +10.0603 ns setup and
++0.255771 ns hold worst slack, zero setup/hold TNS, zero router DRC and antenna
+violations, and an all-checks `check_setup` constraint audit. Standard-cell area
+excluding fill is 16,205.5 µm²; the block has 122 sequential cells.
+
+All 25 processor tests pass with `6_final.v` selected for their clocked paths,
+covering 1,060,580 observations with Liberty-derived functional cell models.
+The combinational-only test remains source RTL in this run. There is no SDF
+annotation; extracted STA supplies separate timing evidence. Kepler's final
+checkpoint comparison reports no difference against technology synthesis, with
+unused clock-gating-model warnings retained. This is not a native/IR-to-HDL proof.
+
+The [physical study](sky130_implementation.md) links checked-in raw reports,
+artifact hashes, the reproducible flow, explicit IO/ROM assumptions and limits.
+Full-corner timing, foundry-deck DRC/LVS, IO/CDC/chip integration, activity-based
+power and board/silicon validation remain unverified.
+
 ## Frontend and borrowing checks
 
 A macro unit test requires specific diagnostics for unsupported syntax,
@@ -127,7 +152,8 @@ removed, along with their tests. The new library example above has its own
 verification. Historical processor/waveform results are not active bitlogic
 coverage. See [project history](history.md).
 
-There is no native/IR-to-HDL formal proof, technology place-and-route, physical
-timing closure, FPGA fit, board test, CDC integration or electrical validation.
-These finite functional tests do not establish correctness for every possible
-source program or target.
+There is no native/IR-to-HDL formal proof, full-corner/chip signoff, FPGA fit,
+board test, CDC integration or electrical validation. The routed SKY130 block and
+scoped mapped-netlist comparison above do not remove those limitations. Icarus
+provides functional simulation and OpenROAD supplies the recorded block timing;
+neither establishes correctness for every possible source program or target.

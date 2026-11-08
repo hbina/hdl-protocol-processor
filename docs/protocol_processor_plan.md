@@ -10,10 +10,11 @@ define intended work; the progress table distinguishes implementation from plans
 | 7 | Jumps, scratch-bit branches, saturating loop counter and bounded polling implemented; native/IR/clocked-HDL timeout and data-dependent traces pass |
 | 8 | Example roles implemented with independent peers: SPI, complete bounded adjacent-frame UART RX, I²C, state-preserving JTAG sequences, SWD and PS/2 device TX; [feasibility study](protocol_feasibility.md) selects CAN/USB/Ethernet boundaries; documented protocol limits remain |
 | 9 | Checked builder and [sequential composition](protocol_composition.md) implemented, with successful exits, relocation, pin handoff and independent waveforms/results; optional annotated frontend considered and deferred |
-| 10 | Generic mapping and mapped-netlist regression complete; target selection and physical implementation remain planned |
+| 10 | [Generic mapping](processor_synthesis.md) and a [routed SKY130 HD block study](sky130_implementation.md) complete with explicit memory/IO/clock assumptions, extracted TT timing, constraint/router checks and routed functional regression; chip-level signoff remains separate work |
 
-Functional checks do not establish physical or electrical signoff. The documented
-protocol limits remain part of scope.
+Functional checks and the single-corner block implementation are distinct evidence.
+No chip-level physical or electrical signoff is claimed. The documented protocol
+limits remain part of scope. See the [requirement-by-requirement audit](processor_plan_audit.md).
 
 ## Step-by-step execution guide
 

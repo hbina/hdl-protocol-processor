@@ -1,0 +1,9 @@
+# Target-neutral mapped logic; no Liberty/PDK, IO cells or physical constraints.
+read_verilog build/protocol_processor.v
+hierarchy -check -top protocol_processor
+synth -top protocol_processor
+check -assert
+tee -o build/processor_synth_stats.json stat -json
+ltp -noff
+write_json build/protocol_processor_mapped.json
+write_verilog -noattr build/protocol_processor_mapped.v

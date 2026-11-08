@@ -1,5 +1,6 @@
 /target/
 /build/
+/.venv/
 *.vcd
 *.fst
 .vscode/

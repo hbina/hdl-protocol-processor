@@ -10,7 +10,7 @@ define intended work; the progress table distinguishes implementation from plans
 | 7 | Jumps, scratch-bit branches, saturating loop counter and bounded polling implemented; native/IR/clocked-HDL timeout and data-dependent traces pass |
 | 8 | Example roles implemented with independent peers: SPI, complete bounded adjacent-frame UART RX, I²C, state-preserving JTAG sequences, SWD and PS/2 device TX; [feasibility study](protocol_feasibility.md) selects CAN/USB/Ethernet boundaries; documented protocol limits remain |
 | 9 | Checked builder and [sequential composition](protocol_composition.md) implemented, with successful exits, relocation, pin handoff and independent waveforms/results; optional annotated frontend considered and deferred |
-| 10 | Synthesis, target selection and physical implementation remain planned |
+| 10 | Generic mapping and mapped-netlist regression complete; target selection and physical implementation remain planned |
 
 Functional checks do not establish physical or electrical signoff. The documented
 protocol limits remain part of scope.

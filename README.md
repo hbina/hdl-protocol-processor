@@ -36,6 +36,11 @@ make check
 make emit
 ```
 
+Optional generic synthesis and mapped-netlist regression use uv with checked-in
+`pyproject.toml`/`uv.lock`: `uv sync --locked`, then `make processor-mapped-test`.
+See the [synthesis baseline](docs/processor_synthesis.md) for tool versions and scope.
+
+
 `make emit` writes `build/select_logic.v`. The generated module has `i_` input
 ports, `o_` output ports, and continuous wire assignments. It has no clocks or
 inferred registers. See the [language and integration guide](docs/bitlogic.md).
@@ -68,7 +73,7 @@ See the [architecture](docs/protocol_processor.md),
 | Combinational Verilog | Partial | Icarus checks 128 conditional-transform combinations and 2,725 operator/boundary cases; no synthesis or board evidence |
 | Ownership and output definitions | Verified | Macro diagnostics plus compile-fail examples for incomplete outputs, input mutation, and Rust E0499/E0502 aliasing errors |
 | Bounded set example | Verified | Native Rust, IR, and Icarus match a `BTreeSet` oracle for all 8,192 state/key/operation combinations; eight-key universe, caller-owned storage |
-| Protocol processor example | Partial | Checked 32-bit ISA; 327,190 transitions match reference/native/IR and source HDL; chip/IO integration remains |
+| Protocol processor example | Partial | Checked 32-bit ISA; 327,190 transitions match reference/native/IR and source/generic-mapped HDL; chip/IO integration remains |
 | UART | Partial | 8N1 TX: 6,144 byte/pin/period cases; 797 single-frame and 780 complete adjacent-frame batch RX scenarios; independent waveforms and clocked HDL; bounded 1..=6-frame reception, no FIFO or board evidence |
 | SPI | Partial | 2,112 single-byte full-duplex programs cover four modes, both bit orders, and an independent peer in native/IR/clocked HDL; no multi-byte API or board timing evidence |
 | I²C | Partial | 684 single-byte read/write scenarios with an independent resolved-bus peer: all bytes/ordinary addresses, ACK/NACK, busy, stretching and timeout boundaries; reset releases pads; no multi-controller or electrical evidence |
@@ -77,6 +82,7 @@ See the [architecture](docs/protocol_processor.md),
 | SWD | Partial | 549 independent resolved-wire scenarios: raw 32-bit DP/AP read/write, ACKs, parity, turnaround and bounded WAIT retries; line reset; no target connection or board validation |
 | Protocol composition | Partial | Explicit success exits, branch relocation, conservative pin claims and shared-pin release; 24 independent UART/SPI waveforms and conditional-error tests; caller owns scratch/entry contracts |
 | CAN, USB, Ethernet | Not started | [Feasibility study](docs/protocol_feasibility.md) selects roles and buffered/controller boundaries; no link implementations |
+| Generic synthesis | Verified | Yosys 0.70: 2,527 generic logic cells + 122 flops; structural check and complete mapped processor regression pass; no technology area/timing claim |
 
 `cargo test --workspace --locked`: **33 tests and 5 doctests pass** (4 compile-fail).
 `cargo fmt --all --check`, Clippy with warnings denied, and `make emit example`
@@ -104,9 +110,10 @@ Exact scope is in [verification](docs/verification.md).
 - [x] Receive complete adjacent UART frames in bounded batches and preserve JTAG IR/DR sequencing.
 - [x] Compose operations with explicit successful exits, pin handoff and independent timing/result checks.
 - [x] Study CAN, USB and Ethernet feasibility and record controller/buffering decisions.
+- [x] Measure generic synthesis and rerun the processor regression on mapped HDL.
 - [ ] Extend the supported Rust subset and composition ergonomics.
 - [ ] Add stronger equivalence checking and optimization passes.
-- [ ] Measure synthesis and physical implementation; complete full-corner timing, chip-level IO/ROM/CDC integration, independent DRC/LVS, power/signoff and hardware validation.
+- [ ] Complete full-corner timing, chip-level IO/ROM/CDC integration, independent DRC/LVS, power/signoff and hardware validation.
 
 ## Limits
 
@@ -138,7 +145,7 @@ SPI and I²C transfer one byte. JTAG sequences preserve TAP state within the ima
 PS/2 needs a stable qualified idle interval and returns inhibited frames to its
 caller. SWD assumes an already selected/configured target. Composition requires
 explicit success metadata and scratch/entry-state planning. See [protocol limits](docs/protocols.md).
-Functional regressions are finite evidence. Native Rust/IR-to-HDL
+Functional and generic-mapped regressions are finite evidence. Native Rust/IR-to-HDL
 formal proof, technology implementation, physical timing, chip-level IO/ROM/CDC
 integration, DRC/LVS, power signoff and hardware validation remain unverified.
 

@@ -153,4 +153,5 @@ emission (zero delay emits nothing), scratch constants and image validation.
 Duplicate/unbound labels, out-of-range targets and oversized images are errors.
 I²C and PS/2 use it for runtime polling and error cleanup. This is host assembly,
 not a Rust protocol frontend. [Sequential composition](protocol_composition.md)
-preserves selected successful exits and explicit pin handoff.
+preserves selected successful exits and explicit pin handoff. Optional synthesis
+and mapped-netlist checks are documented in the [synthesis baseline](processor_synthesis.md).

@@ -95,6 +95,17 @@ maximum-period waveforms are not simulated.
 the wrapper is additional. This is not a synthesis area or timing measurement.
 See the [processor contract](protocol_processor.md) and [protocol interfaces](protocols.md).
 
+## Generic mapping and mapped regression
+
+`make processor-mapped-test` passes with the locked optional uv tools. Yosys 0.70
+maps the core to 2,527 generic logic cells and 122 synchronous-reset flops, checks
+structure and emits a Verilog netlist. The same 25 processor tests pass with the
+mapped modules: 327,190 transition vectors and 1,060,580 clocked observations.
+This is a second implementation path, not additional unique input coverage or a
+formal equivalence proof. The pad module remains a logical simulation model.
+Exact commands, tool versions, cell types, tri-state warning and physical limits
+are recorded in the [synthesis baseline](processor_synthesis.md).
+
 ## Frontend and borrowing checks
 
 A macro unit test requires specific diagnostics for unsupported syntax,

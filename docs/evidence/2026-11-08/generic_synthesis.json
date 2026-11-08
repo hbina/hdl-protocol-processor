@@ -1,0 +1,75 @@
+{
+   "creator": "Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)",
+   "invocation": "stat -json ",
+   "modules": {
+      "\\protocol_processor": {
+         "num_wires":         20,
+         "num_wire_bits":     286,
+         "num_pub_wires":     20,
+         "num_pub_wire_bits": 286,
+         "num_ports":         12,
+         "num_port_bits":     164,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         122,
+         "num_submodules":       1,
+         "num_cells_by_type": {
+            "$_SDFF_PP0_": 122,
+            "processor_step": 1
+         }
+      },
+      "\\processor_step": {
+         "num_wires":         3834,
+         "num_wire_bits":     36214,
+         "num_pub_wires":     1429,
+         "num_pub_wire_bits": 33809,
+         "num_ports":         18,
+         "num_port_bits":     284,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         2527,
+         "num_submodules":       0,
+         "num_cells_by_type": {
+            "$_ANDNOT_": 215,
+            "$_AND_": 650,
+            "$_MUX_": 134,
+            "$_NAND_": 1078,
+            "$_NOR_": 49,
+            "$_NOT_": 3,
+            "$_ORNOT_": 114,
+            "$_OR_": 223,
+            "$_XNOR_": 40,
+            "$_XOR_": 21
+         }
+      }
+   },
+      "design": {
+         "num_wires":         3854,
+         "num_wire_bits":     36500,
+         "num_pub_wires":     1449,
+         "num_pub_wire_bits": 34095,
+         "num_ports":         30,
+         "num_port_bits":     448,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         2649,
+         "num_submodules":       1,
+         "num_cells_by_type": {
+            "$_ANDNOT_": 215,
+            "$_AND_": 650,
+            "$_MUX_": 134,
+            "$_NAND_": 1078,
+            "$_NOR_": 49,
+            "$_NOT_": 3,
+            "$_ORNOT_": 114,
+            "$_OR_": 223,
+            "$_SDFF_PP0_": 122,
+            "$_XNOR_": 40,
+            "$_XOR_": 21,
+            "processor_step": 1
+         }
+      }
+}

@@ -58,6 +58,7 @@ fn composed_uart_spi_timing_results_and_shared_handoff() {
                     .unwrap();
                 let combined = composer.finish().unwrap();
                 assert_eq!(combined.locations[0].entry, 0);
+                assert_eq!(combined.locations[0].name, "uart");
                 let words = combined.program.words();
                 let mut state = State::default();
                 hdl.load(&words);

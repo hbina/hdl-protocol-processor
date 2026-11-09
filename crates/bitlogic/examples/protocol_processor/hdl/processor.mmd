@@ -1,0 +1,14 @@
+flowchart LR
+  rom["External combinational instruction ROM"] -->|instruction: 32 bits| core["processor_step: combinational next-state logic"]
+  regs["State registers: 122 bits"] -->|current state| core
+  core -->|next state| regs
+  clock["clk"] --> regs
+  reset["synchronous reset: clears state"] --> regs
+  regs -->|pc: 8 bits| rom
+  regs -->|values and enables: 8 bits each| pads["protocol_pads: logical tri-state adapter"]
+  pads <-->|8 pads| peer["External IO cells and protocol peer"]
+  pads --> sync["External input synchronization"]
+  sync -->|inputs: 8 bits| core
+  regs --> status["pc, wait_remaining, pins, halted, fault, scratch, count, enables"]
+  %% ROM, physical IO cells, synchronization and protocol peers are integrator-owned.
+  %% The generated implementation.v includes processor_step, protocol_processor and protocol_pads.

@@ -38,10 +38,10 @@ condition. Pin handoff does not establish a safe clock domain, voltage or pad mo
 ## Evidence and example
 
 ```sh
-cargo run --locked -p bitlogic --example protocol_processor -- compose
+cargo test --locked -p bitlogic --example protocol_processor composed_uart_spi_timing_results_and_shared_handoff
 ```
 
-The demo transmits UART `A` on pin 0, then performs SPI on pins 1..4. Tests check
+The composition fixture transmits UART `A` on pin 0, then performs SPI. Tests check
 24 independent combined waveforms across SPI modes and UART periods, including
 shared-pin variants with an explicit release gap and received-byte reconstruction.
 A polling-success/timeout pair checks that success reaches UART while timeout

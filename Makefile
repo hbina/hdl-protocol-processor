@@ -8,15 +8,14 @@ check:
 	cargo clippy --workspace --all-targets --locked -- -D warnings
 
 emit:
-	mkdir -p build
-	cargo run --locked -p bitlogic --example emit -- verilog > build/select_logic.v
+	cargo run --locked -p bitlogic --example emit
 
 example:
-	cargo run --locked -p bitlogic --example emit -- verilog
+	cargo run --locked -p bitlogic --example emit
 
 processor-synth:
 	mkdir -p build
-	cargo run --locked -p bitlogic --example protocol_processor -- verilog > build/protocol_processor.v
+	artifacts=$$(cargo run --locked -p bitlogic --example protocol_processor) && cp "$$artifacts/implementation.v" build/protocol_processor.v
 	UV_CACHE_DIR=$(CURDIR)/build/uv-cache uv run --locked yowasp-yosys -s scripts/processor_synth.ys -l build/processor_synth.log
 
 processor-mapped-test: processor-synth

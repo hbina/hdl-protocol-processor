@@ -35,11 +35,10 @@ Rust version has not been established. Cargo.lock fixes dependency versions.
 
 ```sh
 cargo test --workspace --locked
-cargo run --locked -p bitlogic --example emit -- verilog
-cargo run --locked -p bitlogic --example set -- demo
-cargo run --locked -p bitlogic --example set -- verilog
-cargo run --locked -p bitlogic --example protocol_processor -- demo Hi 0 8
-cargo run --locked -p bitlogic --example protocol_processor -- verilog
+cargo run --locked -p bitlogic --example emit
+cargo run --locked -p bitlogic --example set
+cargo run --locked -p bitlogic --example crc
+cargo run --locked -p bitlogic --example protocol_processor
 make check
 make emit
 ```
@@ -51,14 +50,29 @@ The optional [SKY130 HD block study](docs/sky130_implementation.md) uses rootles
 Podman: `make processor-sky130-test` reproduces routing, timing, constraint checks
 and routed-netlist functional regression with a pinned tool image.
 
-`make emit` writes `build/select_logic.v`. The generated module has `i_` input
-ports, `o_` output ports, and continuous wire assignments. It has no clocks or
-inferred registers. See the [language and integration guide](docs/bitlogic.md).
+Each example takes **no arguments**, generates every artifact in a fresh random
+`/tmp/bitlogic-<module>-...` directory, and prints that directory's absolute path.
+The files persist after exit: `<module>.v` contains the generated module and its
+implementation, `block.svg` shows the interface and port widths, and `circuit.mmd`
+contains the complete IR circuit graph. Open the SVG directly in a browser or
+render the Mermaid file with a Mermaid viewer. Processor output additionally
+includes `processor_top.v`, `pads.v`, the combined `implementation.v`, and
+`processor.mmd` showing registers, feedback and external integration boundaries.
+There are no demo runs or output-format switches. `make emit example` uses the
+same artifact export; synthesis targets copy the generated implementation into
+`build/` for their tools. See the [artifact guide](docs/example_artifacts.md).
 
 The [set example](crates/bitlogic/examples/set.rs) implements contains, insert,
-remove, and clear for keys `0..=7` using an eight-bit membership bitmap. The demo
+remove, and clear for keys `0..=7` using an eight-bit membership bitmap. The caller
 owns the state; emitted HDL exposes current-state and next-state ports. See the
 [set interface](docs/bitlogic.md#bounded-set-example) for operation encodings.
+
+The [CRC example](crates/bitlogic/examples/crc.rs) computes CRC-8 of exactly four
+bytes using polynomial `0x07`, initial value zero, MSB-first input and no reflection
+or final XOR. The first byte occupies bits `31:24`; leading zero bytes count.
+Its 32-step bounded fold expands into combinational logic with no registers,
+byte counter or framing controls. Independent native/IR/HDL tests check its
+polynomial behavior; running it exports the circuit artifacts.
 
 The [protocol processor example](crates/bitlogic/examples/protocol_processor/main.rs)
 uses the library for an instruction-driven next-state function. A separate top
@@ -89,6 +103,8 @@ outputs match the pre-migration HDL.
 | Combinational Verilog | Partial | Icarus checks 128 conditional-transform combinations and 2,725 operator/boundary cases; no synthesis or board evidence |
 | Pure structured interfaces | Verified | Six structured integration tests, schema round trips, nominal composition laws, dependency expectations, and ten compile-fail examples; complete returned values |
 | Bounded set example | Verified | Native Rust, IR, and Icarus match a `BTreeSet` oracle for all 8,192 state/key/operation combinations; eight-key universe, caller-owned storage |
+| Fixed-width CRC example | Verified | `cargo test --locked -p bitlogic --example crc`: native Rust, IR and generated HDL under Icarus match independent polynomial division for 4,131 four-byte messages, including every single-bit input; finite functional evidence |
+| Example artifact export | Verified | All four examples emit Verilog, SVG and full Mermaid graphs into unique persistent `/tmp` directories; bundle connectivity test and Icarus elaboration of exported modules/wrappers |
 | Protocol processor example | Partial | Checked 32-bit ISA; 327,190 transitions match reference/native/IR and source/generic-mapped HDL; 1,060,580 clocked observations also pass on routed SKY130 cells; chip/IO integration remains |
 | UART | Partial | 8N1 TX: 6,144 byte/pin/period cases; 797 single-frame and 780 complete adjacent-frame batch RX scenarios; independent waveforms and clocked HDL; bounded 1..=6-frame reception, no FIFO or board evidence |
 | SPI | Partial | 2,112 single-byte full-duplex programs cover four modes, both bit orders, and an independent peer in native/IR/clocked HDL; no multi-byte API or board timing evidence |
@@ -101,14 +117,15 @@ outputs match the pre-migration HDL.
 | Generic synthesis | Verified | Yosys 0.70: 2,165 generic logic cells + 122 flops; structural check and complete mapped processor regression pass; no technology area/timing claim |
 | SKY130 HD block implementation | Partial | Fresh migrated RTL at TT/25 °C/1.8 V: 15,713.8 µm² cell area, +10.3544 ns setup / +0.253807 ns hold slack at 20 ns; router DRC/antenna zero, constraint audit and routed regression pass; no chip signoff |
 
-`cargo test --workspace --locked`: **39 tests and 11 doctests pass** (10 compile-fail).
+`cargo test --workspace --locked`: **42 tests and 11 doctests pass** (10 compile-fail).
 `cargo fmt --all --check`, Clippy with warnings denied, and `make emit example`
 pass locally. CI runs the same Rust and HDL checks; no remote execution is claimed.
 Exact scope is in [verification](docs/verification.md).
 
 All ten implementation-plan stages have scoped evidence in the
 [completion audit](docs/processor_plan_audit.md), including a fresh source,
-mapped and routed regression and all 16 documented processor commands.
+mapped and routed regression and the historical processor CLI checks. The current
+examples export artifacts without arguments; protocol builders and execution checks remain in tests.
 
 - [x] Establish an independent bitlogic workspace with locked dependencies.
 - [x] Capture pure Rust expressions and complete structured results into typed graphs.
@@ -117,6 +134,8 @@ mapped and routed regression and all 16 documented processor commands.
 - [x] Interpret and compose typed expression graphs.
 - [x] Generate and functionally verify combinational HDL.
 - [x] Implement and exhaustively verify a bounded set example.
+- [x] Generate all example HDL/diagram artifacts into random `/tmp` directories without CLI modes.
+- [x] Add a fixed-four-byte combinational CRC-8 example with independent native/IR/HDL checks.
 - [x] Retire protocol crates and the processor backend from the active tree.
 - [x] Document the [processor and protocol implementation plan](docs/protocol_processor_plan.md) using bitlogic as a library.
 - [x] Implement a processor example with checked ISA, independent cycle model, and clocked HDL verification.
@@ -145,8 +164,9 @@ Mutation, references, arbitrary helpers, early returns, struct-update shorthand,
 ordinary loops, arrays/tuples/enums and arbitrary leaf types are unsupported.
 Immutable shadowing is allowed. Bounded folds have expansion/work limits.
 Arithmetic wraps at the declared width. Some schema and bit-bound errors are
-reported by `ir()` rather than during Rust compilation. Structural dependencies
-are conservative, and nominal type identities are local to a Rust process.
+reported by `ir()` rather than during Rust compilation. Diagrams describe IR
+structure and integration boundaries, not placed gates or physical routing.
+Structural dependencies are conservative, and nominal type identities are local to a Rust process.
 
 The IR is acyclic and combinational. State is explicit in input/output structs;
 registers belong in the surrounding module. Types do not establish clock-domain
@@ -155,6 +175,10 @@ Physical pin connections remain the top module's responsibility.
 
 The set example has a fixed eight-key universe; it does not provide dynamically
 allocated storage or arbitrary key types.
+
+The CRC example handles exactly four bytes with one fixed CRC variant; it has no
+streaming interface or checksum comparison. No CRC synthesis area or timing
+measurements are claimed.
 
 There is no library processor backend or RHDL dependency. The processor example
 has at most 256 words of externally supplied combinational instruction memory,

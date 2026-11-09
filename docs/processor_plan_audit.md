@@ -10,7 +10,7 @@ does not mean complete protocol standards, a chip tapeout or hardware signoff.
 | 2: checked pins/waits/image, raw decoding, expected encodings and independent cycle model | `isa.rs`, `reference.rs`, `runner.rs`; `checked_isa_encodings_and_image_limits`, direct state expectations and bounded/infinite-run outcomes |
 | 3: supported DSL only, complete next-state definitions, native/IR/reference checks | `#[logic] processor_step`, complete returned `ProcessorState`, 327,190 independent transition vectors including injected boundaries/ignored instructions; no library backend/RHDL dependency |
 | 4: generated comb HDL plus clocked registers/reset/ROM, full traces and reset recovery | `processor_top.v`, test ROM fetch by PC, 801 raw-program edges plus pad reset tests; native/IR/source and mapped/routed HDL paths |
-| 5: UART TX builder, exact periods including one clock, capacity, empty/multi-byte cases, commands/images/listing | UART builder, 6,144 byte/pin/period programs against serialized-frame oracle, maximum WAIT waveform, acceptance boundaries and [documented commands](protocol_processor.md#commands) |
+| 5: UART TX builder, exact periods including one clock, capacity, empty/multi-byte cases, commands/images/listing | UART builder, 6,144 byte/pin/period programs against serialized-frame oracle, maximum WAIT waveform, acceptance boundaries and historical CLI export checks (now replaced by [artifact generation](example_artifacts.md)) |
 | 6: input capture, scratch truth tables and aliases, output-bit preservation, indexing resource cost | Input/scratch transition cases; independent truth-table expectations; bounded decoder implementation and 2,418-node/111,484-byte graph/source measurements; atomic sampling/word parity extensions documented and checked |
 | 7: runtime branches/counters, target validation, timeout/result handling, termination limits | ISA JUMP/BRANCH_BIT/LOAD_COUNT/DEC_JUMP; 8,836 polling edges, branch/timeout sweeps, loop limits and structurally checked targets |
 | 8 SPI: controller mode/order/select/capture schedule and independent peer | 2,112 programs, four modes/two orders, received results, sample/clock/select waveform checks; rate limits documented |
@@ -47,3 +47,7 @@ the plan's separately tracked ASIC signoff. Full-chip memory/IO/CDC integration,
 full corners, independent foundry DRC/LVS, activity-based power/IR/EM, packaging
 and manufactured-hardware/board validation remain future work. No signoff or
 unimplemented CAN/USB/Ethernet support is inferred from the completed study.
+
+The 2026-11-09 example update replaces CLI demos/modes with automatic HDL and
+diagram artifact export; historical command counts above describe the audit
+snapshot, while the protocol builders and independent regression remain active.

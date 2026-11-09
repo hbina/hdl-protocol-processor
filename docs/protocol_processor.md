@@ -99,7 +99,7 @@ receiving multi-bit data. Inputs are consumed at the execution edge; input
 synchronization and its latency are external.
 
 Dynamic selection uses bounded 64-way decoder expansion in the existing DSL.
-`stats` reports 2,418 IR nodes and 111,484 bytes of combinational Verilog for this
+The captured graph has 2,418 IR nodes and 111,484 bytes of combinational Verilog for this
 revision. This measures source/graph size, not synthesized gates or timing.
 
 ## Hand-worked edge traces
@@ -126,32 +126,19 @@ zero. The next non-reset edge fetches word zero; reset itself executes no word.
 ## Commands
 
 ```sh
-cargo run --locked -p bitlogic --example protocol_processor -- demo Hi 0 8
-cargo run --locked -p bitlogic --example protocol_processor -- mem Hi 0 8
-cargo run --locked -p bitlogic --example protocol_processor -- asm Hi 0 8
-cargo run --locked -p bitlogic --example protocol_processor -- verilog
-cargo run --locked -p bitlogic --example protocol_processor -- stats
-cargo run --locked -p bitlogic --example protocol_processor -- poll 0 4 2
-cargo run --locked -p bitlogic --example protocol_processor -- spi a5 0 4
-cargo run --locked -p bitlogic --example protocol_processor -- uart-rx 0 16 8
-cargo run --locked -p bitlogic --example protocol_processor -- i2c 50 read 2
-cargo run --locked -p bitlogic --example protocol_processor -- jtag ir a5 8
-cargo run --locked -p bitlogic --example protocol_processor -- ps2 a5 2 4
-cargo run --locked -p bitlogic --example protocol_processor -- swd read 0
-cargo run --locked -p bitlogic --example protocol_processor -- swd reset
-cargo run --locked -p bitlogic --example protocol_processor -- jtag-pair a 4 12345678 32
-cargo run --locked -p bitlogic --example protocol_processor -- uart-rx-batch 2 0 16
-cargo run --locked -p bitlogic --example protocol_processor -- compose
+cargo run --locked -p bitlogic --example protocol_processor
 ```
 
-The demo verifies every observed state against IR evaluation and the independent
-integer reference. Tests additionally check independent protocol waveforms.
-The poll demo uses low inputs and reports timeout; the SPI demo receives zero;
-the RX demo uses low inputs and reports a framing error. I²C reports bus busy,
-PS/2 times out on inhibit, SWD reports invalid ACK, and JTAG captures zeros. Protocol status is in
-scratch, separate from processor fault. These demos exercise execution without a
-physical peer. The native runner reports Halted, Fault or Limit; limits bound simulation rather
-than proving program termination. See [protocol interfaces](protocols.md),
+This exports all HDL and diagram files to a new random directory under `/tmp`
+and prints its path. There are no command-line modes or demos. The bundle
+includes `processor_step.v`, `processor_top.v`, `pads.v`, their combined
+`implementation.v`, `block.svg`, `circuit.mmd`, and `processor.mmd`.
+See the [artifact guide](example_artifacts.md). The combined file can be passed
+to synthesis or simulation as a single source; do not also compile the separate
+module files, which would duplicate their definitions.
+
+Protocol program construction, reference execution and independent waveform
+checks remain in the tests and host builders. See [protocol interfaces](protocols.md),
 [verification evidence](verification.md), and the [remaining plan](protocol_processor_plan.md).
 
 ## Host assembly

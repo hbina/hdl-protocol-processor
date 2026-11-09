@@ -167,8 +167,7 @@ Electrical pad modes, voltage domains and clock-domain safety remain external.
 ## Bounded set example
 
 ```sh
-cargo run --locked -p bitlogic --example set -- demo
-cargo run --locked -p bitlogic --example set -- verilog
+cargo run --locked -p bitlogic --example set
 ```
 
 `set_step(SetInput) -> SetOutput` represents keys `0..=7` with `Bits<8>`:
@@ -195,3 +194,6 @@ The [migration contract and audit](pure_functions.md) records the baseline and
 implementation gates. The mutation-based frontend has been retired. Earlier RHDL
 processor results are separately historical; see [project history](history.md).
 Functional checks do not establish FPGA fit, electrical correctness or ASIC signoff.
+
+All runnable examples generate HDL and diagrams without arguments; see the
+[artifact guide](example_artifacts.md) for files and temporary-folder behavior.

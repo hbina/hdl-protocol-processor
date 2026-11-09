@@ -17,7 +17,8 @@ container=("${podman_cmd[@]}" run --rm --cgroups=disabled --network=none
 
 case "${1:-run}" in
     run)
-        cargo run --locked -p bitlogic --example protocol_processor -- verilog > "$out/emitted_candidate.v"
+        artifacts=$(cargo run --locked -p bitlogic --example protocol_processor)
+        cp "$artifacts/implementation.v" "$out/emitted_candidate.v"
         if ! cmp -s "$out/emitted_candidate.v" "$out/protocol_processor.v"; then
             cp "$out/emitted_candidate.v" "$out/protocol_processor.v"
         fi

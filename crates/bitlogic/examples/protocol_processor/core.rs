@@ -34,6 +34,10 @@ struct PinDecode {
 }
 
 #[logic]
+#[allow(
+    dead_code,
+    reason = "Artifact export uses the IR; native evaluation remains available to tests."
+)]
 pub fn processor_step(input: StepInput) -> ProcessorState {
     let state = input.state;
     let instruction = input.instruction;

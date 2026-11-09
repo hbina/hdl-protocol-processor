@@ -23,6 +23,10 @@ struct Decode {
 }
 
 #[logic]
+#[allow(
+    dead_code,
+    reason = "Artifact export uses the IR; native evaluation remains available to tests."
+)]
 fn set_step(input: SetInput) -> SetOutput {
     let decoded = Decode {
         mask: bits::<8>(1),
@@ -50,38 +54,11 @@ fn set_step(input: SetInput) -> SetOutput {
     }
 }
 
+mod support;
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    match std::env::args().nth(1).as_deref() {
-        Some("verilog") => print!("{}", set_step::ir()?.to_verilog("set_step")?),
-        None | Some("demo") => {
-            let ir = set_step::ir()?;
-            let mut current = bits::<8>(0);
-            for (operation, key, label) in [
-                (1, 3, "insert"),
-                (1, 7, "insert"),
-                (1, 3, "insert"),
-                (0, 3, "contains"),
-                (2, 3, "remove"),
-                (2, 3, "remove"),
-                (0, 3, "contains"),
-                (3, 7, "clear"),
-            ] {
-                let SetOutput { next, present } = set_step(SetInput {
-                    current,
-                    key: bits(key),
-                    operation: bits(operation),
-                });
-                assert_eq!(
-                    ir.evaluate(&[current.get(), key, operation])?,
-                    [next.get(), u64::from(present)]
-                );
-                let members: Vec<_> = (0..8).filter(|&value| next.bit(value)).collect();
-                println!("{label} {key}: previously present={present}, set={members:?}");
-                current = next;
-            }
-        }
-        _ => return Err("expected demo or verilog".into()),
-    }
+    support::no_arguments()?;
+    support::generate("set_step", &set_step::ir()?, &[])?;
     Ok(())
 }
 

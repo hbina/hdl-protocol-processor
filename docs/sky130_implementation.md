@@ -36,7 +36,7 @@ externally generated active-high reset sampled synchronously, and outputs masked
 off until power/clock/reset are valid. Slow asynchronous GPIO inputs use two
 synchronizing stages in that top; their latency must be included when selecting
 protocol periods/holds. Source-synchronous return paths need a separately checked
-round-trip sampling budget. CLI hold defaults are logical demos, not board rates.
+round-trip sampling budget. Protocol test hold intervals are logical simulation values, not board rates.
 For a 3.3 V board-facing implementation, select the
 [SKY130 FD IO GPIO-v2 family](https://skywater-pdk.readthedocs.io/en/main/contents/libraries/sky130_fd_io/docs/user_guide.html)
 around the 1.8 V core, with push-pull or output-enable-controlled drive-low/release

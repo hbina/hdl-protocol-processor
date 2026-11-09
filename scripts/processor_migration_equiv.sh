@@ -10,7 +10,8 @@ baseline_dir="$(mktemp -d /tmp/bitlogic-baseline.XXXXXXXX)"
 trap 'rm -rf -- "$baseline_dir"' EXIT
 git archive "$baseline_revision" | tar -x -C "$baseline_dir"
 CARGO_TARGET_DIR="$out/old-target" cargo run --locked --manifest-path "$baseline_dir/Cargo.toml" -p bitlogic --example protocol_processor -- verilog > "$out/processor.v"
-cargo run --locked -p bitlogic --example protocol_processor -- verilog > "$out/migrated.v"
+artifacts=$(cargo run --locked -p bitlogic --example protocol_processor)
+cp "$artifacts/processor_step.v" "$out/migrated.v"
 # Compare the core modules; the clock/reset wrapper is unchanged. Hide generated
 # internal names because node indices differ and are not correspondence points.
 sed -n '1,/^endmodule/p' "$out/processor.v" | sed 's/^module processor_step(/module old_step(/' > "$out/equivalence.v"

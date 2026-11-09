@@ -11,9 +11,9 @@ cargo test --workspace --locked
 make emit example
 ```
 
-The active workspace has thirty-nine tests and eleven doctests (ten compile-fail).
+The active workspace has forty-two tests and eleven doctests (ten compile-fail).
 
-Final audit also reran all 16 commands in the processor architecture guide,
+The 2026-11-08 audit also reran the 16 historical processor CLI commands,
 the generic mapped and routed processor regressions, Ruff and the physical
 report checker. All passed. Freshly emitted processor RTL matches both flow
 inputs byte for byte, and all 15 recorded physical-evidence hashes match.
@@ -47,7 +47,7 @@ with Icarus against the oracle's expected values. This includes duplicate insert
 absent removals, empty/full sets, both boundary keys, and clear for every key.
 The example's `test = true` Cargo setting includes these in the workspace tests.
 
-`cargo run --locked -p bitlogic --example set -- demo` also passes its native/IR
+The removed set demo historically passed its native/IR
 assertions across a sequence of operations. The `verilog` mode emits `set_step`,
 which compiles with `iverilog -g2012 -s set_step`. No state registers are emitted.
 
@@ -95,7 +95,7 @@ checks do not exhaust the machine's complete state space or establish formal
 equivalence. Maximum SPI/RX period construction is tested, but their complete
 maximum-period waveforms are not simulated.
 
-`cargo run --locked -p bitlogic --example protocol_processor -- stats` reports
+The processor IR records
 2,418 IR nodes and 111,484 bytes for the combinational module in this revision;
 the wrapper is additional. This is not a synthesis area or timing measurement.
 See the [processor contract](protocol_processor.md) and [protocol interfaces](protocols.md).
@@ -186,3 +186,16 @@ board test, CDC integration or electrical validation. The routed SKY130 block an
 scoped mapped-netlist comparison above do not remove those limitations. Icarus
 provides functional simulation and OpenROAD supplies the recorded block timing;
 neither establishes correctness for every possible source program or target.
+
+## Example artifact export (2026-11-09)
+
+The examples accept no arguments and write all outputs into retained random
+`/tmp` folders. `tests/artifacts.rs` checks distinct persistent directories,
+Verilog fidelity, SVG interface labels, mux operand connectivity and an aliased
+output in the complete Mermaid circuit graph. All four exported HDL modules
+and the processor's separate/combined wrapper files are elaborated with Icarus
+in the local acceptance check. The updated generic mapped regression and 122-bit migration equivalence proof
+also pass. Prior physical evidence and hashes describe the earlier source
+snapshots; the physical flow was not rerun for this artifact export change. The Makefile,
+SKY130 script and migration-equivalence script now consume generated files.
+See [artifact contents and commands](example_artifacts.md).

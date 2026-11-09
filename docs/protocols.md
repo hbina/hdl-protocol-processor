@@ -24,7 +24,7 @@ WAIT(0) is never emitted. For B bytes, image size is `2*(1+10*B)+1` at N>1 and
 are rejected before allocation of an instruction image. Period 65536 uses the
 maximum WAIT(65535).
 
-The demo's text argument is transmitted as UTF-8 bytes. The Rust builder accepts
+Host code can pass UTF-8 text as bytes. The Rust builder accepts
 arbitrary bytes. The transmit builder has no flow control, parity variants,
 buffering or board validation. Receive is a separate builder described below.
 

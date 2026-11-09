@@ -1,6 +1,6 @@
 # Bitlogic
 
-**Last updated: 2026-11-08.** An untimed Rust DSL for bit-vector transformations.
+**Last updated: 2026-11-09.** An untimed Rust DSL for bit-vector transformations.
 Write normal assignments in `#[logic]` functions, capture a typed expression graph,
 and interpret it or emit combinational Verilog. The native function remains
 callable and Rust checks its types and borrowing. Clocking, reset, CDC, state
@@ -65,6 +65,12 @@ See the [architecture](docs/protocol_processor.md),
 |---|---|
 | [`bitlogic`](crates/bitlogic/src/lib.rs) | Fixed-width values, typed IR, interpretation, composition, and combinational Verilog |
 | [`bitlogic-macros`](crates/bitlogic-macros/src/lib.rs) | Rust assignment/conditional capture and complete-output validation |
+
+Low-level graphs now support explicit structured `Schema` interfaces,
+`LogicValue` flattening/reconstruction, typed evaluation, nominal composition,
+external port renaming and structural dependency inspection. The existing
+mutable frontend remains available at this stage; schemas can be supplied
+through `Logic::with_schemas`. Existing scalar graph behavior is preserved.
 
 ## Status
 

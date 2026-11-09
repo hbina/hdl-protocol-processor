@@ -48,6 +48,12 @@
 //! ```
 
 mod ir;
+mod value;
+pub use value::{LogicValue, Schema};
+#[doc(hidden)]
+pub mod __private {
+    pub use crate::value::Symbolic;
+}
 pub use bitlogic_macros::logic;
 pub use ir::{Binary, Builder, Error, Logic, Node, NodeId, Operation, Port};
 use std::ops::{Add, BitAnd, BitOr, BitXor, Not, Shl, Shr, Sub};

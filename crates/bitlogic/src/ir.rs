@@ -1,3 +1,4 @@
+use crate::{LogicValue, Schema};
 use std::{
     error,
     fmt::{self, Write},
@@ -82,9 +83,110 @@ pub struct Logic {
     pub(crate) nodes: Vec<Node>,
     pub(crate) inputs: Vec<Port>,
     pub(crate) outputs: Vec<Port>,
+    pub(crate) schemas: Option<(Schema, Schema)>,
 }
 
 impl Logic {
+    pub fn schemas(&self) -> Option<(&Schema, &Schema)> {
+        self.schemas.as_ref().map(|(input, output)| (input, output))
+    }
+
+    pub fn with_schemas(mut self, input: Schema, output: Schema) -> Result<Self, Error> {
+        for (schema, ports) in [(&input, &self.inputs), (&output, &self.outputs)] {
+            let leaves = schema.leaves();
+            if leaves.len() != ports.len() {
+                return fail("schema port count mismatch");
+            }
+            for ((_, leaf), port) in leaves.iter().zip(ports) {
+                if leaf.width()? != port.width {
+                    return fail("schema port width mismatch");
+                }
+            }
+        }
+        self.schemas = Some((input, output));
+        Ok(self)
+    }
+
+    pub fn evaluate_typed<I: LogicValue, O: LogicValue>(&self, input: I) -> Result<O, Error> {
+        if self.schemas.as_ref() != Some(&(I::schema(), O::schema())) {
+            return fail("typed evaluation schema mismatch");
+        }
+        O::from_values(&self.evaluate(&input.flatten())?)
+    }
+
+    /// Change external HDL names without changing field schemas or port order.
+    pub fn rename_ports(mut self, inputs: &[&str], outputs: &[&str]) -> Result<Self, Error> {
+        for (ports, names) in [(&mut self.inputs, inputs), (&mut self.outputs, outputs)] {
+            if ports.len() != names.len() {
+                return fail("port rename count mismatch");
+            }
+            let mut seen = std::collections::BTreeSet::new();
+            for (port, &name) in ports.iter_mut().zip(names) {
+                if !identifier(name) || !seen.insert(name) {
+                    return fail("invalid or duplicate port name");
+                }
+                port.name = name.into();
+            }
+        }
+        Ok(self)
+    }
+
+    /// Structural input dependencies for each output, in input port order.
+    pub fn dependencies(&self) -> Vec<(String, Vec<String>)> {
+        let mut dependencies: Vec<std::collections::BTreeSet<usize>> = Vec::new();
+        for node in &self.nodes {
+            let mut set = std::collections::BTreeSet::new();
+            let sources = match node.operation {
+                Operation::Input(index) => {
+                    set.insert(index);
+                    vec![]
+                }
+                Operation::Constant(_) => vec![],
+                Operation::Not(a)
+                | Operation::Slice { value: a, .. }
+                | Operation::Shift { value: a, .. } => vec![a],
+                Operation::Binary(_, a, b) | Operation::Concat(a, b) => vec![a, b],
+                Operation::Mux { condition, yes, no } => vec![condition, yes, no],
+            };
+            for source in sources {
+                set.extend(&dependencies[source.0]);
+            }
+            dependencies.push(set);
+        }
+        let paths = |schema: Option<&Schema>, ports: &[Port]| -> Vec<String> {
+            match schema {
+                Some(schema) => schema
+                    .leaves()
+                    .iter()
+                    .zip(ports)
+                    .map(|((path, _), port)| {
+                        if path.is_empty() {
+                            port.name.clone()
+                        } else {
+                            path.clone()
+                        }
+                    })
+                    .collect(),
+                None => ports.iter().map(|p| p.name.clone()).collect(),
+            }
+        };
+        let inputs = paths(self.schemas().map(|s| s.0), &self.inputs);
+        let outputs = paths(self.schemas().map(|s| s.1), &self.outputs);
+        self.outputs
+            .iter()
+            .zip(outputs)
+            .map(|(port, name)| {
+                (
+                    name,
+                    dependencies[port.value.0]
+                        .iter()
+                        .map(|&i| inputs[i].clone())
+                        .collect(),
+                )
+            })
+            .collect()
+    }
+
     pub fn nodes(&self) -> &[Node] {
         &self.nodes
     }
@@ -95,7 +197,7 @@ impl Logic {
         &self.outputs
     }
 
-    /// Port values are ordered as in the source signature. Out-of-range inputs are errors.
+    /// Port values use schema leaf order (low-level graphs use insertion order). Out-of-range inputs are errors.
     pub fn evaluate(&self, inputs: &[u64]) -> Result<Vec<u64>, Error> {
         if inputs.len() != self.inputs.len() {
             return fail("input port count mismatch");
@@ -152,8 +254,13 @@ impl Logic {
         Ok(self.outputs.iter().map(|p| values[p.value.0]).collect())
     }
 
-    /// Compose by port order. All intermediate output widths must match the next inputs.
+    /// Compose structured interfaces by nominal type and schema; low-level graphs by widths.
     pub fn then(&self, next: &Self) -> Result<Self, Error> {
+        match (&self.schemas, &next.schemas) {
+            (Some((_, output)), Some((input, _))) if output == input => {}
+            (None, None) => {}
+            _ => return fail("composition logical schema mismatch"),
+        }
         if self.outputs.len() != next.inputs.len()
             || self
                 .outputs
@@ -212,6 +319,11 @@ impl Logic {
                 ..p.clone()
             })
             .collect();
+        result.schemas = self
+            .schemas
+            .as_ref()
+            .zip(next.schemas.as_ref())
+            .map(|((input, _), (_, output))| (input.clone(), output.clone()));
         Ok(result)
     }
 
@@ -289,7 +401,7 @@ fn identifier(name: &str) -> bool {
         && chars.all(|c| c.is_ascii_alphanumeric() || c == '_')
 }
 
-/// Checked construction API used by the macro. Prefer `#[logic]` for Rust borrow checking.
+/// Checked scalar construction API. Prefer `#[logic]` for structured pure functions.
 #[derive(Default)]
 pub struct Builder {
     nodes: Vec<Node>,
@@ -395,6 +507,7 @@ impl Builder {
             nodes: self.nodes,
             inputs: self.inputs,
             outputs: self.outputs,
+            schemas: None,
         })
     }
 }

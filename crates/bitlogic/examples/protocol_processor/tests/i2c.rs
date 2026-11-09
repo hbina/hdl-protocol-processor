@@ -249,7 +249,7 @@ fn scenario(mut case: Scenario, ir: &bitlogic::Logic, hdl: &mut ClockedVectors) 
 
 #[test]
 fn resolved_i2c_transactions_stretch_nack_busy_and_timeout() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     let base = Scenario {
         address: 0x50,

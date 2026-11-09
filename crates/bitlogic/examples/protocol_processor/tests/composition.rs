@@ -14,7 +14,7 @@ fn uart_operation(pin: u8) -> Operation {
 
 #[test]
 fn composed_uart_spi_timing_results_and_shared_handoff() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     let mut cases = 0;
     for shared in [false, true] {
@@ -127,7 +127,7 @@ fn composed_uart_spi_timing_results_and_shared_handoff() {
 
 #[test]
 fn conditional_success_exits_preserve_errors() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     for ready in [false, true] {
         let mut c = Composer::default();

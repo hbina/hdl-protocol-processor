@@ -3,35 +3,50 @@
 //! Operations: 0 = contains, 1 = insert, 2 = remove, 3 = clear.
 //! `present` reports membership BEFORE the operation; `next` is the updated set.
 //! The caller owns storage and feeds `next` back as `current` for later operations.
-use bitlogic::{Bits, bits, logic};
+use bitlogic::{Bits, LogicValue, bits, logic};
+
+#[derive(Clone, Copy, LogicValue)]
+struct SetInput {
+    current: Bits<8>,
+    key: Bits<3>,
+    operation: Bits<2>,
+}
+#[derive(Clone, Copy, LogicValue)]
+struct SetOutput {
+    next: Bits<8>,
+    present: bool,
+}
+#[derive(Clone, Copy, LogicValue)]
+struct Decode {
+    mask: Bits<8>,
+    selected: Bits<8>,
+}
 
 #[logic]
-fn set_step(
-    current: &Bits<8>,
-    key: &Bits<3>,
-    operation: &Bits<2>,
-    next: &mut Bits<8>,
-    present: &mut bool,
-) {
-    // Decode the key using supported constant shifts and bounded expansion.
-    let mut candidate = bits::<3>(0);
-    let mut mask = bits::<8>(1);
-    let mut selected = bits::<8>(0);
-    for _ in 0..8 {
-        if *key == candidate {
-            selected = mask;
-        }
-        candidate = candidate + bits::<3>(1);
-        mask = mask << 1;
+fn set_step(input: SetInput) -> SetOutput {
+    let decoded = Decode {
+        mask: bits::<8>(1),
+        selected: bits::<8>(0),
     }
-    *present = (*current & selected) != bits::<8>(0);
-    *next = *current;
-    if *operation == bits::<2>(1) {
-        *next = *current | selected;
-    } else if *operation == bits::<2>(2) {
-        *next = *current & !selected;
-    } else if *operation == bits::<2>(3) {
-        *next = bits::<8>(0);
+    .fold::<8>(|acc, index| Decode {
+        selected: if input.key == index.slice::<3>(0) {
+            acc.mask
+        } else {
+            acc.selected
+        },
+        mask: acc.mask << 1,
+    });
+    SetOutput {
+        present: (input.current & decoded.selected) != bits::<8>(0),
+        next: if input.operation == bits::<2>(1) {
+            input.current | decoded.selected
+        } else if input.operation == bits::<2>(2) {
+            input.current & !decoded.selected
+        } else if input.operation == bits::<2>(3) {
+            bits::<8>(0)
+        } else {
+            input.current
+        },
     }
 }
 
@@ -51,15 +66,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 (0, 3, "contains"),
                 (3, 7, "clear"),
             ] {
-                let mut next = bits::<8>(0);
-                let mut present = false;
-                set_step(
-                    &current,
-                    &bits(key),
-                    &bits(operation),
-                    &mut next,
-                    &mut present,
-                );
+                let SetOutput { next, present } = set_step(SetInput {
+                    current,
+                    key: bits(key),
+                    operation: bits(operation),
+                });
                 assert_eq!(
                     ir.evaluate(&[current.get(), key, operation])?,
                     [next.get(), u64::from(present)]
@@ -110,15 +121,11 @@ mod tests {
     fn native_and_ir_exhaustively_match_a_set() {
         let ir = set_step::ir().unwrap();
         for (current, key, operation, expected, was_present) in cases() {
-            let mut next = bits::<8>(0);
-            let mut present = false;
-            set_step(
-                &bits(current),
-                &bits(key),
-                &bits(operation),
-                &mut next,
-                &mut present,
-            );
+            let SetOutput { next, present } = set_step(SetInput {
+                current: bits(current),
+                key: bits(key),
+                operation: bits(operation),
+            });
             assert_eq!((next.get(), present), (expected, was_present));
             assert_eq!(
                 ir.evaluate(&[current, key, operation]).unwrap(),

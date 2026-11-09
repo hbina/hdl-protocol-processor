@@ -8,10 +8,10 @@ does not mean complete protocol standards, a chip tapeout or hardware signoff.
 |---|---|
 | 1: widths, ISA/reserved bits, cycle priority, waits, final PC, reset and fetch contract | [Processor contract](protocol_processor.md); `isa.rs`, `core.rs`, wrapper; hand-worked edge table includes WAIT(1/2), HALT and fault boundaries |
 | 2: checked pins/waits/image, raw decoding, expected encodings and independent cycle model | `isa.rs`, `reference.rs`, `runner.rs`; `checked_isa_encodings_and_image_limits`, direct state expectations and bounded/infinite-run outcomes |
-| 3: supported DSL only, complete next-state definitions, native/IR/reference checks | `#[logic] processor_step`, all outputs defaulted, 327,190 independent transition vectors including injected boundaries/ignored instructions; no library backend/RHDL dependency |
+| 3: supported DSL only, complete next-state definitions, native/IR/reference checks | `#[logic] processor_step`, complete returned `ProcessorState`, 327,190 independent transition vectors including injected boundaries/ignored instructions; no library backend/RHDL dependency |
 | 4: generated comb HDL plus clocked registers/reset/ROM, full traces and reset recovery | `processor_top.v`, test ROM fetch by PC, 801 raw-program edges plus pad reset tests; native/IR/source and mapped/routed HDL paths |
 | 5: UART TX builder, exact periods including one clock, capacity, empty/multi-byte cases, commands/images/listing | UART builder, 6,144 byte/pin/period programs against serialized-frame oracle, maximum WAIT waveform, acceptance boundaries and [documented commands](protocol_processor.md#commands) |
-| 6: input capture, scratch truth tables and aliases, output-bit preservation, indexing resource cost | Input/scratch transition cases; independent truth-table expectations; bounded decoder implementation and 2,314-node/107,058-byte graph/source measurements; atomic sampling/word parity extensions documented and checked |
+| 6: input capture, scratch truth tables and aliases, output-bit preservation, indexing resource cost | Input/scratch transition cases; independent truth-table expectations; bounded decoder implementation and 2,418-node/111,484-byte graph/source measurements; atomic sampling/word parity extensions documented and checked |
 | 7: runtime branches/counters, target validation, timeout/result handling, termination limits | ISA JUMP/BRANCH_BIT/LOAD_COUNT/DEC_JUMP; 8,836 polling edges, branch/timeout sweeps, loop limits and structurally checked targets |
 | 8 SPI: controller mode/order/select/capture schedule and independent peer | 2,112 programs, four modes/two orders, received results, sample/clock/select waveform checks; rate limits documented |
 | 8 UART RX: start/sample timing, phase variation, complete back-to-back reception, framing errors and timeout | 797 single-frame/error cases plus 780 complete two-/six-frame batch scenarios; all byte values and phases at minimum period; later-frame error preserves earlier data |
@@ -24,12 +24,12 @@ does not mean complete protocol standards, a chip tapeout or hardware signoff.
 | 9 optional annotated frontend | Considered and deferred as explicitly optional; no unsupported host/runtime Rust lowering claim is made |
 | 10: select target/clock/memory/IO assumptions and measure implementation | SKY130 HD, external combinational ROM and IO budgets in [config/constraints](sky130_implementation.md); technology mapping, placement, CTS, route, extraction and GDS complete |
 | 10: appropriate physical/functional checks with honest scope | Extracted TT timing and all-constraint sanity pass; router DRC/antenna zero; checkpoint comparison passes; routed clocked regression checks 1,060,580 observations; raw reports/hashes retained |
-| Required project checks and dashboards | Cargo format/Clippy/workspace suite; 33 tests and five doctests; locked optional uv tools, Ruff and generic/routed targets; README, verification, protocol limitations and roadmap updated together |
+| Required project checks and dashboards | Cargo format/Clippy/workspace suite; 39 tests and eleven doctests; locked optional uv tools, Ruff and generic/routed targets; README, verification, protocol limitations and roadmap updated together |
 
 Detailed coverage and exact counts are in [verification](verification.md).
 
 Final revalidation on 2026-11-08 passed formatting, workspace Clippy with warnings
-denied, all 33 workspace tests and five doctests, and all 25 processor tests on
+denied, all 39 workspace tests and eleven doctests, and all 25 processor tests on
 both the generic mapped and routed netlists. The routed run independently
 reported 1,060,580 clocked observations. All 16 processor commands documented in
 the architecture guide and `make emit example` succeeded. Freshly emitted RTL

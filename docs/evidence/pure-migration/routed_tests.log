@@ -1,0 +1,55 @@
+
+running 25 tests
+SWD read image: 241 words
+test tests::i2c::checked_assembly_and_pin_configuration ... ok
+test tests::jtag::jtag_parameters_and_capacity ... ok
+test tests::ps2::ps2_parameters ... ok
+test tests::scratch_operations_independent_expectations ... ok
+test tests::spi_parameters_and_sample_bit_contract ... ok
+test tests::uart_capacity_and_parameters ... ok
+test tests::wait_fault_reset_and_runner_contracts ... ok
+test tests::composition::composition_rejects_resources_exits_capacity_and_relocates_branches ... ok
+test tests::checked_isa_encodings_and_image_limits ... ok
+24 independent composed UART/SPI waveforms
+27 clocked HDL edges
+test tests::composition::conditional_success_exits_preserve_errors ... ok
+19 clocked HDL edges
+test tests::i2c::i2c_reset_releases_drivers ... ok
+801 clocked HDL edges
+test tests::clocked_reset_fault_final_pc_and_unused_rom ... ok
+298 clocked HDL edges
+test tests::swd::swd_reset_parameters_and_atomic_sample_contract ... ok
+1952 clocked HDL edges
+test tests::composition::composed_uart_spi_timing_results_and_shared_handoff ... ok
+272 independent resolved-bus PS/2 scenarios
+4032 clocked HDL edges
+test tests::jtag::jtag_ir_then_dr_preserves_instruction_and_both_results ... ok
+8836 clocked HDL edges
+test tests::control_flow_encodings_targets_and_polling ... ok
+2112 independent SPI peer/waveform programs
+672 independent JTAG TAP scenarios
+549 independent resolved push-pull SWD scenarios
+684 independent resolved-bus I2C scenarios
+797 independent UART RX frames/error scenarios
+780 complete adjacent-frame UART batch scenarios
+32482 clocked HDL edges
+test tests::ps2::ps2_device_frames_inhibit_request_and_timeout ... ok
+135340 clocked HDL edges
+test tests::uart_receive_bytes_phase_variation_and_errors ... ok
+83808 clocked HDL edges
+test tests::jtag::jtag_reset_scan_and_capture_against_tap ... ok
+143532 clocked HDL edges
+test tests::uart_batch::uart_receive_complete_back_to_back_batches ... ok
+84064 clocked HDL edges
+test tests::spi_modes_orders_waveforms_and_receive_results ... ok
+327190 independent reference/native/IR/combinational-HDL cases
+test tests::native_ir_and_combinational_hdl_match_reference ... ok
+119250 clocked HDL edges
+test tests::swd::swd_wire_requests_responses_turnaround_parity_and_retries ... ok
+119794 clocked HDL edges
+test tests::i2c::resolved_i2c_transactions_stretch_nack_busy_and_timeout ... ok
+326345 clocked HDL edges
+test tests::uart_all_bytes_pins_periods_native_ir_and_clocked_hdl ... ok
+
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 45.09s
+

@@ -1,4 +1,4 @@
-use super::{core::processor_step, isa::*, protocols::uart, reference::State, runner::*};
+use super::{core::processor_ir, isa::*, protocols::uart, reference::State, runner::*};
 use std::{
     fmt::Write as _,
     io::{BufWriter, Write},
@@ -60,7 +60,7 @@ fn processor_hdl() -> String {
     if let Some(path) = std::env::var_os("BITLOGIC_PROCESSOR_NETLIST") {
         std::fs::read_to_string(path).expect("read explicitly selected mapped netlist")
     } else {
-        processor_step::ir()
+        processor_ir()
             .unwrap()
             .to_verilog("processor_step")
             .unwrap()
@@ -393,7 +393,7 @@ fn transition_cases(mut check: impl FnMut(State, u32, u8)) {
 #[test]
 fn spi_modes_orders_waveforms_and_receive_results() {
     use super::protocols::spi;
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     let mut programs = 0;
     for byte in 0..=255_u8 {
@@ -600,7 +600,7 @@ fn check_receive(case: RxCase, ir: &bitlogic::Logic, hdl: &mut ClockedVectors) {
 
 #[test]
 fn uart_receive_bytes_phase_variation_and_errors() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     let baseline = RxCase {
         byte: 0,
@@ -732,7 +732,7 @@ fn control_flow_encodings_targets_and_polling() {
     assert_eq!(run(&loop_forever, 100).0, Outcome::Limit);
     assert!(poll::input_high(Pin::new(0).unwrap(), 0, 1).is_err());
     assert!(poll::input_high(Pin::new(0).unwrap(), 1, 0).is_err());
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     for pin in [0, 7] {
         for attempts in [1, 2, 5] {
@@ -834,7 +834,7 @@ fn scratch_operations_independent_expectations() {
 
 #[test]
 fn native_ir_and_combinational_hdl_match_reference() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let dir = tempfile::tempdir().unwrap();
     let mut vectors = BufWriter::new(std::fs::File::create(dir.path().join("vectors")).unwrap());
     let mut count = 0;
@@ -1105,7 +1105,7 @@ fn check_uart(
 
 #[test]
 fn uart_all_bytes_pins_periods_native_ir_and_clocked_hdl() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     for byte in 0..=u8::MAX {
         for pin in 0..8 {

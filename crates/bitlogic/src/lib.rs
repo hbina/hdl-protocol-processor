@@ -1,60 +1,105 @@
-//! Untimed bit transformations authored with Rust assignments.
+//! Pure, untimed bit-vector transformations with structured inputs and outputs.
 //!
 //! ```
+//! use bitlogic::{logic, bits, Bits, LogicValue};
+//! #[derive(Clone, Copy, Debug, PartialEq, Eq, LogicValue)]
+//! struct State { counter: Bits<8>, enabled: bool }
+//! #[logic]
+//! fn step(current: State) -> State {
+//!     State {
+//!         counter: if current.enabled { current.counter + bits::<8>(1) }
+//!                  else { current.counter },
+//!         enabled: current.enabled,
+//!     }
+//! }
+//! let input = State { counter: bits(255), enabled: true };
+//! let ir = step::ir()?;
+//! assert_eq!(step(input), State { counter: bits(0), enabled: true });
+//! assert_eq!(ir.evaluate_typed::<_, State>(input)?, step(input));
+//! let verilog = ir.to_verilog("step")?;
+//! assert!(verilog.contains("i_counter"));
+//! # Ok::<(), bitlogic::Error>(())
+//! ```
+//!
+//! Mutation is outside the language:
+//! ```compile_fail
+//! use bitlogic::logic;
+//! #[logic]
+//! fn mutate(input: bool) -> bool { let mut value = input; value = !value; value }
+//! ```
+//!
+//! Inputs must be owned values:
+//! ```compile_fail
+//! use bitlogic::logic;
+//! #[logic]
+//! fn borrowed(input: &bool) -> bool { *input }
+//! ```
+//!
+//! Every field must be supplied in a returned struct:
+//! ```compile_fail
+//! use bitlogic::{logic, LogicValue};
+//! #[derive(Clone, Copy, LogicValue)] struct Pair { a: bool, b: bool }
+//! #[logic]
+//! fn incomplete(input: bool) -> Pair { Pair { a: input } }
+//! ```
+//!
+//! Branch types must agree:
+//! ```compile_fail
 //! use bitlogic::{logic, bits, Bits};
 //! #[logic]
-//! fn invert(input: &Bits<8>, output: &mut Bits<8>) {
-//!     *output = !*input;
-//! }
-//! let ir = invert::ir().unwrap();
-//! assert_eq!(ir.evaluate(&[0x55]).unwrap(), [0xaa]);
-//! assert!(ir.to_verilog("invert").unwrap().contains("module invert"));
-//! let mut result = bits::<8>(0);
-//! invert(&bits::<8>(0x55), &mut result);
-//! assert_eq!(result.get(), 0xaa);
+//! fn mismatched(input: bool) -> Bits<8> { if input { bits::<8>(1) } else { false } }
 //! ```
 //!
-//! Rust checks access rights in the retained native function:
+//! Arbitrary Rust leaf types are unsupported:
 //! ```compile_fail
-//! use bitlogic::{logic, Bits, bits};
+//! use bitlogic::{logic, LogicValue};
+//! #[derive(Clone, Copy, LogicValue)] struct Unsupported { number: u8 }
 //! #[logic]
-//! fn copy(input: &Bits<8>, output: &mut Bits<8>) { *output = *input; }
-//! let mut pin = bits::<8>(0);
-//! copy(&pin, &mut pin);
-//! ```
-//! Outputs must be defined on every path, independently of their native initial value:
-//! ```compile_fail
-//! use bitlogic::{logic, Bits};
-//! #[logic]
-//! fn incomplete(enable: &bool, output: &mut Bits<8>) {
-//!     if *enable { *output = bitlogic::bits::<8>(1); }
-//! }
+//! fn unsupported(input: Unsupported) -> Unsupported { input }
 //! ```
 //!
-//! Two output parameters cannot alias in native Rust:
+//! Functions have exactly one input:
 //! ```compile_fail
-//! use bitlogic::{logic, Bits, bits};
+//! use bitlogic::logic;
 //! #[logic]
-//! fn pair(a: &mut Bits<1>, b: &mut Bits<1>) { *a = bits::<1>(0); *b = bits::<1>(1); }
-//! let mut pin = bits::<1>(0);
-//! pair(&mut pin, &mut pin);
+//! fn multiple(a: bool, b: bool) -> bool { a && b }
 //! ```
 //!
-//! Shared input references cannot be assigned:
+//! Reassignment and early returns are unsupported:
 //! ```compile_fail
-//! use bitlogic::{logic, Bits, bits};
+//! use bitlogic::logic;
 //! #[logic]
-//! fn invalid(a: &Bits<1>, b: &mut Bits<1>) { *a = bits::<1>(0); *b = bits::<1>(1); }
+//! fn assign(input: bool) -> bool { let value = input; value = false; value }
+//! ```
+//!
+//! ```compile_fail
+//! use bitlogic::logic;
+//! #[logic]
+//! fn early(input: bool) -> bool { return input; }
+//! ```
+//!
+//! Struct-update syntax is intentionally explicit rather than implicit:
+//! ```compile_fail
+//! use bitlogic::{logic, LogicValue};
+//! #[derive(Clone, Copy, LogicValue)] struct Pair { a: bool, b: bool }
+//! #[logic]
+//! fn update(input: Pair) -> Pair { Pair { a: false, ..input } }
+//! ```
+//!
+//! Source structs must have named fields:
+//! ```compile_fail
+//! use bitlogic::LogicValue;
+//! #[derive(LogicValue)] struct Tuple(bool);
 //! ```
 
 mod ir;
 mod value;
+pub use bitlogic_macros::{LogicValue, logic};
 pub use value::{LogicValue, Schema};
 #[doc(hidden)]
 pub mod __private {
     pub use crate::value::Symbolic;
 }
-pub use bitlogic_macros::logic;
 pub use ir::{Binary, Builder, Error, Logic, Node, NodeId, Operation, Port};
 use std::ops::{Add, BitAnd, BitOr, BitXor, Not, Shl, Shr, Sub};
 

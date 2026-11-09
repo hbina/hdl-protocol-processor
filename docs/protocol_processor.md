@@ -4,6 +4,14 @@ Implemented as the `protocol_processor` Cargo example. The library generates the
 combinational `processor_step`; `hdl/processor_top.v` supplies registers and reset.
 No RHDL dependency or processor backend is involved.
 
+The Rust frontend is `processor_step(StepInput) -> ProcessorState`: `StepInput`
+contains a nested current-state struct plus instruction and external inputs.
+Every branch returns a complete immutable state. Bounded immutable folds expand
+scratch and pin decoders; immutable bindings express parity reduction. The
+`processor_ir()` adapter preserves the existing external HDL port names/order.
+The independent integer reference model is unchanged by the frontend migration.
+See the [pure language guide](bitlogic.md).
+
 ## State and integration
 
 State is PC (8 bits), wait counter (16 bits), pin values/enables (8 bits each), scratch bank
@@ -91,7 +99,7 @@ receiving multi-bit data. Inputs are consumed at the execution edge; input
 synchronization and its latency are external.
 
 Dynamic selection uses bounded 64-way decoder expansion in the existing DSL.
-`stats` reports 2,314 IR nodes and 107,058 bytes of combinational Verilog for this
+`stats` reports 2,418 IR nodes and 111,484 bytes of combinational Verilog for this
 revision. This measures source/graph size, not synthesized gates or timing.
 
 ## Hand-worked edge traces

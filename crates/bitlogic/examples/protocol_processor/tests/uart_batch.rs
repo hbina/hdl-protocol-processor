@@ -55,7 +55,7 @@ fn check(
 
 #[test]
 fn uart_receive_complete_back_to_back_batches() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     let mut cases = 0;
     for byte in 0..=255_u8 {

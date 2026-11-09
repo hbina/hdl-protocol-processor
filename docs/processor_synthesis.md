@@ -2,6 +2,9 @@
 
 Measured locally on 2026-11-08. This is target-neutral logic mapping, not FPGA
 fit, ASIC area, physical timing, electrical integration or signoff.
+The pure structured-function processor migration was rerun through this flow;
+all 25 mapped processor tests pass with unchanged coverage. The previous
+2,527-cell result is retained in `evidence/2026-11-08/generic_synthesis.json`.
 
 ## Reproduce
 
@@ -32,11 +35,11 @@ selected netlist fails the tests. The logical pad model remains outside synthesi
 
 | Measurement | Result |
 |---|---|
-| Combinational processor_step | 2,527 generic logic cells |
+| Combinational processor_step | 2,165 generic logic cells |
 | State registers | 122 generic synchronous-reset flip-flops |
-| Design primitives | 2,649, excluding the hierarchy instance |
+| Design primitives | 2,287, excluding the hierarchy instance |
 | Inferred memory | None; instruction storage is external |
-| Longest combinational topological path | 21 mapped cells inside processor_step |
+| Longest combinational topological path | 22 mapped cells inside processor_step |
 | Structural check | `check -assert` passes |
 
 Cell types are generic AND/OR/NAND/NOR, inverted variants, muxes, XOR/XNOR and

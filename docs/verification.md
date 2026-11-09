@@ -11,7 +11,7 @@ cargo test --workspace --locked
 make emit example
 ```
 
-The active workspace has thirty-three tests and five doctests (four compile-fail).
+The active workspace has thirty-nine tests and eleven doctests (ten compile-fail).
 
 Final audit also reran all 16 commands in the processor architecture guide,
 the generic mapped and routed processor regressions, Ruff and the physical
@@ -23,7 +23,7 @@ inputs byte for byte, and all 15 recorded physical-evidence hashes match.
 Five `bitlogic/tests/logic.rs` integration tests include independent comparisons
 of native Rust and graph evaluation. Cases cover every input of a three-bit
 conditional transform, a minimum/flag function, bit slicing/concatenation and
-bounded loop expansion. The graph interpreter exhausts all 64 input pairs for
+bounded immutable fold expansion. The graph interpreter exhausts all 64 input pairs for
 each of eleven binary operations at three bits. Tests also check unsigned wrap
 behavior, 64-bit boundaries, oversized shifts, composition identity, mismatched
 port shapes, out-of-range input values, and invalid widths/module names.
@@ -96,14 +96,26 @@ equivalence. Maximum SPI/RX period construction is tested, but their complete
 maximum-period waveforms are not simulated.
 
 `cargo run --locked -p bitlogic --example protocol_processor -- stats` reports
-2,314 IR nodes and 107,058 bytes for the combinational module in this revision;
+2,418 IR nodes and 111,484 bytes for the combinational module in this revision;
 the wrapper is additional. This is not a synthesis area or timing measurement.
 See the [processor contract](protocol_processor.md) and [protocol interfaces](protocols.md).
+
+## Processor migration equivalence
+
+`bash scripts/processor_migration_equiv.sh` reconstructs the baseline from Git
+revision `e4784a926d096a9fb3134eb3e1d08a6f6c4adaf1`, emits both processor cores,
+hides incidental internal wire names and uses Yosys `equiv_simple` followed by
+`equiv_status -assert`. All 122 next-state output bits are proven equivalent.
+This proof compares the two emitted combinational processor functions for all
+input bit patterns. It is not a general source-language soundness proof, a
+native/IR equivalence proof or an electrical/timing claim. The wrapper and the
+independent integer reference are unchanged. The script requires Git history
+containing the baseline revision and the locked optional uv synthesis tools.
 
 ## Generic mapping and mapped regression
 
 `make processor-mapped-test` passes with the locked optional uv tools. Yosys 0.70
-maps the core to 2,527 generic logic cells and 122 synchronous-reset flops, checks
+maps the core to 2,165 generic logic cells and 122 synchronous-reset flops, checks
 structure and emits a Verilog netlist. The same 25 processor tests pass with the
 mapped modules: 327,190 transition vectors and 1,060,580 clocked observations.
 This is a second implementation path, not additional unique input coverage or a
@@ -114,10 +126,10 @@ are recorded in the [synthesis baseline](processor_synthesis.md).
 ## SKY130 routed block
 
 `make processor-sky130-test` passes on the pinned offline ORFS container. It
-checks the routed TT/25 °C/1.8 V block at a 20 ns clock: +10.0603 ns setup and
-+0.255771 ns hold worst slack, zero setup/hold TNS, zero router DRC and antenna
+checks the routed TT/25 °C/1.8 V block at a 20 ns clock: +10.3544 ns setup and
++0.253807 ns hold worst slack, zero setup/hold TNS, zero router DRC and antenna
 violations, and an all-checks `check_setup` constraint audit. Standard-cell area
-excluding fill is 16,205.5 µm²; the block has 122 sequential cells.
+excluding fill is 15,713.8 µm²; the block has 122 sequential cells.
 
 All 25 processor tests pass with `6_final.v` selected for their clocked paths,
 covering 1,060,580 observations with Liberty-derived functional cell models.
@@ -131,13 +143,30 @@ artifact hashes, the reproducible flow, explicit IO/ROM assumptions and limits.
 Full-corner timing, foundry-deck DRC/LVS, IO/CDC/chip integration, activity-based
 power and board/silicon validation remain unverified.
 
-## Frontend and borrowing checks
+## Structured frontend, dependencies and diagnostics
 
-A macro unit test requires specific diagnostics for unsupported syntax,
-incomplete outputs, reads before definition, width/slice errors, and expansion
-limits. Four compile-fail doctests cover incomplete output definitions, writing
-an input reference, and Rust E0499/E0502 aliasing errors. One executable doctest
-checks native evaluation, graph evaluation, and HDL construction.
+Six tests in `tests/structured.rs` check nested schemas and nominal identities,
+field-declaration ordering despite reordered literals, native flatten/reconstruct
+round trips, malformed values, typed-evaluation mismatch, bool versus Bits<1>,
+whole-struct conditionals, immutable shadowing and qualified type paths. All 256
+combinations of a nested state/reset/unused-input fixture match independent
+expected values in native Rust, IR and Icarus. Dependency expectations include
+conditional predicates and exclude unused inputs; `x ^ x` retains its structural
+dependency. Composition tests check nominal mismatch, explicit adapters, both
+identity laws and associativity over all sixteen states. Flattening collisions
+on both interfaces are rejected. Bounded folds check index values through 255,
+zero iterations and accumulator behavior; the processor and set exercise struct
+accumulators. Invalid bit/slice/concat bounds fail during capture.
+
+A macro unit test checks mutation/reference/assignment rejection, invalid
+signatures, missing else/early returns, iteration/work limits and validation of
+zero-iteration fold bodies. Ten compile-fail doctests cover mutation, references,
+missing fields, incompatible branches, unsupported leaf types, invalid function
+arity, reassignment, early return, struct updates and tuple structs. One executable
+doctest checks pure structured native/IR evaluation and HDL construction.
+
+The [migration audit](pure_functions.md) records baseline and current evidence.
+The integer processor reference and protocol oracle logic are preserved.
 
 ## Build and CI
 

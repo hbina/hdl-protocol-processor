@@ -1,0 +1,40 @@
+{
+  "revision": "e4784a926d096a9fb3134eb3e1d08a6f6c4adaf1",
+  "workspace_tests": 33,
+  "doctests": 5,
+  "processor_tests": 25,
+  "processor_ir_nodes": 2314,
+  "processor_verilog_bytes": 107058,
+  "processor_emitted_sha256": "1de112d969d74750699d82c6a8c737de5cb33a803d6c85c2c6075bdb85d4e35a",
+  "generic_logic_cells": 2527,
+  "flops": 122,
+  "baseline_commands": [
+    "cargo test --workspace --locked",
+    "cargo run --locked -p bitlogic --example protocol_processor -- verilog",
+    "cargo run --locked -p bitlogic --example protocol_processor -- stats"
+  ],
+  "physical_evidence": "docs/evidence/2026-11-08/sky130_summary.json",
+  "independent_reference_unchanged": "crates/bitlogic/examples/protocol_processor/reference.rs",
+  "hdl_input_order": [
+    "pc",
+    "wait",
+    "pins",
+    "halted",
+    "fault",
+    "scratch",
+    "count",
+    "enables",
+    "instruction",
+    "inputs"
+  ],
+  "hdl_output_order": [
+    "next_pc",
+    "next_wait",
+    "next_pins",
+    "next_halted",
+    "next_fault",
+    "next_scratch",
+    "next_count",
+    "next_enables"
+  ]
+}

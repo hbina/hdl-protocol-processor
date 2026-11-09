@@ -1,0 +1,3 @@
+   Compiling bitlogic-macros v0.1.0 (/mnt/extra_pool/tmp/jane_street_design_asic/crates/bitlogic-macros)
+    Checking bitlogic v0.1.0 (/mnt/extra_pool/tmp/jane_street_design_asic/crates/bitlogic)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.19s

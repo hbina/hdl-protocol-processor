@@ -1,0 +1,32 @@
+$ cargo run --locked -p bitlogic --example protocol_processor -- demo Hi 0 8
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- mem Hi 0 8
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- asm Hi 0 8
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- verilog
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- stats
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- poll 0 4 2
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- spi a5 0 4
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- uart-rx 0 16 8
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- i2c 50 read 2
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- jtag ir a5 8
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- ps2 a5 2 4
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- swd read 0
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- swd reset
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- jtag-pair a 4 12345678 32
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- uart-rx-batch 2 0 16
+exit=0
+$ cargo run --locked -p bitlogic --example protocol_processor -- compose
+exit=0

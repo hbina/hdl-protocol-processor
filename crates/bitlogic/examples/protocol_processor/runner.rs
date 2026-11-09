@@ -1,44 +1,37 @@
-use super::{core::processor_step, isa::Program, reference::State};
+use super::{
+    core::{ProcessorState, StepInput, processor_step},
+    isa::Program,
+    reference::State,
+};
 use bitlogic::{Logic, bits};
 
 pub fn native_step(state: State, instruction: u32, inputs: u8, reset: bool) -> State {
     if reset {
         return State::default();
     }
-    let (mut pc, mut wait, mut pins) = (bits::<8>(0), bits::<16>(0), bits::<8>(0));
-    let (mut halted, mut fault) = (false, false);
-    let mut scratch = bits::<64>(0);
-    let mut count = bits::<16>(0);
-    let mut enables = bits::<8>(0);
-    processor_step(
-        &bits(state.pc.into()),
-        &bits(state.wait.into()),
-        &bits(state.pins.into()),
-        &state.halted,
-        &state.fault,
-        &bits(state.scratch),
-        &bits(state.count.into()),
-        &bits(state.enables.into()),
-        &bits(instruction.into()),
-        &bits(inputs.into()),
-        &mut pc,
-        &mut wait,
-        &mut pins,
-        &mut halted,
-        &mut fault,
-        &mut scratch,
-        &mut count,
-        &mut enables,
-    );
+    let next = processor_step(StepInput {
+        state: ProcessorState {
+            pc: bits(state.pc.into()),
+            wait: bits(state.wait.into()),
+            pins: bits(state.pins.into()),
+            halted: state.halted,
+            fault: state.fault,
+            scratch: bits(state.scratch),
+            count: bits(state.count.into()),
+            enables: bits(state.enables.into()),
+        },
+        instruction: bits(instruction.into()),
+        inputs: bits(inputs.into()),
+    });
     State {
-        pc: pc.get() as u8,
-        wait: wait.get() as u16,
-        pins: pins.get() as u8,
-        halted,
-        fault,
-        scratch: scratch.get(),
-        count: count.get() as u16,
-        enables: enables.get() as u8,
+        pc: next.pc.get() as u8,
+        wait: next.wait.get() as u16,
+        pins: next.pins.get() as u8,
+        halted: next.halted,
+        fault: next.fault,
+        scratch: next.scratch.get(),
+        count: next.count.get() as u16,
+        enables: next.enables.get() as u8,
     }
 }
 

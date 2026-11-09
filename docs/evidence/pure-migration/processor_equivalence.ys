@@ -1,0 +1,6 @@
+read_verilog build/pure-baseline/equivalence.v
+rename -hide old_step/w:n* new_step/w:n*
+equiv_make old_step new_step migration_equiv
+hierarchy -top migration_equiv
+equiv_simple
+equiv_status -assert

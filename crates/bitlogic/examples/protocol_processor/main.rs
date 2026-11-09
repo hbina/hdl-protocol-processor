@@ -39,7 +39,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         print!(
             "{}\n{}\n{}",
-            core::processor_step::ir()?.to_verilog("processor_step")?,
+            core::processor_ir()?.to_verilog("processor_step")?,
             include_str!("hdl/processor_top.v"),
             include_str!("hdl/pads.v")
         );
@@ -81,7 +81,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return demo(&uart::receive_frames(pin, period, 16, count)?);
     }
     if mode == "stats" && args.len() == 1 {
-        let ir = core::processor_step::ir()?;
+        let ir = core::processor_ir()?;
         println!(
             "nodes={} verilog_bytes={}",
             ir.nodes().len(),
@@ -267,7 +267,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn demo(program: &isa::Program) -> Result<(), Box<dyn std::error::Error>> {
-    let ir = core::processor_step::ir()?;
+    let ir = core::processor_ir()?;
     let (outcome, trace) = runner::run(program, 2_000_000);
     let words = program.words();
     let mut expected = reference::State::default();

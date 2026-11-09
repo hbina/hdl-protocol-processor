@@ -273,7 +273,7 @@ fn check(case: Case, ir: &bitlogic::Logic, hdl: &mut ClockedVectors) {
 
 #[test]
 fn swd_wire_requests_responses_turnaround_parity_and_retries() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     let base = Case {
         read: true,
@@ -380,7 +380,7 @@ fn swd_reset_parameters_and_atomic_sample_contract() {
     ] {
         assert!(swd::line_reset(invalid).is_err());
     }
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     let words = swd::line_reset(cfg).unwrap().words();
     hdl.load(&words);

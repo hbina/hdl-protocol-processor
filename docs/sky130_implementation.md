@@ -3,6 +3,9 @@
 Measured 2026-11-08. The selected target is a SKY130 HD standard-cell block,
 using ORFS's `sky130hd` platform at TT, 25 °C and 1.80 V. It is an implementation
 study of the processor core, not a pad-equipped chip or tapeout-ready design.
+The pure structured-function processor was freshly synthesized, placed, routed,
+extracted and regressed after migration. Earlier measurements remain preserved in
+`evidence/2026-11-08/`; current measurements link to `evidence/pure-migration/`.
 
 ## Boundary and constraints
 
@@ -74,10 +77,10 @@ and [SKY130 HD platform](https://github.com/The-OpenROAD-Project/OpenROAD-flow-s
 | Check | Observed result |
 |---|---|
 | RTL-to-layout flow | Technology synthesis, placement, clock tree, detailed routing, extraction and GDS emission complete |
-| Non-filler standard-cell area | 16,205.5 µm²; 2,852 instances including physical overhead |
+| Non-filler standard-cell area | 15,713.8 µm²; 2,678 instances including physical overhead |
 | Sequential cells | 122 |
-| Core / die area | 37,755.0 / 39,227.8 µm² |
-| Setup / hold worst slack | +10.0603 / +0.255771 ns at the specified 20 ns TT-corner target |
+| Core / die area | 35,914.4 / 37,550.7 µm² |
+| Setup / hold worst slack | +10.3544 / +0.253807 ns at the specified 20 ns TT-corner target |
 | Setup / hold TNS | Both zero |
 | Slew / capacitance / fanout violations | Zero in final STA metrics |
 | Detailed-router DRC / antenna-violating nets | Zero / zero after repair |
@@ -91,12 +94,12 @@ clocked tests instantiate the actual `6_final.v`. This complements extracted
 static timing rather than replacing it. The checkpoint comparison is scoped to
 mapped implementation netlists, not a proof of native Rust/IR/frontend semantics.
 
-The [summary](evidence/2026-11-08/sky130_summary.json) records artifact hashes and
-scoped metrics. Raw [finish metrics](evidence/2026-11-08/sky130_finish_metrics.json),
-[routing metrics](evidence/2026-11-08/sky130_route_metrics.json),
-[timing report](evidence/2026-11-08/sky130_finish.rpt),
-[constraint audit](evidence/2026-11-08/sky130_constraint_audit.log) and
-[checkpoint log](evidence/2026-11-08/sky130_checkpoint_lec.log) preserve local evidence.
+The [summary](evidence/pure-migration/sky130_summary.json) records artifact hashes and
+scoped metrics. Raw [finish metrics](evidence/pure-migration/sky130_finish_metrics.json),
+[routing metrics](evidence/pure-migration/sky130_route_metrics.json),
+[timing report](evidence/pure-migration/sky130_finish.rpt),
+[constraint audit](evidence/pure-migration/sky130_constraint_audit.log) and
+[checkpoint log](evidence/pure-migration/sky130_checkpoint_lec.log) preserve local evidence.
 The upstream finish JSON repeats some generic area keys; the table uses the
 explicit `area__stdcell`, core-area and die-area keys. Re-run the
 [report checker](../scripts/sky130_report.py) after reproducing the flow.
@@ -116,7 +119,7 @@ foundry signoff. No FPGA or board execution is claimed.
 OpenROAD warns that a physical decap master has signal pins without a Liberty
 cell. Kepler warns about unsupported clock-gating library models; none of those
 cells occur in this netlist. These warnings are retained as limits, not hidden.
-The flow's 0.732052 mW power estimate uses default/vectorless activity; it is not
+The flow's 0.742931 mW power estimate uses default/vectorless activity; it is not
 a protocol-activity power measurement or IR/EM signoff. Chip-level IO and power
 integration, full corners and independent physical verification remain future
 milestones beyond this scoped block study.

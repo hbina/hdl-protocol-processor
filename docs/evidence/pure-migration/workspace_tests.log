@@ -1,0 +1,107 @@
+    Blocking waiting for file lock on build directory
+   Compiling bitlogic v0.1.0 (/mnt/extra_pool/tmp/jane_street_design_asic/crates/bitlogic)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.10s
+     Running unittests src/lib.rs (target/debug/deps/bitlogic-4f4d8d4b1d46ca9e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/logic.rs (target/debug/deps/logic-c6c14e41fe727b78)
+
+running 5 tests
+test composition_preserves_values_and_checks_port_shapes ... ok
+test every_binary_operation_and_width_boundary_has_defined_semantics ... ok
+test native_and_ir_match_independent_truth_tables ... ok
+test emitted_combinational_hdl_matches_independent_oracle ... ok
+test emitted_hdl_covers_all_operators_and_64_bit_boundaries ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/structured.rs (target/debug/deps/structured-3a7d4c186de6d129)
+
+running 6 tests
+test collisions_and_bad_bit_operations_fail_during_capture ... ok
+test dependencies_include_predicates_and_exclude_unused_inputs ... ok
+test composition_checks_nominal_types_and_satisfies_laws ... ok
+test nested_schema_round_trip_and_validation ... ok
+test bounded_folds_preserve_index_and_zero_iteration_semantics ... ok
+test aggregates_native_ir_and_hdl_match_independent_expectations ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests examples/protocol_processor/main.rs (target/debug/examples/protocol_processor-eaf797f395e9170f)
+
+running 25 tests
+test tests::i2c::checked_assembly_and_pin_configuration ... ok
+test tests::jtag::jtag_parameters_and_capacity ... ok
+test tests::ps2::ps2_parameters ... ok
+test tests::spi_parameters_and_sample_bit_contract ... ok
+test tests::scratch_operations_independent_expectations ... ok
+test tests::uart_capacity_and_parameters ... ok
+test tests::wait_fault_reset_and_runner_contracts ... ok
+test tests::composition::composition_rejects_resources_exits_capacity_and_relocates_branches ... ok
+test tests::checked_isa_encodings_and_image_limits ... ok
+test tests::i2c::i2c_reset_releases_drivers ... ok
+test tests::composition::conditional_success_exits_preserve_errors ... ok
+test tests::clocked_reset_fault_final_pc_and_unused_rom ... ok
+test tests::swd::swd_reset_parameters_and_atomic_sample_contract ... ok
+test tests::composition::composed_uart_spi_timing_results_and_shared_handoff ... ok
+test tests::jtag::jtag_ir_then_dr_preserves_instruction_and_both_results ... ok
+test tests::control_flow_encodings_targets_and_polling ... ok
+test tests::ps2::ps2_device_frames_inhibit_request_and_timeout ... ok
+test tests::jtag::jtag_reset_scan_and_capture_against_tap ... ok
+test tests::spi_modes_orders_waveforms_and_receive_results ... ok
+test tests::uart_receive_bytes_phase_variation_and_errors ... ok
+test tests::uart_batch::uart_receive_complete_back_to_back_batches ... ok
+test tests::i2c::resolved_i2c_transactions_stretch_nack_busy_and_timeout ... ok
+test tests::swd::swd_wire_requests_responses_turnaround_parity_and_retries ... ok
+test tests::native_ir_and_combinational_hdl_match_reference ... ok
+test tests::uart_all_bytes_pins_periods_native_ir_and_clocked_hdl ... ok
+
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 23.53s
+
+     Running unittests examples/set.rs (target/debug/examples/set-04c294ef4ec5fa85)
+
+running 2 tests
+test tests::native_and_ir_exhaustively_match_a_set ... ok
+test tests::emitted_hdl_exhaustively_matches_a_set ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
+
+     Running unittests src/lib.rs (target/debug/deps/bitlogic_macros-1268a8b61b7dbb2a)
+
+running 1 test
+test tests::rejects_mutation_and_unsupported_syntax ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.73s
+
+   Doc-tests bitlogic
+
+running 1 test
+test crates/bitlogic/src/lib.rs - (line 3) ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 10 tests
+test crates/bitlogic/src/lib.rs - (line 32) - compile fail ... ok
+test crates/bitlogic/src/lib.rs - (line 90) - compile fail ... ok
+test crates/bitlogic/src/lib.rs - (line 69) - compile fail ... ok
+test crates/bitlogic/src/lib.rs - (line 25) - compile fail ... ok
+test crates/bitlogic/src/lib.rs - (line 75) - compile fail ... ok
+test crates/bitlogic/src/lib.rs - (line 62) - compile fail ... ok
+test crates/bitlogic/src/lib.rs - (line 82) - compile fail ... ok
+test crates/bitlogic/src/lib.rs - (line 54) - compile fail ... ok
+test crates/bitlogic/src/lib.rs - (line 39) - compile fail ... ok
+test crates/bitlogic/src/lib.rs - (line 47) - compile fail ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+all doctests ran in 0.19s; merged doctests compilation took 0.16s
+   Doc-tests bitlogic_macros
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

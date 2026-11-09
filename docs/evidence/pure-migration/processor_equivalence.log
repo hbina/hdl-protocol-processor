@@ -1,0 +1,431 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)
+
+-- Executing script file `/mnt/extra_pool/tmp/jane_street_design_asic/build/pure-baseline/equivalence.ys' --
+
+1. Executing Verilog-2005 frontend: build/pure-baseline/equivalence.v
+Parsing Verilog input from `build/pure-baseline/equivalence.v' to AST representation.
+Generating RTLIL representation for module `\old_step'.
+Generating RTLIL representation for module `\new_step'.
+Successfully finished Verilog frontend.
+
+2. Executing EQUIV_MAKE pass (creating equiv checking module).
+Presumably equivalent wires: o_next_enables_gold ($ternary$build/pure-baseline/equivalence.v:4636$1563_Y_gold), o_next_enables_gate ($ternary$build/pure-baseline/equivalence.v:9513$3104_Y_gate) -> o_next_enables
+Presumably equivalent wires: o_next_count_gold ($ternary$build/pure-baseline/equivalence.v:4634$1562_Y_gold), o_next_count_gate ($ternary$build/pure-baseline/equivalence.v:9511$3103_Y_gate) -> o_next_count
+Presumably equivalent wires: o_next_scratch_gold ($ternary$build/pure-baseline/equivalence.v:4646$1568_Y_gold), o_next_scratch_gate ($ternary$build/pure-baseline/equivalence.v:9509$3102_Y_gate) -> o_next_scratch
+Presumably equivalent wires: o_next_fault_gold ($ternary$build/pure-baseline/equivalence.v:4638$1564_Y_gold), o_next_fault_gate ($ternary$build/pure-baseline/equivalence.v:9507$3101_Y_gate) -> o_next_fault
+Presumably equivalent wires: o_next_halted_gold ($ternary$build/pure-baseline/equivalence.v:4640$1565_Y_gold), o_next_halted_gate ($ternary$build/pure-baseline/equivalence.v:9505$3100_Y_gate) -> o_next_halted
+Presumably equivalent wires: o_next_pins_gold ($ternary$build/pure-baseline/equivalence.v:4644$1567_Y_gold), o_next_pins_gate ($ternary$build/pure-baseline/equivalence.v:9503$3099_Y_gate) -> o_next_pins
+Presumably equivalent wires: o_next_wait_gold ($ternary$build/pure-baseline/equivalence.v:4648$1569_Y_gold), o_next_wait_gate ($ternary$build/pure-baseline/equivalence.v:9501$3098_Y_gate) -> o_next_wait
+Presumably equivalent wires: o_next_pc_gold ($ternary$build/pure-baseline/equivalence.v:4642$1566_Y_gold), o_next_pc_gate ($ternary$build/pure-baseline/equivalence.v:9499$3097_Y_gate) -> o_next_pc
+Presumably equivalent wires: i_inputs_gold (\i_inputs_gold), i_inputs_gate (\i_inputs_gate) -> i_inputs
+Presumably equivalent wires: i_instruction_gold (\i_instruction_gold), i_instruction_gate (\i_instruction_gate) -> i_instruction
+Presumably equivalent wires: i_enables_gold (\i_enables_gold), i_enables_gate (\i_enables_gate) -> i_enables
+Presumably equivalent wires: i_count_gold (\i_count_gold), i_count_gate (\i_count_gate) -> i_count
+Presumably equivalent wires: i_scratch_gold (\i_scratch_gold), i_scratch_gate (\i_scratch_gate) -> i_scratch
+Presumably equivalent wires: i_fault_gold (\i_fault_gold), i_fault_gate (\i_fault_gate) -> i_fault
+Presumably equivalent wires: i_halted_gold (\i_halted_gold), i_halted_gate (\i_halted_gate) -> i_halted
+Presumably equivalent wires: i_pins_gold (\i_pins_gold), i_pins_gate (\i_pins_gate) -> i_pins
+Presumably equivalent wires: i_wait_gold (\i_wait_gold), i_wait_gate (\i_wait_gate) -> i_wait
+Presumably equivalent wires: i_pc_gold (\i_pc_gold), i_pc_gate (\i_pc_gate) -> i_pc
+
+3. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1. Analyzing design hierarchy..
+Top module:  \migration_equiv
+
+3.2. Analyzing design hierarchy..
+Top module:  \migration_equiv
+Removing unused module `\new_step'.
+Removing unused module `\old_step'.
+Removed 2 unused modules.
+
+4. Executing EQUIV_SIMPLE pass.
+Found 122 unproven $equiv cells (8 groups) in migration_equiv:
+ Grouping SAT models for \o_next_pc:
+  Trying to prove $equiv for \o_next_pc [0]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pc [1]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pc [2]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pc [3]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pc [4]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pc [5]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pc [6]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pc [7]:
+ezsat
+ success!
+ Grouping SAT models for \o_next_wait:
+  Trying to prove $equiv for \o_next_wait [0]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [1]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [2]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [3]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [4]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [5]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [6]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [7]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [8]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [9]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [10]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [11]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [12]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [13]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [14]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_wait [15]:
+ezsat
+ success!
+ Grouping SAT models for \o_next_pins:
+  Trying to prove $equiv for \o_next_pins [0]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pins [1]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pins [2]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pins [3]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pins [4]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pins [5]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pins [6]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_pins [7]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_halted:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_fault:
+ezsat
+ success!
+ Grouping SAT models for \o_next_scratch:
+  Trying to prove $equiv for \o_next_scratch [0]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [1]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [2]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [3]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [4]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [5]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [6]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [7]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [8]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [9]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [10]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [11]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [12]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [13]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [14]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [15]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [16]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [17]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [18]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [19]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [20]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [21]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [22]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [23]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [24]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [25]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [26]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [27]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [28]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [29]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [30]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [31]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [32]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [33]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [34]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [35]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [36]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [37]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [38]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [39]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [40]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [41]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [42]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [43]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [44]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [45]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [46]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [47]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [48]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [49]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [50]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [51]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [52]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [53]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [54]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [55]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [56]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [57]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [58]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [59]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [60]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [61]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [62]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_scratch [63]:
+ezsat
+ success!
+ Grouping SAT models for \o_next_count:
+  Trying to prove $equiv for \o_next_count [0]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [1]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [2]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [3]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [4]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [5]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [6]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [7]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [8]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [9]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [10]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [11]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [12]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [13]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [14]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_count [15]:
+ezsat
+ success!
+ Grouping SAT models for \o_next_enables:
+  Trying to prove $equiv for \o_next_enables [0]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_enables [1]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_enables [2]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_enables [3]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_enables [4]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_enables [5]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_enables [6]:
+ezsat
+ success!
+  Trying to prove $equiv for \o_next_enables [7]:
+ezsat
+ success!
+Proved 122 previously unproven $equiv cells.
+
+5. Executing EQUIV_STATUS pass.
+Found 122 $equiv cells in migration_equiv:
+  Of those cells 122 are proven and 0 are unproven.
+  Equivalence successfully proven!
+
+End of script. Logfile hash: 720ca2c699, time: 3.79s, user: 3.79s, system: 0.00s
+Yosys 0.70 (git sha1 28ba3cb92, Release, Clang /workspace/YoWASP/yosys/wasi-sdk-33.0-x86_64-linux/share/cmake/../..//bin/clang++ 22.1.0)
+Time spent: 94% 1x equiv_simple (3 sec), 3% 2x read_verilog (0 sec), ...

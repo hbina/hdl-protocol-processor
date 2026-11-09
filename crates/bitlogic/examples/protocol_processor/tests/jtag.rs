@@ -128,7 +128,7 @@ fn check_scan(
 
 #[test]
 fn jtag_reset_scan_and_capture_against_tap() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     let mut cases = 0;
     for kind in [RegisterKind::Data, RegisterKind::Instruction] {
@@ -217,7 +217,7 @@ fn jtag_ir_then_dr_preserves_instruction_and_both_results() {
     let program = jtag::sequence(&scans, cfg).unwrap();
     assert_eq!(program.instructions().len(), 251);
     let words = program.words();
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     for initial in 0..16 {
         let mut tap = initial;

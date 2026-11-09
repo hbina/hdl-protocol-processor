@@ -1,42 +1,66 @@
-use bitlogic::{Binary, Bits, Builder, bits, logic};
+use bitlogic::{Binary, Bits, Builder, LogicValue, bits, logic};
 use std::{fmt::Write, process::Command};
 
-#[logic]
-fn transform(a: &Bits<3>, b: &Bits<3>, enabled: &bool, result: &mut Bits<3>, different: &mut bool) {
-    let mut value = *a ^ *b;
-    if *enabled {
-        value = value + bits::<3>(3);
-    } else {
-        value = !value;
-    }
-    *result = value;
-    *different = *a != *b;
+#[derive(Clone, Copy, LogicValue)]
+struct TransformInput {
+    a: Bits<3>,
+    b: Bits<3>,
+    enabled: bool,
+}
+#[derive(Clone, Copy, LogicValue)]
+struct TransformOutput {
+    result: Bits<3>,
+    different: bool,
+}
+#[derive(Clone, Copy, LogicValue)]
+struct Pair {
+    a: Bits<3>,
+    b: Bits<3>,
+}
+#[derive(Clone, Copy, LogicValue)]
+struct ConditionalOutput {
+    result: Bits<3>,
+    flag: bool,
 }
 
 #[logic]
-fn conditional(a: &Bits<3>, b: &Bits<3>, result: &mut Bits<3>, flag: &mut bool) {
-    *result = if *a < *b { *a } else { *b };
-    *flag = false;
-    if *a == *b {
-        *flag = true;
-    } else if *a > bits::<3>(3) {
-        *flag = a.bit(0);
+fn transform(input: TransformInput) -> TransformOutput {
+    let value = input.a ^ input.b;
+    TransformOutput {
+        result: if input.enabled {
+            value + bits::<3>(3)
+        } else {
+            !value
+        },
+        different: input.a != input.b,
     }
 }
 
 #[logic]
-fn slices(a: &Bits<4>, result: &mut Bits<4>) {
+fn conditional(input: Pair) -> ConditionalOutput {
+    ConditionalOutput {
+        result: if input.a < input.b { input.a } else { input.b },
+        flag: if input.a == input.b {
+            true
+        } else if input.a > bits::<3>(3) {
+            input.a.bit(0)
+        } else {
+            false
+        },
+    }
+}
+
+#[logic]
+fn slices(a: Bits<4>) -> Bits<4> {
     let low = a.slice::<2>(0);
     let high = a.slice::<2>(2);
-    *result = low.concat::<2, 4>(high);
-    for _ in 0..2 {
-        *result = (*result << 1) ^ bits::<4>(3);
-    }
+    low.concat::<2, 4>(high)
+        .fold::<2>(|value, _index| (value << 1) ^ bits::<4>(3))
 }
 
 #[logic]
-fn invert(a: &Bits<3>, result: &mut Bits<3>) {
-    *result = !*a;
+fn invert(a: Bits<3>) -> Bits<3> {
+    !a
 }
 
 #[test]
@@ -46,9 +70,11 @@ fn native_and_ir_match_independent_truth_tables() {
     for a in 0..8_u64 {
         for b in 0..8_u64 {
             for enabled in [false, true] {
-                let mut result = bits::<3>(0);
-                let mut different = false;
-                transform(&bits(a), &bits(b), &enabled, &mut result, &mut different);
+                let TransformOutput { result, different } = transform(TransformInput {
+                    a: bits(a),
+                    b: bits(b),
+                    enabled,
+                });
                 let expected = if enabled {
                     ((a ^ b) + 3) & 7
                 } else {
@@ -61,9 +87,10 @@ fn native_and_ir_match_independent_truth_tables() {
                     [expected, flag]
                 );
             }
-            let mut result = bits::<3>(0);
-            let mut flag = false;
-            conditional(&bits(a), &bits(b), &mut result, &mut flag);
+            let ConditionalOutput { result, flag } = conditional(Pair {
+                a: bits(a),
+                b: bits(b),
+            });
             let expected_flag = a == b || (a > 3 && a & 1 != 0);
             assert_eq!(
                 conditional_ir.evaluate(&[a, b]).unwrap(),
@@ -74,8 +101,7 @@ fn native_and_ir_match_independent_truth_tables() {
     }
     let ir = slices::ir().unwrap();
     for a in 0..16 {
-        let mut result = bits::<4>(0);
-        slices(&bits(a), &mut result);
+        let result = slices(bits(a));
         let rotated = ((a & 3) << 2) | (a >> 2);
         let expected = ((((rotated << 1) ^ 3) << 1) ^ 3) & 15;
         assert_eq!(result.get(), expected);
@@ -87,8 +113,7 @@ fn native_and_ir_match_independent_truth_tables() {
 fn composition_preserves_values_and_checks_port_shapes() {
     let twice = invert::ir().unwrap().then(&invert::ir().unwrap()).unwrap();
     for value in 0..8 {
-        let mut native = bits::<3>(0);
-        invert(&bits(value), &mut native);
+        let native = invert(bits(value));
         assert_eq!(native.get(), (!value) & 7);
         assert_eq!(twice.evaluate(&[value]).unwrap(), [value]);
     }

@@ -89,7 +89,7 @@ fn check(case: Case, ir: &bitlogic::Logic, hdl: &mut ClockedVectors) {
 
 #[test]
 fn ps2_device_frames_inhibit_request_and_timeout() {
-    let ir = processor_step::ir().unwrap();
+    let ir = processor_ir().unwrap();
     let mut hdl = ClockedVectors::new();
     let base = Case {
         byte: 0xa5,

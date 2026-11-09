@@ -1,0 +1,34 @@
+BITLOGIC_PROCESSOR_NETLIST=/mnt/extra_pool/tmp/jane_street_design_asic/build/protocol_processor_mapped.v cargo test --locked -p bitlogic --example protocol_processor
+   Compiling bitlogic v0.1.0 (/mnt/extra_pool/tmp/jane_street_design_asic/crates/bitlogic)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.22s
+     Running unittests examples/protocol_processor/main.rs (target/debug/examples/protocol_processor-eaf797f395e9170f)
+
+running 25 tests
+test tests::i2c::checked_assembly_and_pin_configuration ... ok
+test tests::jtag::jtag_parameters_and_capacity ... ok
+test tests::ps2::ps2_parameters ... ok
+test tests::scratch_operations_independent_expectations ... ok
+test tests::spi_parameters_and_sample_bit_contract ... ok
+test tests::uart_capacity_and_parameters ... ok
+test tests::wait_fault_reset_and_runner_contracts ... ok
+test tests::composition::composition_rejects_resources_exits_capacity_and_relocates_branches ... ok
+test tests::checked_isa_encodings_and_image_limits ... ok
+test tests::i2c::i2c_reset_releases_drivers ... ok
+test tests::composition::conditional_success_exits_preserve_errors ... ok
+test tests::swd::swd_reset_parameters_and_atomic_sample_contract ... ok
+test tests::clocked_reset_fault_final_pc_and_unused_rom ... ok
+test tests::composition::composed_uart_spi_timing_results_and_shared_handoff ... ok
+test tests::jtag::jtag_ir_then_dr_preserves_instruction_and_both_results ... ok
+test tests::control_flow_encodings_targets_and_polling ... ok
+test tests::ps2::ps2_device_frames_inhibit_request_and_timeout ... ok
+test tests::jtag::jtag_reset_scan_and_capture_against_tap ... ok
+test tests::spi_modes_orders_waveforms_and_receive_results ... ok
+test tests::uart_receive_bytes_phase_variation_and_errors ... ok
+test tests::uart_batch::uart_receive_complete_back_to_back_batches ... ok
+test tests::swd::swd_wire_requests_responses_turnaround_parity_and_retries ... ok
+test tests::i2c::resolved_i2c_transactions_stretch_nack_busy_and_timeout ... ok
+test tests::native_ir_and_combinational_hdl_match_reference ... ok
+test tests::uart_all_bytes_pins_periods_native_ir_and_clocked_hdl ... ok
+
+test result: ok. 25 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 33.76s
+
